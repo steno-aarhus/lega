@@ -282,7 +282,8 @@ data <- data %>%
 
 
 # Define variables for survival analysis ----------------------------------
-# Date of death and loss to follow up
+
+## date of death and loss to follow-up -------------------------------------
 data <- data %>%
   mutate(date_of_death = if_else(!is.na(p40000_i0), p40000_i0, p40000_i1),
          date_of_death = as.Date(date_of_death),
@@ -294,7 +295,7 @@ remove <- c("p191", "p40000_i0", "p40000_i1")
 data <- data %>%
   select(-matches(remove))
 
-# Defining birth date as origin for survival analysis
+## birth date as origin for survival analysis ------------------------------
 # Merging birth year and month of birth into one column:
 
 month_names <- c("January", "February", "March", "April", "May", "June",
@@ -308,13 +309,11 @@ data <- data %>%
 
 remove(month_names)
 
-
 # adding 15 as DD for all participants:
-
 data$date_birth <- as.Date(paste0(data$date_birth, "-15"))
 
 
-# Set cut-off date for follow-up ------------------------------------------
+## Set cut-off date for follow-up ------------------------------------------
 # Estimated last follow-up date for cholecystectomy (stagnation of diagnoses)
 # Create the plot
 ggplot(data, aes(x = opcs4_removal_date, y = id)) +
@@ -342,7 +341,8 @@ print(last_date)
 #   mutate(censoring = as.Date("2022-10-31"))
 
 
-# estimate survival time for gallstone or removal of gallbladder
+## estimate survival time --------------------------------------------------
+# gallstone or removal of gallbladder
 data <- data %>%
   mutate(
     survival_time_tmp = case_when(
@@ -374,7 +374,7 @@ data <- data %>%
         !is.na(opcs3_removal_date) | !is.na(opcs3_gallstone_date) ~ 1,
     TRUE ~ 0))
 
-# estimate survival time for cholecystitis
+# cholecystitis
 data <- data %>%
     mutate(
         survival_time_tmp = case_when(
@@ -399,7 +399,7 @@ data <- data %>%
             !is.na(icd9_other_date) ~ 1,
         TRUE ~ 0))
 
-# estimated survival time for all GBD
+# all GBD
 data <- data %>%
     mutate(
         survival_time_tmp = case_when(
@@ -425,7 +425,7 @@ data <- data %>%
         survival_time_tmp = NULL
     )
 
-# binary variable to indicate if gallstone happened
+# binary variable to indicate if gbd happened
 data <- data %>%
     mutate(gbd = case_when(
         !is.na(icd10_gallstone_date) | !is.na(icd10_obstruction_date) |
@@ -436,6 +436,56 @@ data <- data %>%
             !is.na(icd9_other_date) ~ 1,
         TRUE ~ 0))
 
+
+
+# Remove those with outcome before baseline (=last webQ) --------
+# time of last completed 24h recall as baseline date
+data <- data %>%
+    mutate(ques_comp_t0 = p105010_i0,
+           ques_comp_t1 = p105010_i1,
+           ques_comp_t2 = p105010_i2,
+           ques_comp_t3 = p105010_i3,
+           ques_comp_t4 = p105010_i4,
+           # Removing specific time stamp
+           ques_comp_t0 = substr(ques_comp_t0, 1, 10),
+           ques_comp_t1 = substr(ques_comp_t1, 1, 10),
+           ques_comp_t2 = substr(ques_comp_t2, 1, 10),
+           ques_comp_t3 = substr(ques_comp_t3, 1, 10),
+           ques_comp_t4 = substr(ques_comp_t4, 1, 10)
+    )
+
+
+# New column with baseline start date as last completed questionnaire
+data <- data %>%
+    # Convert ques_0 to ques_4 to date format
+    mutate(across(starts_with("ques_"), as.Date)) %>%
+    # Gather all columns into key-value pairs
+    pivot_longer(cols = starts_with("ques_"), names_to = "questionnaire", values_to = "date_filled") %>%
+    # Group by participant ID and select the row with the latest date_filled for each participant
+    group_by(id) %>%
+    slice(which.max(date_filled)) %>%
+    ungroup() %>%
+    # Rename the remaining column to indicate the last filled questionnaire
+    rename(last_filled_questionnaire = questionnaire)
+
+
+remove <- c("p105010_i0", "p105010_i1", "p105010_i2", "p105010_i3","p105010_i4")
+data <- data %>%
+    select(-matches(remove))
+
+data <- data %>%
+    mutate(already_diagnosed = case_when(
+        icd10_gallstone_date < date_filled | icd10_obstruction_date < date_filled |
+            icd9_gallstone_date < date_filled | icd9_obstruction_date < date_filled |
+            opcs4_removal_date < date_filled | opcs4_gallstone_date < date_filled |
+            opcs3_removal_date < date_filled | opcs3_gallstone_date < date_filled |
+            icd10_cholecystit_date < date_filled | icd9_acute_date < date_filled |
+            icd9_other_date < date_filled ~ 1,
+        TRUE ~ NA_character_
+        ))
+
+data <- data %>%
+    subset(already_diagnosed != 1)
 
 # Save data ---------------------------------------------------------------
 arrow::write_parquet(data, here("data/data.parquet"))
