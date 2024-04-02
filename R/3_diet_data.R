@@ -249,7 +249,7 @@ data <- data %>%
 #
 # data <- data %>%
 #   calculate_food_intake() %>%
-  select(-matches(remove_diet))
+#   select(-matches(remove_diet))
 
 # # Save data ---------------------------------------------------------------
 arrow::write_parquet(data, here("data/data.parquet"))
