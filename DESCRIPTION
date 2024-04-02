@@ -3,7 +3,9 @@ Type: Project
 Version: 0.0.1
 Imports:
     duckdb,
+    flextable,
     gert,
+    gtsummary,
     here,
     knitr,
     remotes,
