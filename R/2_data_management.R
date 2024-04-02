@@ -226,11 +226,6 @@ data <- data %>% mutate(
   pea_servings = as.numeric(pea_servings),
   peas = pea_servings * 80) #assuming 1 serving 80g
 
-data <- data %>%
-  rename(alt = p30620_i0,
-         ast = p30650_i0)
-
-
 
 # Remove recoded variables from sorted_data -------------------------------
 
