@@ -1,9 +1,6 @@
 #3. Descriptive
 
-# Install and load packages -----------------------------------------------------------
-install.packages("gtsummary")
-install.packages("flextable")
-
+# Load packages -----------------------------------------------------------
 library(tidyverse)
 library(dplyr)
 library(magrittr)
@@ -19,8 +16,8 @@ source(here::here("R/1_data_start.R"))
 
 # Table 1 -----------------------------------------------------------------
 table1 <- data %>%
-  select(nafld, age, sex, yearly_income, education, deprivation, cohabitation, ethnicity, physical_activity, smoking, alcohol_daily, region, bmi30, diabetes, non_cancer_illness, cancer, family_illness) %>%
-  tbl_summary(by = nafld,
+  select(gbd, age, sex, yearly_income, education, deprivation, cohabitation, ethnicity, physical_activity, smoking, alcohol_daily, region, bmi30, diabetes, non_cancer_illness, cancer, family_illness) %>%
+  tbl_summary(by = gbd,
               statistic = list(all_continuous() ~  "{median} ({p10}, {p90})",
                                all_categorical() ~ "{n} ({p}%)"),
               digits = all_continuous() ~ 1,
@@ -30,5 +27,5 @@ table1 <- data %>%
   modify_caption("Table 1. Baseline characteristics of participants in the UK Biobank Cohort") %>%
   as_flex_table()
 
-# flextable::save_as_html(table1, path = here("doc", "table1.html"))
-flextable::save_as_docx(table1, path = here("doc", "table1.docx"))
+flextable::save_as_html(table1, path = here("doc", "table1.html"))
+# flextable::save_as_docx(table1, path = here("doc", "table1.docx"))
