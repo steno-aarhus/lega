@@ -227,7 +227,7 @@ data <- data %>% mutate(
   peas = pea_servings * 80) #assuming 1 serving 80g
 
 
-# Remove recoded variables from sorted_data -------------------------------
+# Remove recoded variables from sorted data -------------------------------
 
 
 variables_to_remove <- c("p20111", "p20110", "p20107", "p23104",
@@ -235,8 +235,8 @@ variables_to_remove <- c("p20111", "p20110", "p20107", "p23104",
                          "p20116", "p26030", "p3456", "p21022",
                          "p22040", "p6141", "p6138", "p22189",
                          "p21000", "p54", "p738", "p30650",
-                         "p30620", "p41272", "p20165", "p100002",
-                         "p100001", "p41282", "p709")
+                         "p30620", "p20165", "p100002",
+                         "p100001", "p709")
 
 data <- data %>%
   select(-matches(variables_to_remove))
