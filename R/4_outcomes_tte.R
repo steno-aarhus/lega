@@ -244,8 +244,8 @@ opcs3_subset <- opcs3 %>%
 # Defining dates of cholecystectomy
 opcs3_removal <- opcs3_subset %>% mutate(
     opcs3_removal_date = case_when(
-        str_detect(p41273var, "522") ~ as.character(c_across(starts_with("p41283"))),
-        str_detect(p41273var, "522.2") ~ as.character(c_across(starts_with("p41283"))),
+        str_detect(p41273, "522") ~ as.character(c_across(starts_with("p41283"))),
+        str_detect(p41273, "522.2") ~ as.character(c_across(starts_with("p41283"))),
         TRUE ~ NA_character_),
     opcs3_removal_date = as.Date(opcs3_removal_date, format = "%Y-%m-%d"))
 
@@ -260,7 +260,7 @@ data <- data %>%
 
 # Defining dates of gallstone removal
 opcs3_gallstone <- opcs3_subset %>%
-    mutate(opcs3_gallstone_date = ifelse(str_detect(p41723var, "511"),
+    mutate(opcs3_gallstone_date = ifelse(str_detect(p41273, "511"),
                                          as.character(c_across(starts_with("p41283"))),
                                          NA),
            opcs3_gallstone_date = as.Date(opcs3_gallstone_date, format = "%Y-%m-%d"))
@@ -337,8 +337,8 @@ last_date <- max(dates$opcs4_removal_date)
 print(last_date)
 
 # # Administrative censoring at October 31st, 2022
-# data <- data %>%
-#   mutate(censoring = as.Date("2022-10-31"))
+data <- data %>%
+  mutate(censoring = as.Date("2022-10-31"))
 
 
 ## estimate survival time --------------------------------------------------
@@ -468,24 +468,39 @@ data <- data %>%
     # Rename the remaining column to indicate the last filled questionnaire
     rename(last_filled_questionnaire = questionnaire)
 
+data <- data %>%
+  mutate(date_filled = as.Date(date_filled))
 
 remove <- c("p105010_i0", "p105010_i1", "p105010_i2", "p105010_i3","p105010_i4")
 data <- data %>%
     select(-matches(remove))
 
-data <- data %>%
-    mutate(already_diagnosed = case_when(
-        icd10_gallstone_date < date_filled | icd10_obstruction_date < date_filled |
-            icd9_gallstone_date < date_filled | icd9_obstruction_date < date_filled |
-            opcs4_removal_date < date_filled | opcs4_gallstone_date < date_filled |
-            opcs3_removal_date < date_filled | opcs3_gallstone_date < date_filled |
-            icd10_cholecystit_date < date_filled | icd9_acute_date < date_filled |
-            icd9_other_date < date_filled ~ 1,
-        TRUE ~ NA_character_
-        ))
+diagnosed_before <- function(data) {
+  filtered_data <- data %>%
+    filter(
+      icd10_gallstone_date < date_filled |
+        icd10_obstruction_date < date_filled |
+        icd9_gallstone_date < date_filled |
+        icd9_obstruction_date < date_filled |
+        opcs4_removal_date < date_filled |
+        opcs4_gallstone_date < date_filled |
+        opcs3_removal_date < date_filled |
+        opcs3_gallstone_date < date_filled |
+        icd10_cholecystit_date < date_filled |
+        icd9_acute_date < date_filled |
+        icd9_other_date < date_filled
+    )
 
-data <- data %>%
-    subset(already_diagnosed != 1)
+  data <- data %>%
+    anti_join(
+      filtered_data,
+      by = "id"
+    )
+
+  return(data)
+}
+data <- diagnosed_before(data)
+
 
 # Save data ---------------------------------------------------------------
 arrow::write_parquet(data, here("data/data.parquet"))
