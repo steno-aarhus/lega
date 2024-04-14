@@ -35,11 +35,11 @@ data <- data %>%
 meat_pseudo <- coxph(Surv(survival_time, nafld == 1) ~
                        # removing meat
                        legumes80 + poultry80 + fish80+
-                       #other food components
-                       cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
-                       dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
-                       veggie_weekly + potato_weekly + egg_weekly + meat_sub_weekly +
-                       non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
+                         #other food components
+                         cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
+                         dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
+                         veggie_weekly + potato_weekly + egg_weekly +
+                         non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
                        sauce_weekly + weight_weekly + age_strata + region + sex +
                        alcohol_spline + ethnicity + deprivation_quint + education +
                        cohabitation + physical_activity + smoking + diabetes + cancer +
@@ -84,11 +84,11 @@ plot(pseudo_km, xlab = "Time", ylab = "Survival Probability", main = "Estimated 
 poultry_model2 <- coxph(Surv(survival_time, nafld == 1) ~
                           # removing meat
                           legumes80 + meats80 + fish80+
-                          #other food components
-                          cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
-                          dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
-                          veggie_weekly + potato_weekly + egg_weekly + meat_sub_weekly +
-                          non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
+                         #other food components
+                         cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
+                         dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
+                         veggie_weekly + potato_weekly + egg_weekly +
+                         non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
                           sauce_weekly + weight_weekly + age_strata + region + sex +
                           alcohol_spline + ethnicity + deprivation_quint + education +
                           cohabitation + physical_activity + smoking + diabetes + cancer +
@@ -112,11 +112,11 @@ poultry_model2 <- data.frame(row_name = row_name, HR = HR, Lower_CI = CI[1], Upp
 fish_model2 <- coxph(Surv(survival_time, nafld == 1) ~
                        # removing meat
                        legumes80 + meats80 + poultry80+
-                       #other food components
-                       cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
-                       dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
-                       veggie_weekly + potato_weekly + egg_weekly + meat_sub_weekly +
-                       non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
+                         #other food components
+                         cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
+                         dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
+                         veggie_weekly + potato_weekly + egg_weekly +
+                         non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
                        sauce_weekly + weight_weekly + age_strata + region + sex +
                        alcohol_spline + ethnicity + deprivation_quint + education +
                        cohabitation + physical_activity + smoking + diabetes + cancer +
