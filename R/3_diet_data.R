@@ -124,11 +124,11 @@ data <- data %>%
     # total weights of foods
     weight_daily = cereal_refined_daily + whole_grain_daily + mixed_dish_daily +
         dairy_daily + fats_daily + fruit_daily + nut_daily + veggie_daily + potato_daily +
-        egg_daily + meat_sub_daily + non_alc_beverage_daily + alc_beverage_daily +
+        egg_daily + non_alc_beverage_daily + alc_beverage_daily +
         snack_daily + sauce_daily + legume_daily + meats_daily + poultry_daily + fish_daily,
     weight_weekly = cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
         dairy_weekly + fats_weekly + fruit_weekly + nut_weekly + veggie_weekly + potato_weekly +
-        egg_weekly + meat_sub_weekly + non_alc_beverage_weekly + alc_beverage_weekly +
+        egg_weekly + non_alc_beverage_weekly + alc_beverage_weekly +
         snack_weekly + sauce_weekly + legume_weekly + meats_weekly + poultry_weekly + fish_weekly,
     #for secondary analysis
     # legumes
