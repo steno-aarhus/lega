@@ -194,7 +194,7 @@ data <- data %>%
 #     mutate(
 #       cereal_refined_total = calculate_total(matches("p26113|p26079|p26071|p26072|p26073|p26075|p26068|p26083")),
 #       whole_grain_total = calculate_total(matches("p26074|p26076|p26077|p26078|p26105|p26114")),
-#       mixed_dish_total = calculate_total(matches("p26128|p26097|p26116|p26135|p26139")),
+#       mixed_dish_total = calculate_total(matches("p26128|p26097|p26116|p26135|p26139"|"p26145")),
 #       dairy_total = calculate_total(matches("p26154|p26087|p26096|p26102|p26103|p26099|p26131|p26133|p26150")),
 #       fats_total = calculate_total(matches("p26112|p26062|p26063|p26155|p26110|p26111")),
 #       fruit_total = calculate_total(matches("p26089|p26090|p26091|p26092|p26093|p26094")),
@@ -202,7 +202,6 @@ data <- data %>%
 #       veggie_total = calculate_total(matches("p26065|p26098|p26115|p26123|p26125|p26143|p26146|p26147|p26144")),
 #       potato_total = calculate_total(matches("p26118|p26119|p26120")),
 #       egg_total = calculate_total(matches("p26088")),
-#       meat_sub_total = calculate_total(matches("p26145")),
 #       non_alc_beverage_total = calculate_total(matches("p26124|p26141|p26142|p26148|p26081|p26082|p26095|p26126|p26127")),
 #       alc_beverage_total = calculate_total(matches("p26151|p26152|p26153|p26067|p26138")),
 #       snack_total = calculate_total(matches("p26106|p26140|p26134|p26084|p26085|p26064|p26080")),
