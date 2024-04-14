@@ -26,7 +26,7 @@ data <- data %>%
     # mixed dishes
     mixed_dish_total = rowSums(select(., starts_with("p26128") | starts_with("p26097") |
                                         starts_with("p26116") | starts_with("p26135") |
-                                        starts_with("p26139")), na.rm = TRUE),
+                                        starts_with("p26139") | starts_with("p26145")), na.rm = TRUE),
     mixed_dish_daily = mixed_dish_total/p20077,
     mixed_dish_weekly = mixed_dish_daily * 7,
     # dairy
@@ -70,10 +70,6 @@ data <- data %>%
     egg_total = rowSums(select(., starts_with("p26088")), na.rm = TRUE),
     egg_daily = egg_total/p20077,
     egg_weekly = egg_daily * 7,
-    # meat substitutes
-    meat_sub_total = rowSums(select(., starts_with("p26145")), na.rm = TRUE),
-    meat_sub_daily = meat_sub_total/p20077,
-    meat_sub_weekly = meat_sub_daily * 7,
     # non-alcoholic beverages
     non_alc_beverage_total = rowSums(select(., starts_with("p26124") | starts_with("p26141") |
                                               starts_with("p26142") | starts_with("p26148") |
