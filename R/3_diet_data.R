@@ -19,8 +19,8 @@ data <- data %>%
     cereal_refined_weekly = cereal_refined_daily * 7,
     # whole-grain cereals
     whole_grain_total = rowSums(select(., starts_with("p26074") | starts_with("p26076") |
-                                          starts_with("p26077") | starts_with("p26078") |
-                                          starts_with("p26105") | starts_with("p26114")), na.rm = TRUE),
+                                         starts_with("p26077") | starts_with("p26078") |
+                                         starts_with("p26105") | starts_with("p26114")), na.rm = TRUE),
     whole_grain_daily = whole_grain_total/p20077,
     whole_grain_weekly = whole_grain_daily * 7,
     # mixed dishes
@@ -49,7 +49,7 @@ data <- data %>%
                                    starts_with("p26093") | starts_with("p26094")), na.rm = TRUE),
     fruit_daily = fruit_total/p20077,
     fruit_weekly = fruit_daily * 7,
-        # nuts and seeds
+    # nuts and seeds
     nut_total = rowSums(select(., starts_with("p26107") | starts_with("p26108")), na.rm = TRUE),
     nut_daily = nut_total/p20077,
     nut_weekly = nut_daily*7,
@@ -123,13 +123,13 @@ data <- data %>%
     fish_weekly = fish_daily * 7,
     # total weights of foods
     weight_daily = cereal_refined_daily + whole_grain_daily + mixed_dish_daily +
-        dairy_daily + fats_daily + fruit_daily + nut_daily + veggie_daily + potato_daily +
-        egg_daily + non_alc_beverage_daily + alc_beverage_daily +
-        snack_daily + sauce_daily + legume_daily + meats_daily + poultry_daily + fish_daily,
+      dairy_daily + fats_daily + fruit_daily + nut_daily + veggie_daily + potato_daily +
+      egg_daily + non_alc_beverage_daily + alc_beverage_daily +
+      snack_daily + sauce_daily + legume_daily + meats_daily + poultry_daily + fish_daily,
     weight_weekly = cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
-        dairy_weekly + fats_weekly + fruit_weekly + nut_weekly + veggie_weekly + potato_weekly +
-        egg_weekly + non_alc_beverage_weekly + alc_beverage_weekly +
-        snack_weekly + sauce_weekly + legume_weekly + meats_weekly + poultry_weekly + fish_weekly,
+      dairy_weekly + fats_weekly + fruit_weekly + nut_weekly + veggie_weekly + potato_weekly +
+      egg_weekly + non_alc_beverage_weekly + alc_beverage_weekly +
+      snack_weekly + sauce_weekly + legume_weekly + meats_weekly + poultry_weekly + fish_weekly,
     #for secondary analysis
     # legumes
     legume_pea_total = rowSums(select(., starts_with("p26086") | starts_with("p26101") |
@@ -139,12 +139,12 @@ data <- data %>%
     legume_pea_weekly = legume_pea_daily * 7,
     # vegetables
     veggie_pea_total = rowSums(select(., starts_with("p26065") | starts_with("p26098") |
-                                starts_with("p26147") | starts_with("p26123") |
-                                starts_with("p26125") | starts_with("p26143") |
-                                starts_with("p26146")), na.rm = TRUE)-peas,
+                                        starts_with("p26147") | starts_with("p26123") |
+                                        starts_with("p26125") | starts_with("p26143") |
+                                        starts_with("p26146")), na.rm = TRUE)-peas,
     veggie_pea_daily = veggie_pea_total/p20077,
     veggie_pea_weekly = veggie_pea_daily * 7
-    )
+  )
 
 
 
