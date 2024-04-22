@@ -6,7 +6,7 @@ library(stringr)
 
 # Remove ineligible number of recalls ------------
 data <- data %>%
-subset(p20077>=2)
+  subset(p20077>=2)
 data <- data %>%
   mutate(p20077 = as.numeric(p20077))
 
@@ -38,15 +38,15 @@ data <- data %>% mutate(
     age >= 55 & age <= 59 ~ 3,
     age >= 60 & age <= 64 ~ 4,
     age >= 65 ~ 5
-    ),
+  ),
   age_strata = as.factor(age_strata),
   ethnicity = case_when(
     p21000_i0 == "White" | p21000_i0 == "British" | p21000_i0 == "Irish" | p21000_i0 == "Any other white background" ~ "white",
     p21000_i0 == "Chinese" | p21000_i0 == "Asian or Asian British" | p21000_i0 =="Indian" | p21000_i0 == "Pakistani" | p21000_i0 == "Bangladeshi" | p21000_i0 == "Any other Asian background" ~ "asian",
     p21000_i0 == "Black or Black British" | p21000_i0 == "Caribbean" | p21000_i0 == "African" | p21000_i0 == "Any other Black background" ~ "black",
     p21000_i0 == "Mixed" | p21000_i0 == "White and Black Caribbean" |p21000_i0 == "White and Black African" | p21000_i0 == "White and Asian" | p21000_i0 == "Any other mixed background" |
-    p21000_i0 == "Other ethnic group" | p21000_i0 == "Do not know" | p21000_i0 == "Prefer not to answer" | str_detect(p21000_i0, "NA") ~ "mixed or other"
-    ),
+      p21000_i0 == "Other ethnic group" | p21000_i0 == "Do not know" | p21000_i0 == "Prefer not to answer" | str_detect(p21000_i0, "NA") ~ "mixed or other"
+  ),
   deprivation = p22189,
   deprivation_quint = ntile(deprivation, 5),
   deprivation_quint = as.factor(deprivation_quint),
@@ -72,114 +72,109 @@ data <- data %>% mutate(
     education_short == "NVQ or HND or HNC or equival" ~ "Low",
     education_short == "Other professional qualifica" ~ "Low",
     education_short == "None of the above" ~ "Low"
-    ),
+  ),
   education = as.factor(education),
   physical_activity = case_when(
     p22040_i0 >0 & p22040_i0 <=918 ~ "low",
     p22040_i0 >918 & p22040_i0 <=3706 ~ "moderate",
     p22040_i0 >3706 ~ "high",
     TRUE ~ "unknown"
-    ),
-  # Self-reported and doctor diagnosed non-cancer illness.
+  ),
+  bmi = p23104_i0,
+  bmi = as.numeric(bmi),
+  bmi30 = ifelse(p23104_i0 >= 30, 1, 0),
+  bmi30 = as.numeric(bmi30)
+)
+
+data <- data %>% mutate(
   p6150_i0 = ifelse(is.na(p6150_i0), "None", p6150_i0),
   p6150_i0 = as.character(p6150_i0),
   p20002_i0 = ifelse(is.na(p20002_i0), "None", p20002_i0),
   p20002_i0 = as.character(p20002_i0),
-  non_cancer_illness = case_when(
-    str_detect(p20002_i0, "hypert") | str_detect(p6150_i0, "High") ~ "hypertension",
-    str_detect(p20002_i0, "myocardial") | str_detect(p6150_i0, "Heart") ~ "mi",
-    str_detect(p20002_i0, "stroke") | str_detect(p20002_i0, "ischaemic") | str_detect(p20002_i0, "haemorrhage") | str_detect(p6150_i0, "Stroke")~ "stroke",
-    str_detect(p20002_i0, "cholesterol") ~ "cholesterolemia",
-    str_detect(p20002_i0, "cholangitis") | str_detect(p20002_i0, "cholelithiasis") | str_detect(p20002_i0, "cholecyst") | str_detect(p20002_i0, "primary biliary cirrhosis") ~ "gbd",
-    str_detect(p20002_i0, "alcoholic cirrhosis") ~ "alcoholic liver disease",
-    str_detect(p6150_i0, "Angina") ~ "angina",
-    p6150_i0 == "None" | p20002_i0 == "None" ~ "none of the above",
+  related_disease = case_when(
+    str_detect(p20002_i0, "hypert") | str_detect(p6150_i0, "High") | str_detect(p20002_i0, "myocardial") |
+      str_detect(p6150_i0, "Heart") | str_detect(p20002_i0, "stroke") | str_detect(p20002_i0, "ischaemic") |
+      str_detect(p20002_i0, "haemorrhage") | str_detect(p6150_i0, "Stroke") | str_detect(p20002_i0, "cholesterol") |
+      str_detect(p20002_i0, "cholangitis") | str_detect(p20002_i0, "cholelithiasis") |
+      str_detect(p20002_i0, "cholecyst") | str_detect(p20002_i0, "primary biliary cirrhosis") |
+      str_detect(p20002_i0, "alcoholic cirrhosis") | str_detect(p6150_i0, "Angina") |  p2443_i0 == "Yes" ~ "yes",
+    p2443_i0 == "No" | p6150_i0 == "None" | p20002_i0 == "None" ~ "none of the above",
+    str_detect(p2443_i0, "know") | str_detect(p2443_i0, "answer") ~ "none of the above",
     TRUE ~ "none of the above"
-    ),
-  non_cancer_illness = as.factor(non_cancer_illness),
-  diabetes = case_when(
-    str_detect(p2443_i0, "know") ~ "don't know",
-    str_detect(p2443_i0, "answer") ~ "no answer",
-    p2443_i0 == "No" ~ "no",
-    p2443_i0 == "Yes" ~ "yes",
-    TRUE ~ "no answer"
-    ),
-  diabetes = as.factor(diabetes),
-  # illness in closest family
+  ))
+
+data <- data %>% mutate(
   p20107_i0 = ifelse(is.na(p20107_i0), "None", p20107_i0),
   p20110_i0 = ifelse(is.na(p20110_i0), "None", p20110_i0),
   p20111_i0 = ifelse(is.na(p20111_i0), "None", p20111_i0),
   p20107_i0 = as.character(p20107_i0),
   p20110_i0 = as.character(p20110_i0),
   p20111_i0 = as.character(p20111_i0),
-  family_illness= case_when(
-    str_detect(p20107_i0, "Diabetes") | str_detect(p20110_i0, "Diabetes") | str_detect(p20111_i0, "Diabetes")~ "diabetes",
-    str_detect(p20107_i0, "High blood pressure") | str_detect(p20110_i0, "High blood pressure") | str_detect(p20111_i0, "High blood pressure") ~ "hypertension",
-    str_detect(p20107_i0, "Stroke") | str_detect(p20110_i0, "Stroke") | str_detect(p20111_i0, "Stroke")~ "stroke",
-    str_detect(p20107_i0, "Heart disease") | str_detect(p20110_i0, "Heart disease") | str_detect(p20111_i0, "Heart disease") ~ "heart disease",
+  disease_family = case_when(
+    str_detect(p20107_i0, "Diabetes") | str_detect(p20110_i0, "Diabetes") | str_detect(p20111_i0, "Diabetes") |
+      str_detect(p20107_i0, "High blood pressure") | str_detect(p20110_i0, "High blood pressure") |
+      str_detect(p20111_i0, "High blood pressure") | str_detect(p20107_i0, "Stroke") | str_detect(p20110_i0, "Stroke") |
+      str_detect(p20111_i0, "Stroke") | str_detect(p20107_i0, "Heart disease") | str_detect(p20110_i0, "Heart disease") |
+      str_detect(p20111_i0, "Heart disease") ~ "yes",
     p20107_i0 == "None" | p20110_i0 == "None" | p20111_i0 == "None" ~ "none of the above",
     TRUE ~ "none of the above" # If none of the conditions match
-    ),
-  family_illness = as.factor(family_illness),
+  ),
+  disease_family = as.factor(disease_family),
   cancer = case_when(
     str_detect(p2453_i0, "Do not know") ~ "don't know",
     str_detect(p2453_i0, "Yes") ~ "yes",
     p2453_i0 == "No" ~ "no",
     str_detect(p2453_i0, "answer") ~ "no answer",
     TRUE ~ "no answer"
-    ),
-  cancer = as.factor(cancer),
-    bmi = p23104_i0,
-  bmi = as.numeric(bmi),
-    bmi30 = ifelse(p23104_i0 >= 30, 1, 0),
-  bmi30 = as.numeric(bmi30)
-  )
+  ),
+  cancer = as.factor(cancer))
+
 
 
 data <- data %>% mutate(
-   cohabitation = case_when(
-     p709_i0 == 1 ~ "alone",
-     str_detect(p6141_i0, "Husband, wife or partner") ~ "with spouse/partner",
-     p6141_i0 == "Son and/or daughter (include step-children)" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister"|
-       p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Other related" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Grandchild" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Grandchild|Other related" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Grandparent"|
-       p6141_i0 == "Son and/or daughter (include step-children)|Grandchild|Other related|Other unrelated" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Grandchild|Other unrelated" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Other related|Other unrelated" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Other unrelated" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Other related" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Other unrelated" |
-       p6141_i0 == "Mother and/or father" |
-       p6141_i0 == "Mother and/or father|Grandchild" |
-       p6141_i0 == "Mother and/or father|Grandparent" |
-       p6141_i0 == "Mother and/or father|Other related" |
-       p6141_i0 == "Mother and/or father|Other unrelated" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Mother and/or father" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Grandchild"|
-       p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Other related" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Other unrelated" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Grandchild|Other unrelated" |
-       p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Mother and/or father|Other related" |
-       p6141_i0 == "Other related" |
-       p6141_i0 == "Other unrelated"
-     ~ "other non-partner",
-     p6141_i0 == "Prefer not to answer"
-      ~ "no answer"
+  cohabitation = case_when(
+    p709_i0 == 1 ~ "alone",
+    str_detect(p6141_i0, "Husband, wife or partner") ~ "with spouse/partner",
+    p6141_i0 == "Son and/or daughter (include step-children)" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister"|
+      p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Other related" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Grandchild" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Grandchild|Other related" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Grandparent"|
+      p6141_i0 == "Son and/or daughter (include step-children)|Grandchild|Other related|Other unrelated" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Grandchild|Other unrelated" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Other related|Other unrelated" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Other unrelated" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Other related" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Other unrelated" |
+      p6141_i0 == "Mother and/or father" |
+      p6141_i0 == "Mother and/or father|Grandchild" |
+      p6141_i0 == "Mother and/or father|Grandparent" |
+      p6141_i0 == "Mother and/or father|Other related" |
+      p6141_i0 == "Mother and/or father|Other unrelated" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Mother and/or father" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Grandchild"|
+      p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Other related" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Other unrelated" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Grandchild|Other unrelated" |
+      p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Mother and/or father|Other related" |
+      p6141_i0 == "Other related" |
+      p6141_i0 == "Other unrelated"
+    ~ "other non-partner",
+    p6141_i0 == "Prefer not to answer"
+    ~ "no answer"
   ))
 
 data <- data %>% mutate(
-    smoking = case_when(
+  smoking = case_when(
     str_detect(p20116_i0, "Never") ~ "never",
     str_detect(p20116_i0, "Previous") ~ "former",
     str_detect(p20116_i0, "Current") & as.numeric(p3456_i0) > 0 & as.numeric(p3456_i0) <= 15 ~ "current <15",
     str_detect(p20116_i0, "Current") & as.numeric(p3456_i0) > 15 ~ "current > 15",
     str_detect(p20116_i0, "answer") ~ "no answer",
     TRUE ~ "no answer"  # Handling cases not covered by the conditions
-    ))
+  ))
 
 data <- data %>% mutate(
   p26030_i0 = ifelse(is.na(p26030_i0), 0, p26030_i0),
@@ -225,6 +220,23 @@ data <- data %>% mutate(
       str_detect(p104280_i3, "quarter") | str_detect(p104280_i4, "quarter") ~ 0.25),
   pea_servings = as.numeric(pea_servings),
   peas = pea_servings * 80) #assuming 1 serving 80g
+
+
+# Removing individuals with missing information on covariates
+filtered_data <- subset(data, !is.na(age))
+filtered_data <- subset(filtered_data, !is.na(region))
+filtered_data <- subset(filtered_data, !is.na(sex))
+filtered_data <- subset(filtered_data, !is.na(ethnicity)) #126772
+filtered_data <- subset(filtered_data, !is.na(deprivation)) #126623
+filtered_data <- subset(filtered_data, !is.na(education)) #126263
+filtered_data <- subset(filtered_data, !is.na(cohabitation)) # 125643
+filtered_data <- subset(filtered_data, !is.na(physical_activity)) # no change
+filtered_data <- subset(filtered_data, !is.na(smoking)) # no change
+filtered_data <- subset(filtered_data, !is.na(related_disease)) # no change
+filtered_data <- subset(filtered_data, !is.na(disease_family)) # no change
+filtered_data <- subset(filtered_data, !is.na(yearly_income)) # no change
+filtered_data <- subset(filtered_data, !is.na(bmi30)) #123822
+data <- filtered_data
 
 
 # Remove recoded variables from sorted data -------------------------------
