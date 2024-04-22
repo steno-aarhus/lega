@@ -392,7 +392,7 @@ data <- data %>%
         survival_time_tmp = NULL
     )
 
-# binary variable to indicate if gallstone happened
+# binary variable to indicate if cholecystitis happened
 data <- data %>%
     mutate(cholecystit = case_when(
         !is.na(icd10_cholecystit_date) | !is.na(icd9_acute_date) |
@@ -501,6 +501,67 @@ diagnosed_before <- function(data) {
 }
 data <- diagnosed_before(data)
 
+
+
+# counting and removing those with event before baseline
+# defining time in study
+data <- data %>%
+  mutate(
+    survival_time_gst10 = case_when(
+      !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_gst9 = case_when(
+      !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_obs10 = case_when(
+      !is.na(icd10_obstruction_date) ~ as.numeric(difftime(icd10_obstruction_date, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_obs9 = case_when(
+      !is.na(icd9_obstruction_date) ~ as.numeric(difftime(icd9_obstruction_date, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_rem4 = case_when(
+      !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_gst4 = case_when(
+      !is.na(opcs4_gallstone_date) ~ as.numeric(difftime(opcs4_gallstone_date, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_rem3 = case_when(
+      !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_gst3 = case_when(
+      !is.na(opcs3_gallstone_date) ~ as.numeric(difftime(opcs3_gallstone_date, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_chol = case_when(
+      !is.na(icd10_cholecystit_date) ~ as.numeric(difftime(icd10_cholecystit_date, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_acute = case_when(
+      !is.na(icd9_acute_date) ~ as.numeric(difftime(icd9_acute_date, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_other = case_when(
+      !is.na(icd9_other_date) ~ as.numeric(difftime(icd9_other_date, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_ltfu = case_when(
+      !is.na(loss_to_follow_up) ~ as.numeric(difftime(loss_to_follow_up, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_death = case_when(
+      !is.na(date_of_death) ~ as.numeric(difftime(date_of_death, date_filled, units = "days")),
+      TRUE ~ NA),
+    survival_time_cenc = difftime(censoring, date_filled, units = "days"),
+    time = pmin(survival_time_gst10, survival_time_gst9, survival_time_obs10,
+                survival_time_obs9, survival_time_rem4, survival_time_gst4,
+                survival_time_rem3, survival_time_gst3, survival_time_chol,
+                survival_time_acute, survival_time_other, survival_time_death,
+                survival_time_cenc, survival_time_ltfu, na.rm = TRUE),
+    time = time/365.25
+  )
+
+# counting and removing those with event before baseline
+data_time <- data %>%
+  subset(data$time<0)
+
+# remove those with event before baseline
+data <- data %>%
+  subset(data$time>=0)
 
 # Save data ---------------------------------------------------------------
 arrow::write_parquet(data, here("data/data.parquet"))
