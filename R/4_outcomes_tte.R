@@ -38,19 +38,6 @@ first_non_na_gallstone <- icd10_gallstone %>%
 data <- data %>%
   left_join(first_non_na_gallstone %>% select(id, icd10_gallstone_date), by = "id")
 
-#Defining dates for bile duct obstruction (K82.0)
-icd10_obstruction <- icd10_subset %>%
-    mutate(icd10_obstruction_date = ifelse(str_detect(p41270var, "K82.0"),
-                                         as.character(c_across(starts_with("p41280"))),
-                                         NA),
-           icd10_obstruction_date = as.Date(icd10_obstruction_date, format = "%Y-%m-%d"))
-first_non_na_obstruction <- icd10_obstruction %>%
-    filter(!is.na(icd10_obstruction_date)) %>%
-    group_by(id) %>%
-    slice(1) %>%
-    ungroup()
-data <- data %>%
-    left_join(first_non_na_obstruction %>% select(id, icd10_obstruction_date), by = "id")
 
 # Defining dates of cholecystitis (K81.X)
 icd10_cholecystit <- icd10_subset %>%
@@ -105,21 +92,6 @@ first_non_na_gallstone <- icd9_gallstone %>%
 data <- data %>%
   left_join(first_non_na_gallstone %>% select(id, icd9_gallstone_date), by = "id")
 
-# Defining dates of bile duct obstruction
-icd9_obstruction <- icd9_subset %>%
-  mutate(icd9_obstruction_date = ifelse(str_detect(p41271var, "5762"),
-                                  as.character(c_across(starts_with("p41281"))),
-                                  NA),
-         icd9_obstruction_date = as.Date(icd9_obstruction_date, format = "%Y-%m-%d"))
-
-first_non_na_obstruction <- icd9_obstruction %>%
-  filter(!is.na(icd9_obstruction_date)) %>%
-  group_by(id) %>%
-  slice(1) %>%
-  ungroup()
-
-data <- data %>%
-  left_join(first_non_na_obstruction %>% select(id, icd9_obstruction_date), by = "id")
 
 # Defining date of acute cholecystitis
 icd9_acute <- icd9_subset %>%
@@ -347,7 +319,6 @@ data <- data %>%
   mutate(
     survival_time_tmp = case_when(
       !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_birth, units = "days")),
-      !is.na(icd10_obstruction_date) ~ as.numeric(difftime(icd10_obstruction_date, date_birth, units = "days")),
       !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_birth, units = "days")),
       !is.na(icd9_obstruction_date) ~ as.numeric(difftime(icd9_obstruction_date, date_birth, units = "days")),
       !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_birth, units = "days")),
@@ -368,7 +339,7 @@ data <- data %>%
 # binary variable to indicate if gallstone happened
 data <- data %>%
   mutate(gallstone = case_when(
-    !is.na(icd10_gallstone_date) | !is.na(icd10_obstruction_date) |
+    !is.na(icd10_gallstone_date) |
       !is.na(icd9_gallstone_date) | !is.na(icd9_obstruction_date) |
         !is.na(opcs4_removal_date) | !is.na(opcs4_gallstone_date) |
         !is.na(opcs3_removal_date) | !is.na(opcs3_gallstone_date) ~ 1,
@@ -404,7 +375,6 @@ data <- data %>%
     mutate(
         survival_time_tmp = case_when(
             !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_birth, units = "days")),
-            !is.na(icd10_obstruction_date) ~ as.numeric(difftime(icd10_obstruction_date, date_birth, units = "days")),
             !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_birth, units = "days")),
             !is.na(icd9_obstruction_date) ~ as.numeric(difftime(icd9_obstruction_date, date_birth, units = "days")),
             !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_birth, units = "days")),
@@ -428,7 +398,7 @@ data <- data %>%
 # binary variable to indicate if gbd happened
 data <- data %>%
     mutate(gbd = case_when(
-        !is.na(icd10_gallstone_date) | !is.na(icd10_obstruction_date) |
+        !is.na(icd10_gallstone_date) |
             !is.na(icd9_gallstone_date) | !is.na(icd9_obstruction_date) |
             !is.na(opcs4_removal_date) | !is.na(opcs4_gallstone_date) |
             !is.na(opcs3_removal_date) | !is.na(opcs3_gallstone_date) |
