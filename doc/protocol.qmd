@@ -1,246 +1,6 @@
 ---
-title: "Protocol: TITLE"
+title: "Protocol: Substituting  meat, poultry, and fish with legumes and risk of gallbladder diseases in a large prospective cohort"
 # Add all *direct* contributors to the protocol here
-author: 
-  - name: NAME
-    affiliation: 
-      - name: INSTITUTION
-date: last-modified
-format: html
-# bibliography: "file/path"
-execute: 
-  echo: true
----
-
-```{r setup}
-#| include: false
-# Include packages here if needed.
-```
-
-::: content-hidden
-This is a template for writing your protocol in a format that based on
-features used in the [Open Science Framework registry](https://osf.io/)
-for all types of studies. Because this database is not for observational
-studies per se, there are fields that are not relevant for you to fill
-in. These fields have not been included in this template. Also, all
-fields where you have to check a list of items or similar, have also
-been excluded from this template.
-
-Please also refer to a relevant reporting checklist (e.g. STROBE) when
-describing the study. Find checklists
-[here](https://www.equator-network.org/).
-:::
-
-# Study information
-
-## Title
-
-::: content-hidden
-*Put in the title of your study. Remember to include your study design
-in the title.*
-:::
-
-## Description
-
-::: content-hidden
-Overall description of your project. Think of this as what you would
-reply if a colleague asked you what your project was about.
-
-Keep the inline R code below. This inserts the standard UKB statement.
-:::
-
-`r ukbAid::statements$protocol`
-
-## Objectives and hypotheses
-
-::: content-hidden
--   Put in a very brief introduction to the topic. Explain the
-    scientific background and rationale
--   Put in the research aim/objective
--   If relevant, list your specific hypotheses
-:::
-
-# Design plan
-
-## Study type
-
-::: content-hidden
-Note: Leave the below text here.
-:::
-
-**Observational Study**. Data is collected from study subjects that are
-not randomly assigned to a treatment. This includes surveys, natural
-experiments, and regression discontinuity designs.
-
-## Blinding
-
-::: content-hidden
-Note: Leave the below text here.
-:::
-
-No blinding is involved in this study.
-
-## Study design
-
-::: content-hidden
-Describe your study design. Typical study designs for observation
-studies include cohort, cross sectional, and case-control studies
-
-This question has a variety of possible answers. The key is for a
-researcher to be as detailed as is necessary given the specifics of
-their design. Be careful to determine if every parameter has been
-specified in the description of the study design. There may be some
-overlap between this question and the following questions. That is OK,
-as long as sufficient detail is given in one of the areas to provide all
-of the requested information.
-
-Put in overall information about the study design. Key elements of the
-study design, the location, relevant dates, periods of recruitment etc.
-For instance, include that it is a cohort and cross-sectional (most
-likely).
-:::
-
-# Sampling plan
-
-## Existing data
-
-::: content-hidden
-Note: Leave the below text here.
-:::
-
-**Registration prior to analysis of the data**. As of the date of
-submission, the data exist and you have accessed it, though no analysis
-has been conducted related to the research plan (including calculation
-of summary statistics). A common situation for this scenario when a
-large dataset exists that is used for many different studies over time,
-or when a data set is randomly split into a sample for exploratory
-analyses, and the other section of data is reserved for later
-confirmatory data analysis.
-
-## Explanation of existing data
-
-::: content-hidden
-Note: Leave the below text here.
-:::
-
-The UK Biobank is a large national cohort of participants in the UK,
-with data collected in a standardized format the the sole purpose of
-providing a data resource for researchers to use for health research.
-All information about collection procedures, limitations, and sources of
-bias are well established and described by the UK Biobank resource.
-
-Because of its size of data collected, it is near impossible to a priori
-see patterns in the data that might influence how the analysis will be
-conducted, unless specifically looked for or previously published on. In
-this way, we feel pre-analysis bias is minimal.
-
-## Data collection procedures
-
-::: content-hidden
--   If relevant, describe if or how the subset of data was selected or
-    chosen participant
--   Describe how the exposure was assessed (or refer to the UK Biobank
-    link on it)
--   Describe how the outcome was assessed (or refer to the UK Biobank
-    link on it)
--   Describe how the covariates were assessed (or refer to the UK
-    Biobank link on it)
-:::
-
-## Sample size
-
-::: content-hidden
-Describe the participants. Describe the eligibility criteria and sources
-of selection of participants. At this point it may not be possible to
-know your sample size.
-:::
-
-## Sample size rationale
-
-::: content-hidden
-If relevant, describe why you chose the sample size that you did. If
-using the full dataset, simply say you are using the sample size
-available in the UK Biobank.
-:::
-
-# Variables
-
-## Measures variables
-
-::: content-hidden
-List the exposure(s), outcome(s), and covariates
-:::
-
-# Analysis plan
-
-## Statistical models
-
-::: content-hidden
-Describe your statistical analysis. This is essentially your statistical
-analysis plan.
-
-Remember to mention statistical software to be used, analysis of
-baseline characteristics, adjustment for confounding, selection of
-potential confounders, examined subgroups, how missing data was handled,
-how loss to follow-up was addressed and sensitivity analyses.
-:::
-
-## Transformations
-
-::: content-hidden
-Describe any transformations you will make to the data, such as
-centering, recoding, etc. This will likely change during the actual
-analysis, but at least here you can give a general idea for what you
-will do to the data.
-:::
-
-## Inference criteria
-
-::: content-hidden
-Describe how you will infer that a result is meaningful or not. For
-instance, if using p-values, indicate what the threshold is and WHY.
-Also what steps you are taking to minimize misclassification/false
-discovery rate.
-:::
-
-## Data exclusion
-
-::: content-hidden
-Describe what data you will exclude and why. For instance, dropping type
-1 diabetes since you are only looking at type 2 diabetes. Or how you
-will handle outliers.
-:::
-
-## Missing data
-
-::: content-hidden
-Describe how you will handle missing or incomplete data. This will
-likely change when you actually do your analysis, but its a good first
-step.
-:::
-
-## Exploratory analyses (optional)
-
-::: content-hidden
-Describe any exploratory analyses you will do and that you might report
-on/include in the manuscript. Exploratory analysis is on where you have
-not made a hypothesis or prediction about, and instead are seeing what
-patterns or associations might exist. This could be to help you in your
-main analysis or it could be the main aim of your project.
-:::
-
-# Other
-
-*add the references here*
-
-# References
-
-
-
-
-
----
-title: "Protocol: Legume consumption and risk of gallbladder diseases in the UK Biobank Study: a prospective follow-up"
 author:
   - name: Fie Langmann
     orcid: "0000-0003-3474-9346"
@@ -281,10 +41,10 @@ author:
       - "conceptualization"
     affiliations:
       - name: Aarhus University
-date: February 8, 2024
+date: May 28, 2024
 format: html
 embed-resources: true
-bibliography: masld.bib
+bibliography: gbd.bib
 # You can browse all the Citation Styles here: https://github.com/citation-style-language/styles
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/vancouver.csl
 execute:
@@ -297,43 +57,51 @@ editor:
 ```{r setup}
 #| include: false
 # Include packages here if needed.
-
-library(ukbAid)
 ```
+
+::: content-hidden
+This is a template for writing your protocol in a format that based on
+features used in the [Open Science Framework registry](https://osf.io/)
+for all types of studies. Because this database is not for observational
+studies per se, there are fields that are not relevant for you to fill
+in. These fields have not been included in this template. Also, all
+fields where you have to check a list of items or similar, have also
+been excluded from this template.
+
+Please also refer to a relevant reporting checklist (e.g. STROBE) when
+describing the study. Find checklists
+[here](https://www.equator-network.org/).
+:::
 
 # Study information
 
-## Legume consumption and risk of gallbladder diseases in the UK Biobank Study: a prospective follow-up
+## Substituting meat, poultry, and fish with legumes and risk of gallbladder diseases in a large prospective cohort
 
 ## Description
 
-Western diets has been shown to cause a multitude of non-communicable
-diseases. Metabolic dysfunction-associated steatotic liver disease
-(MASLD) is the leading chronic disease globally and strongly associated
-with Western dietary patterns. Based on a combined environmental and
-health related focus, legumes are increasingly being recommended as a
-meat substitute, and this study therefore investigates the association
-between substituting legumes for meats, poultry, and fish and the risk
-of developing MASLD.
+Western diets high in animal foods and saturated fats has been shown to
+cause a multitude of non-communicable diseases while also having great
+and negative impacts on the environment. Based on a combined
+environmental and health related focus, legumes are increasingly being
+recommended as a meat substitute. Previous research has however
+indicated an increased risk of developing gallbladder related diseases
+when consuming large amounts of legumes and this study therefore
+investigates the association between substituting legumes for meats,
+poultry, and fish and the risk of developing gallbladder diseases.
 
 `r ukbAid::statements$protocol`
 
 ## Objectives and hypotheses
 
 ### Background
-
 The EAT-Lancet reference diet was introduced in 2019 as a globally
 sustainable and healthy diet emphasizing plant-based proteins instead of
 animal-based proteins, e.g., with a recommendation of 100 g legumes
-daily [@Loken2020; @Springmann2020; @Willett2019]. Legume consumption
-minimizes the risk of metabolic dysfunction-associated steatotic liver
-disease (MASLD) in animals, by reducing build-up of fats in the liver
-[@Hong2016; @Zhang2023; @Bouchenak2013; @Son2014; @Rigotti1989]. MASLD
-is the most prevalent chronic liver disease in the Western countries
-with a prevalence of 15-45 % [@Benedict2017; @Younossi2016]. The disease
-is caused by Western diets high in red meat, fats, and sugars, obesity,
-physical inactivity, and smoking [@Benedict2017; @Younossi2016;
-@Younossi2018; @AlDayyat2018]. As legumes are a source of both
+daily [@Loken2020; @Springmann2020; @Willett2019].
+
+LEGUMES AND GBD
+
+As legumes are a source of both
 carbohydrates and proteins, research frequently compares legumes with
 other carbohydrate sources [@Sievenpiper2009; @Jayalath2014;
 @Belski2011; @Linlawan2019; @Lee2008]. Observed associations for foods
@@ -344,9 +112,9 @@ groups, they will most often increase the intake of certain other food
 groups, in an otherwise stable diet [@Ibsen2020; @Ibsen2022]. The
 association of such food intake will not only be caused by the increased
 consumption of one food, but rather the substitution effect including
-various foods. Replacing protein from animal sources with protein from
-plant sources has previously been associated with a substantially lower
-mortality rate and lower risk of MASLD [@Song2016; @Zhang2023].
+various foods.
+
+
 Consumption of legumes in Western countries has been negligible to date
 and the impact of markedly increasing intakes of legumes on
 hepatobiliary and other diseases is understudied. Therefore, this study
@@ -368,6 +136,13 @@ non-meat components for legumes on the risk of MASLD and MASH.
 
 -   Replacing non-specific foods with legumes is not associated with
     gallbladder diseases.
+
+::: content-hidden
+-   Put in a very brief introduction to the topic. Explain the
+    scientific background and rationale
+-   Put in the research aim/objective
+-   If relevant, list your specific hypotheses
+:::
 
 # Design plan
 
@@ -400,17 +175,27 @@ National Health Service North West Multicentre Research Ethics Committee
 
 ## Existing data
 
-**Registration prior to analysis of the data**
-
-All data was collected in UK Biobank prior to access and data analyses.
+**Registration prior to analysis of the data**. As of the date of
+submission, the data exist and you have accessed it, though no analysis
+has been conducted related to the research plan (including calculation
+of summary statistics). A common situation for this scenario when a
+large dataset exists that is used for many different studies over time,
+or when a data set is randomly split into a sample for exploratory
+analyses, and the other section of data is reserved for later
+confirmatory data analysis.
 
 ## Explanation of existing data
 
 The UK Biobank is a large national cohort of participants in the UK,
-with data collected in a standardized format with the sole purpose of
+with data collected in a standardized format the the sole purpose of
 providing a data resource for researchers to use for health research.
 All information about collection procedures, limitations, and sources of
 bias are well established and described by the UK Biobank resource.
+
+Because of its size of data collected, it is near impossible to a priori
+see patterns in the data that might influence how the analysis will be
+conducted, unless specifically looked for or previously published on. In
+this way, we feel pre-analysis bias is minimal.
 
 ## Data collection procedures
 
@@ -474,92 +259,63 @@ as poultry with or without skin, and fried poultry with batter or
 breadcrumbs. Fish will be defined as oily fish, white fish and tinned
 tuna, fried fish with batter or breadcrumbs, and shellfish.
 
-**Metabolic dysfunction-associated steatotic liver disease**
+**Gallbladder diseases**
 
-Incident cases of MASH and MAFLD will be assessed through linkage to the
-National Health Service registers where diagnosis after hospital
-admission or primary care visits are coded according to the
-International Classification of Diseases and Related Health Problems
-(ICD-10) [@Digital2021]. MASLD was previously known as non-alcoholic
-fatty liver disease (NAFLD), but the nomenclature was changed in 2023 to
-shift focus towards the metabolic factors underlying the disease and not
-merely the lack of alcohol consumption and to aid the prevention and
-early diagnoses of MASLD [@Thornton2023]. Due to this change in
-nomenclature, incident cases of MASLD are diagnosed based on ICD-10-code
-for NAFLD, K76.0, at first admission to hospital, while incident cases
-of MASH are diagnosed based on ICD-10-code for NASH, K75.8
-[@Biobank2020; @Zhang2023a].
-
-**Covariates**
-
-Directed acyclic graphs were used to illustrate the potential and known
-association between covariates of the association between substituting
-meat, poultry or fish for legumes and development of MAFLD and MASH.
-Information on covariates will include information on all other dietary
-components based on total weight by food group intakes as g/day and
-kcal/day retrieved from the Oxford WebQ (fruits, vegetables, cereal
-products, dairy products, egg products, nuts, mixed dishes, condiments,
-added sugar and sweets, non-alcoholic beverages, and alcoholic
-beverages), sex (male, female), age (years), alcohol consumption (g
-ethanol/day as restricted cubic splines), ethnic group (white, mixed
-background, Asian, black, other, and unknown), socioeconomic status
-(Townsend deprivation score \[quintiles\], educational level),
-geographical region of recruitment (ten UK regions), cohabitation
-(partner, children, sibling, parent, grandparent, grandchild, other
-related, other unrelated, no answer), anthropometry (BMI \[kg/m2\]),
-physical activity (low ≤918 MET-min/week\], moderate \[918-3706
-MET-min/week\], and high \[≥3706 MET-min/week\], unknown)
-[@Cassidy2016], smoking status (never, former, current 1-15 cigarettes
-per day, current ≥15 cigarettes per day, and smoking status unknown);
-metabolic risk factors (self-reported \[yes, no, unknown\] diagnoses of
-diabetes, hypertension, and high cholesterol).
+::: content-hidden
+-   If relevant, describe if or how the subset of data was selected or
+    chosen participant
+-   Describe how the exposure was assessed (or refer to the UK Biobank
+    link on it)
+-   Describe how the outcome was assessed (or refer to the UK Biobank
+    link on it)
+-   Describe how the covariates were assessed (or refer to the UK
+    Biobank link on it)
+:::
 
 ## Sample size
 
 For this cohort study, only participants with two or more 24 h dietary
-assessments will be included in the analyses, while missing information
-on covariates will be filled in by multiple imputations where
-applicable. Individuals with alcohol intakes exceeding the 90th
-percentile will be excluded from the study to mitigate the risk of
-misclassifying the outcome by eliminating those with alcoholic fatty
-liver disease.
+assessments and complete information on covariates will be included in
+the analyses.
 
 ## Sample size rationale
 
 # Variables
 
-## Measured variables
+## Measures variables
 
-**Exposures:** g/day and kcal/day consumption of legumes, meats,
-poultry, and fish
+**Exposures:** g/week consumption of legumes, meats, poultry, and fish
 
-**Outcomes:** metabolic dysfunction-associated steatotic liver disease
-(MASLD) and metabolic dysfunction-associated steatohepatitis (MASH)
+**Outcomes:** gallstone, gallbladder inflammation, gallbladder removal
 
-**Covariates:** g/day and kcal/day consumption of fruits, vegetables,
-cereal products, dairy products, egg products, nuts, mixed dishes,
-condiments, added sugar and sweets, non-alcoholic beverages, and
-alcoholic beverages. Sex, age, ethnic group, Townsend deprivation score,
+**Covariates:** g/week consumption of fruits, vegetables, cereal
+products, dairy products, egg products, nuts, mixed dishes, condiments,
+added sugar and sweets, non-alcoholic beverages, and alcoholic
+beverages. Sex, age, ethnic group, Townsend deprivation score,
 educational level, geographical region of recruitment (ten UK regions),
-lives with a wife or partner, BMI, physical activity, smoking status,
-and self-reported diabetes, hypertension, and high cholesterol.
+cohabitation, BMI, physical activity, smoking status, own and family
+history of metabolic risk factors, and cancer.
+
+::: content-hidden
+List the exposure(s), outcome(s), and covariates
+Update covariates and outcomes
+:::
 
 # Analysis plan
 
-## Statistical models
+## Statistical models (UPDATE)
 
 ### Main analyses
 
 Standard summary statistics will be performed to describe the
-distribution of total legume consumption as an average g/day based on
-participants' 24-h WebQ responses and across baseline characteristics of
-participants in the study. Multi-variable adjusted Cox Proportional
-Hazards regression models will be used to estimate the hazard ratios for
-each of the outcomes based on replacing meats, poultry, or fish with
-legumes.
+distribution of baseline characteristics and food consumption as an
+average g/day based on participants' 24-h WebQ responses. Multi-variable
+adjusted Cox Proportional Hazards regression models will be used to
+estimate the hazard ratios for NAFLD based on replacing meats, poultry,
+or fish with legumes.
 
 -   Replacing red and processed meats, poultry, or fish with legumes
-    (e.g., per 30 g/day)
+    (e.g., per 80 g/week)
 
 Age will be used as the underlying time scale in the analyses. Follow-up
 time will begin with participants' last completed Oxford WebQ. As
@@ -567,7 +323,7 @@ participants in UKB are still followed-up today, participants will be
 right censored at the date of the most recent registry update of full
 follow-up for the outcomes. Otherwise, censoring will occur at the event
 of death, loss to follow-up from the study, or date of diagnosis of
-MASLD or MASH, whichever comes first. The substitution analyses will be
+NAFLD or NASH, whichever comes first. The substitution analyses will be
 conducted with different adjustment levels.
 
 **Model 1** will be minimally adjusted for strata of age at recruitment
@@ -578,26 +334,25 @@ meats; poultry; fish). When substituting g legumes/day, the unit for all
 dietary components will be g/day and the analyses will be adjusted for
 total amount of consumed foods in g/day.
 
-**Model 2** will be further adjusted for alcohol consumption (g/day as
-restricted cubic splines), ethnic group (white, mixed, Asian, black,
-other, unknown), socioeconomic status (Townsend deprivation score,
-educational level), living with a wife or partner (yes, no), physical
-activity (low \[0-9.9 METs/week\], moderate \[10-49.9 METs/week\], and
-high \[≥50 METs/week\], unknown), smoking status (never, former, current
-1-15 cigarettes per day, current ≥15 cigarettes per day, current but
-number of cigarettes per day unknown, and smoking status unknown), and
-self-reported diagnosis of diabetes, hypertension, or high cholesterol
-(yes, no, unknown).
+**Model 2** will be further adjusted for alcohol consumption (g/day),
+ethnic group (white, mixed, Asian, black), socioeconomic status
+(Townsend deprivation score, educational level), cohabitation (alone,
+with partner, with other non-partner, unknown), physical activity (low
+\[≤918 MET-min/week\], moderate \[918-3706 MET-min/week\], high \[≥3706
+MET-min/week\], and unknown), smoking status (never, former, current
+1-15 cigarettes per day, current ≥15 cigarettes per day, and unknown),
+own and family history of metabolic risk factors (yes or no/unknown),
+and cancer (yes, no, unknown).
 
 **Model 3** will further adjust for anthropometry (BMI ≥ 30 kg/m2), as
 obesity may either confound or mediate the association between replacing
-red and processed meats, poultry, or fish with legumes and risk of MASLD
+red and processed meats, poultry, or fish with legumes and risk of NAFLD
 
 ### Secondary and sensitivity analyses
 
-To evaluate the association between overall legume intake and
-hepatobiliary disease risk, quintiles of legume intake (g/day) will be
-evaluated with adjustment levels similar to the substitution models.
+To evaluate the association between overall legume intake and NAFLD
+risk, hazard ratios associated with a 80 g/week increase in legumes will
+be estimated following adjustment levels in model 2.
 
 Peas are increasingly used as a plant-based meat alternative in the food
 industry [@Maningat2022]. Despite this, peas are also included in the
@@ -611,16 +366,25 @@ portion size of peas weighing 80 g [@Services2021].
 To evaluate the robustness of the main analyses, sensitivity analyses
 will include varying numbers of Oxford WebQ returns, and removal of
 participants with increased serum levels of alanine-aminotransferase
-(\>45 U/L for women and \>70 U/L for men) and aspartate-aminotransferase
-(\>35 U/L for women and \>45 U/L for men). Sensitivity analyses will
+(\>40 U/L) and aspartate-aminotransferase. Sensitivity analyses will
 further include removal of participants in the highest 10% percentile of
-alcohol intake and removal of those with previous diseases of the liver,
-although not necessarily MAFLD, as they may be predisposed for
-developing further liver diseases.
+alcohol intake.
 
 All analyses will be conducted in R with a significance level of 5%.
 
+
+::: content-hidden
+Describe your statistical analysis. This is essentially your statistical
+analysis plan.
+
+Remember to mention statistical software to be used, analysis of
+baseline characteristics, adjustment for confounding, selection of
+potential confounders, examined subgroups, how missing data was handled,
+how loss to follow-up was addressed and sensitivity analyses.
+:::
+
 ## Transformations
+
 
 ## Inference criteria
 
@@ -632,7 +396,19 @@ containing 1 or 0, for ratios or absolute measures respectively.
 
 ## Data exclusion
 
+::: content-hidden
+Describe what data you will exclude and why. For instance, dropping type
+1 diabetes since you are only looking at type 2 diabetes. Or how you
+will handle outliers.
+:::
+
 ## Missing data
+
+::: content-hidden
+Describe how you will handle missing or incomplete data. This will
+likely change when you actually do your analysis, but its a good first
+step.
+:::
 
 ## Exploratory analyses (optional)
 
