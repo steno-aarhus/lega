@@ -6,6 +6,11 @@ library(magrittr)
 library(tidyr)
 library(stringr)
 
+# Load data
+targets::tar_make()
+# Restart session
+source(here::here("R/1_data_start.R"))
+
 # Remove ineligible number of recalls ------------
 data <- data %>%
   subset(p20077>=2)
@@ -29,7 +34,7 @@ data <- data %>%
 
 
 # Recoding covariables (not foods) ------------------------------------------------------
-
+# Baseline characteristics
 data <- data %>% mutate(
   sex = p31,
   sex = as.factor(sex),
@@ -46,7 +51,7 @@ data <- data %>% mutate(
   age_strata = as.factor(age_strata),
   ethnicity = case_when(
     p21000_i0 == "White" | p21000_i0 == "British" | p21000_i0 == "Irish" | p21000_i0 == "Any other white background" ~ "white",
-    p21000_i0 == "Chinese" | p21000_i0 == "Asian or Asian British" | p21000_i0 =="Indian" | p21000_i0 == "Pakistani" | p21000_i0 == "Bangladeshi" | p21000_i0 == "Any other Asian background" ~ "asian",
+    p21000_i0 == "Chinese" | p21000_i0 == "Asian or Asian British" | p21000_i0 =="Indian" | p21000_i0 == "Pakistani" | p21000_i0 == "Bangladeshi" | p21000_i0 == "Any other Asian background" ~ "Asian",
     p21000_i0 == "Black or Black British" | p21000_i0 == "Caribbean" | p21000_i0 == "African" | p21000_i0 == "Any other Black background" ~ "black",
     p21000_i0 == "Mixed" | p21000_i0 == "White and Black Caribbean" |p21000_i0 == "White and Black African" | p21000_i0 == "White and Asian" | p21000_i0 == "Any other mixed background" |
       p21000_i0 == "Other ethnic group" | p21000_i0 == "Do not know" | p21000_i0 == "Prefer not to answer" | str_detect(p21000_i0, "NA") ~ "mixed or other"
@@ -82,19 +87,24 @@ data <- data %>% mutate(
     p22040_i0 >3706 ~ "high",
     TRUE ~ "unknown"
   ),
-  bmi = p23104_i0,
-  bmi = as.numeric(bmi),
   bmi30 = ifelse(p23104_i0 >= 30, 1, 0),
   bmi30 = as.numeric(bmi30),
-  bilirubin = p30840,
+  bilirubin = p30840_i0,
   bilirubin = as.numeric(bilirubin),
   weight_loss = case_when(
-      str_detect(p2306, "lost") ~ "yes",
+      str_detect(p2306_i0, "lost") ~ "yes",
       TRUE ~ "no"),
-  hrt = p2814
-)
-data <- data %>% mutate(
-  oral_contraceptive = p2784)# this is maybe a character variable, -3 is coded as NA and should be altered
+  hrt = case_when(
+      str_detect(p2814_i0, "Yes") ~ "yes",
+      str_detect(p2814_i0, "answer") ~ "unknown",
+      TRUE ~ "no"),
+  oral_contraceptive = case_when(
+      str_detect(p2784_i0, "Yes") ~ "yes",
+      str_detect(p2784_i0, "answer") ~ "unknown",
+      TRUE ~ "no")
+  )
+
+
 
 data <- data %>% mutate(
   pregnancies = # vars below may be  character variable, -3 is coded as NA and should be altered
