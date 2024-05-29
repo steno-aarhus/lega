@@ -1,4 +1,6 @@
 # Data management
+# Load packages
+library(tidyverse)
 library(dplyr)
 library(magrittr)
 library(tidyr)
@@ -19,7 +21,9 @@ data <- data %>%
 variables_to_edit <- c("p738", "p2443", "p2453", "p3456", "p6150",
                        "p20002","p20107", "p20110", "p20111", "p20161", "p20162",
                        "p21000", "p22040", "p22506", "p23104", "p2443",
-                       "p2453", "p6141", "p709")
+                       "p2453", "p6141", "p709", "p30840", "p2306", "p2814",
+                       "p2784", "p2734", "p3829", "p3839", "p3849")
+
 data <- data %>%
   select(-matches(paste0(variables_to_edit, "_i[1-4]")))
 
@@ -48,8 +52,6 @@ data <- data %>% mutate(
       p21000_i0 == "Other ethnic group" | p21000_i0 == "Do not know" | p21000_i0 == "Prefer not to answer" | str_detect(p21000_i0, "NA") ~ "mixed or other"
   ),
   deprivation = p22189,
-  deprivation_quint = ntile(deprivation, 5),
-  deprivation_quint = as.factor(deprivation_quint),
   yearly_income = case_when(
     str_detect(p738_i0, "18,000 to") ~ "18,000-30,999",
     str_detect(p738_i0, "31,000") ~ "31,000-51,999",
@@ -83,8 +85,25 @@ data <- data %>% mutate(
   bmi = p23104_i0,
   bmi = as.numeric(bmi),
   bmi30 = ifelse(p23104_i0 >= 30, 1, 0),
-  bmi30 = as.numeric(bmi30)
+  bmi30 = as.numeric(bmi30),
+  bilirubin = p30840,
+  bilirubin = as.numeric(bilirubin),
+  weight_loss = case_when(
+      str_detect(p2306, "lost") ~ "yes",
+      TRUE ~ "no"),
+  hrt = p2814
 )
+data <- data %>% mutate(
+  oral_contraceptive = p2784)# this is maybe a character variable, -3 is coded as NA and should be altered
+
+data <- data %>% mutate(
+  pregnancies = # vars below may be  character variable, -3 is coded as NA and should be altered
+      # -1 is coded as do not know
+p2734 number of live births
+p3829 number of stillbirths
+p3839 number of spontaneous abortions
+p3849 number of pregnancy terminations
+
 
 data <- data %>% mutate(
   p6150_i0 = ifelse(is.na(p6150_i0), "None", p6150_i0),
