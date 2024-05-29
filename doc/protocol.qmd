@@ -265,7 +265,7 @@ geographical region of recruitment (ten UK regions), cohabitation
 (alone, with spouse/partner, with other non-partner, no answer),
 anthropometry (BMI \[kg/m2\]), physical activity (low \[≤918
 MET-min/week\], moderate \[918-3706 MET-min/week\], high \[≥3706
-MET-min/week\], and unknown) [@Cassidy2016], smoking status (never, former, current 1-15 cigarettes per day, current ≥15 cigarettes per day, unknown), rapid  weight loss (yes, no), history of gallbladder related conditions (participants’ diagnosis of diabetes, elevated cholesterol, use of hormone replacement therapy  drugs for women [yes, no], used of oral contraceptives  for women [yes, no]), and family history of gallbladder related conditions (diabetes, elevated cholesterol, gallbladder disease). Blood samples were drawn at baseline for all participants to measure total bilirubin  levels as there has been found a causal association between elevated total bilirubin and risk of gallbladder diseases [@Sun2023].  
+MET-min/week\], and unknown) [@Cassidy2016], smoking status (never, former, current 1-15 cigarettes per day, current ≥15 cigarettes per day, unknown), rapid  weight loss (yes, no), history of gallbladder related conditions (participants’ diagnosis of diabetes, elevated cholesterol, use of hormone replacement therapy  drugs for women [yes, no], used of oral contraceptives  for women [yes, no]), and family history of diabetes (yes, no). Blood samples were drawn at baseline for all participants to measure total bilirubin  levels as there has been found a causal association between elevated total bilirubin and risk of gallbladder diseases [@Sun2023].
 
 ## Sample size
 
@@ -325,7 +325,7 @@ red and processed meats, poultry, or fish with legumes and risk of gallbladder d
 
 To evaluate the association between overall legume intake and gallbladder disease
 risk, hazard ratios associated with a 80 g/week increase in legumes will
-be estimated following adjustment levels in model 2. Secondary analyses will also include a non-specific substitution of legumes and pulses for any other food component to evaluate the association with gallbladder diseases. Adjustment will follow model 2.  
+be estimated following adjustment levels in model 2. Secondary analyses will also include a non-specific substitution of legumes and pulses for any other food component to evaluate the association with gallbladder diseases. Adjustment will follow model 2.
 
 Peas are increasingly used as a plant-based meat alternative in the food
 industry [@Maningat2022]. Despite this, peas are also included in the
@@ -338,7 +338,7 @@ portion size of peas weighing 80 g [@Services2021].
 
 To evaluate the robustness of the main analyses, sensitivity analyses
 will include varying numbers of Oxford WebQ returns, and removal of
-participants in the highest 90th percentile of total bilirubin levels. 
+participants in the highest 90th percentile of total bilirubin levels.
 
 All analyses will be conducted in R with a significance level of 5%.
 
@@ -357,11 +357,11 @@ containing 1 or 0, for ratios or absolute measures respectively.
 ## Data exclusion
 
 **Exclusion criteria**
-Only participants with two or more completed Oxford WebQs are eligible for analyses. Participants who had their gallbladder removed or were diagnosed with cholelithiasis or cholecystitis before the last completed Oxford WebQ will be excluded from analyses.   
+Only participants with two or more completed Oxford WebQs are eligible for analyses. Participants who had their gallbladder removed or were diagnosed with cholelithiasis or cholecystitis before the last completed Oxford WebQ will be excluded from analyses.
 
 
 ## Missing data
-Missing data on covariates at baseline will also be a cause for exclusion of participants. 
+Missing data on covariates at baseline will also be a cause for exclusion of participants.
 
 
 # Other
