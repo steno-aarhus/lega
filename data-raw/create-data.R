@@ -11,8 +11,8 @@ library(magrittr)
 # files into the history.
 
 # Uncomment if you messed up and need to start over.
-# ukbAid::project_variables %>%
-#     readr::write_csv(here::here("data-raw/project-variables.csv"))
+# project_variables_original <- ukbAid::project_variables %>%
+#     readr::write_csv(here::here("data-raw/project-variables_original.csv"))
 
 # Update if necessary.
 ukbAid::rap_variables %>%
