@@ -19,7 +19,7 @@ summary(data$sex=="Male")
 
 # Table 1 -----------------------------------------------------------------
 table1 <- data %>%
-  select(gbd, age, sex, yearly_income, education, deprivation, cohabitation, ethnicity, physical_activity, smoking, alcohol_daily, region, bmi30, related_disease, cancer, disease_family) %>%
+  select(gbd, age, sex, yearly_income, education, deprivation, cohabitation, ethnicity, physical_activity, smoking, region, bmi30, hrt, oral_contraceptive, related_disease, cancer, disease_family) %>%
   tbl_summary(by = gbd,
               statistic = list(all_continuous() ~  "{median} ({p10}, {p90})",
                                all_categorical() ~ "{n} ({p}%)"),
@@ -31,4 +31,20 @@ table1 <- data %>%
   as_flex_table()
 
 flextable::save_as_html(table1, path = here("doc", "table1.html"))
-# flextable::save_as_docx(table1, path = here("doc", "table1.docx"))
+
+
+# Supplementary table 1 ---------------------------------------------------
+suppl_table1 <- data %>%
+    select(gbd, legume_weekly, meats_weekly, poultry_weekly, fish_weekly, cereal_refined_weekly, whole_grain_weekly, mixed_dish_weekly, dairy_weekly, fats_weekly, fruit_weekly, nut_weekly, veggie_weekly, potato_weekly, egg_weekly, non_alc_beverage_weekly, alc_beverage_weekly, snack_weekly, sauce_weekly, weight_weekly) %>%
+    tbl_summary(by = gbd,
+                statistic = list(all_continuous() ~  "{median} ({p10}, {p90})",
+                                 all_categorical() ~ "{n} ({p}%)"),
+                digits = all_continuous() ~ 1,
+                missing_text = "n missing") %>%
+    add_overall() %>%
+    bold_labels() %>%
+    modify_caption("Supplementary Table 1. Median and 10-90 percentiles of weekly intake of food groups included in substitution analyses in the UK Biobank") %>%
+    as_flex_table()
+
+flextable::save_as_html(suppl_table1, path = here("doc", "suppl_table1.html"))
+
