@@ -132,3 +132,13 @@ p41282,Date of first operative procedure - OPCS4,446544,https://biobank.ndph.ox.
 p41283,Date of first operative procedure - OPCS3,10699,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=41283
 p104280,Pea intake,51142,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=104280
 p105010,When diet questionnaire completed,210948,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=105010
+
+p30840 bilirubin
+p2306 rapid weight loss
+p2814 hormone replacement therapy
+p2784 oral contraceptive use
+p2734 number of live births
+p3829 number of stillbirths
+p3839 number of spontaneous abortions
+p3849 number of pregnancy terminations
+
