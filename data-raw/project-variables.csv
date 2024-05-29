@@ -132,13 +132,11 @@ p41282,Date of first operative procedure - OPCS4,446544,https://biobank.ndph.ox.
 p41283,Date of first operative procedure - OPCS3,10699,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=41283
 p104280,Pea intake,51142,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=104280
 p105010,When diet questionnaire completed,210948,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=105010
-
-p30840 bilirubin
-p2306 rapid weight loss
-p2814 hormone replacement therapy
-p2784 oral contraceptive use
-p2734 number of live births
-p3829 number of stillbirths
-p3839 number of spontaneous abortions
-p3849 number of pregnancy terminations
-
+p2734,Number of live births,272718,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=2734
+p30840,Total bilirubin,468571,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=30840
+p2306,Weight change compared with 1 year ago,501277,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=2306
+p2814,Ever used hormone-replacement therapy (HRT),272717,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=2814
+p2784,Ever taken oral contraceptive pill,272717,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=2784
+p3829,Number of stillbirths,88135,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=3829
+p3839,Number of spontaneous miscarriages,88135,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=3839
+p3849,Number of pregnancy terminations,88135,https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=3849
