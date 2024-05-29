@@ -6,10 +6,6 @@ p54_i0,UK Biobank assessment centre | Instance 0,p54
 p54_i1,UK Biobank assessment centre | Instance 1,p54
 p54_i2,UK Biobank assessment centre | Instance 2,p54
 p54_i3,UK Biobank assessment centre | Instance 3,p54
-p55_i0,Month of attending assessment centre | Instance 0,p55
-p55_i1,Month of attending assessment centre | Instance 1,p55
-p55_i2,Month of attending assessment centre | Instance 2,p55
-p55_i3,Month of attending assessment centre | Instance 3,p55
 p190,Reason lost to follow-up,p190
 p191,Date lost to follow-up,p191
 p709_i0,Number in household | Instance 0,p709
@@ -20,6 +16,10 @@ p738_i0,Average total household income before tax | Instance 0,p738
 p738_i1,Average total household income before tax | Instance 1,p738
 p738_i2,Average total household income before tax | Instance 2,p738
 p738_i3,Average total household income before tax | Instance 3,p738
+p2306_i0,Weight change compared with 1 year ago | Instance 0,p2306
+p2306_i1,Weight change compared with 1 year ago | Instance 1,p2306
+p2306_i2,Weight change compared with 1 year ago | Instance 2,p2306
+p2306_i3,Weight change compared with 1 year ago | Instance 3,p2306
 p2443_i0,Diabetes diagnosed by doctor | Instance 0,p2443
 p2443_i1,Diabetes diagnosed by doctor | Instance 1,p2443
 p2443_i2,Diabetes diagnosed by doctor | Instance 2,p2443
@@ -28,10 +28,34 @@ p2453_i0,Cancer diagnosed by doctor | Instance 0,p2453
 p2453_i1,Cancer diagnosed by doctor | Instance 1,p2453
 p2453_i2,Cancer diagnosed by doctor | Instance 2,p2453
 p2453_i3,Cancer diagnosed by doctor | Instance 3,p2453
+p2734_i0,Number of live births | Instance 0,p2734
+p2734_i1,Number of live births | Instance 1,p2734
+p2734_i2,Number of live births | Instance 2,p2734
+p2734_i3,Number of live births | Instance 3,p2734
+p2784_i0,Ever taken oral contraceptive pill | Instance 0,p2784
+p2784_i1,Ever taken oral contraceptive pill | Instance 1,p2784
+p2784_i2,Ever taken oral contraceptive pill | Instance 2,p2784
+p2784_i3,Ever taken oral contraceptive pill | Instance 3,p2784
+p2814_i0,Ever used hormone-replacement therapy (HRT) | Instance 0,p2814
+p2814_i1,Ever used hormone-replacement therapy (HRT) | Instance 1,p2814
+p2814_i2,Ever used hormone-replacement therapy (HRT) | Instance 2,p2814
+p2814_i3,Ever used hormone-replacement therapy (HRT) | Instance 3,p2814
 p3456_i0,Number of cigarettes currently smoked daily (current cigarette smokers) | Instance 0,p3456
 p3456_i1,Number of cigarettes currently smoked daily (current cigarette smokers) | Instance 1,p3456
 p3456_i2,Number of cigarettes currently smoked daily (current cigarette smokers) | Instance 2,p3456
 p3456_i3,Number of cigarettes currently smoked daily (current cigarette smokers) | Instance 3,p3456
+p3829_i0,Number of stillbirths | Instance 0,p3829
+p3829_i1,Number of stillbirths | Instance 1,p3829
+p3829_i2,Number of stillbirths | Instance 2,p3829
+p3829_i3,Number of stillbirths | Instance 3,p3829
+p3839_i0,Number of spontaneous miscarriages | Instance 0,p3839
+p3839_i1,Number of spontaneous miscarriages | Instance 1,p3839
+p3839_i2,Number of spontaneous miscarriages | Instance 2,p3839
+p3839_i3,Number of spontaneous miscarriages | Instance 3,p3839
+p3849_i0,Number of pregnancy terminations | Instance 0,p3849
+p3849_i1,Number of pregnancy terminations | Instance 1,p3849
+p3849_i2,Number of pregnancy terminations | Instance 2,p3849
+p3849_i3,Number of pregnancy terminations | Instance 3,p3849
 p6138_i0,Qualifications | Instance 0,p6138
 p6138_i1,Qualifications | Instance 1,p6138
 p6138_i2,Qualifications | Instance 2,p6138
@@ -40,10 +64,6 @@ p6141_i0,How are people in household related to participant | Instance 0,p6141
 p6141_i1,How are people in household related to participant | Instance 1,p6141
 p6141_i2,How are people in household related to participant | Instance 2,p6141
 p6141_i3,How are people in household related to participant | Instance 3,p6141
-p6142_i0,Current employment status | Instance 0,p6142
-p6142_i1,Current employment status | Instance 1,p6142
-p6142_i2,Current employment status | Instance 2,p6142
-p6142_i3,Current employment status | Instance 3,p6142
 p6150_i0,Vascular/heart problems diagnosed by doctor | Instance 0,p6150
 p6150_i1,Vascular/heart problems diagnosed by doctor | Instance 1,p6150
 p6150_i2,Vascular/heart problems diagnosed by doctor | Instance 2,p6150
@@ -72,12 +92,23 @@ p21000_i0,Ethnic background | Instance 0,p21000
 p21000_i1,Ethnic background | Instance 1,p21000
 p21000_i2,Ethnic background | Instance 2,p21000
 p21000_i3,Ethnic background | Instance 3,p21000
-p21001_i0,Body mass index (BMI) | Instance 0,p21001
-p21001_i1,Body mass index (BMI) | Instance 1,p21001
-p21001_i2,Body mass index (BMI) | Instance 2,p21001
-p21001_i3,Body mass index (BMI) | Instance 3,p21001
+p21022,Age at recruitment,p21022
 p22040_i0,Summed MET minutes per week for all activity | Instance 0,p22040
 p22189,Townsend deprivation index at recruitment,p22189
+p23104_i0,Body mass index (BMI) | Instance 0,p23104
+p23104_i1,Body mass index (BMI) | Instance 1,p23104
+p23104_i2,Body mass index (BMI) | Instance 2,p23104
+p23104_i3,Body mass index (BMI) | Instance 3,p23104
+p26000_i0,Total weight of all foods and beverages | Instance 0,p26000
+p26000_i1,Total weight of all foods and beverages | Instance 1,p26000
+p26000_i2,Total weight of all foods and beverages | Instance 2,p26000
+p26000_i3,Total weight of all foods and beverages | Instance 3,p26000
+p26000_i4,Total weight of all foods and beverages | Instance 4,p26000
+p26002_i0,Energy | Instance 0,p26002
+p26002_i1,Energy | Instance 1,p26002
+p26002_i2,Energy | Instance 2,p26002
+p26002_i3,Energy | Instance 3,p26002
+p26002_i4,Energy | Instance 4,p26002
 p26030_i0,Alcohol | Instance 0,p26030
 p26030_i1,Alcohol | Instance 1,p26030
 p26030_i2,Alcohol | Instance 2,p26030
@@ -553,6 +584,8 @@ p26155_i1,Trans fatty acids | Instance 1,p26155
 p26155_i2,Trans fatty acids | Instance 2,p26155
 p26155_i3,Trans fatty acids | Instance 3,p26155
 p26155_i4,Trans fatty acids | Instance 4,p26155
+p30840_i0,Total bilirubin | Instance 0,p30840
+p30840_i1,Total bilirubin | Instance 1,p30840
 p40000_i0,Date of death | Instance 0,p40000
 p40000_i1,Date of death | Instance 1,p40000
 p41270,Diagnoses - ICD10,p41270
