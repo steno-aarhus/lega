@@ -4,6 +4,10 @@ library(tidyverse)
 library(magrittr)
 library(dplyr)
 
+# Load saved data:
+targets::tar_make()
+source(here::here("R/1_data_start.R"))
+
 
 # Average dietary intake of food groups -----------------------------------
 # estimating average daily and weekly intakes of food groups in g
