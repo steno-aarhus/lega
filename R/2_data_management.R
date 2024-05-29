@@ -7,8 +7,6 @@ library(tidyr)
 library(stringr)
 
 # Load data
-targets::tar_make()
-# Restart session
 source(here::here("R/1_data_start.R"))
 
 # Remove ineligible number of recalls ------------
@@ -104,62 +102,37 @@ data <- data %>% mutate(
       TRUE ~ "no")
   )
 
-
-
+# preparing pregnancy outcomes for summed pregnancies
+# converting from character to numeric. All no answers coded as NA
 data <- data %>% mutate(
-  pregnancies = # vars below may be  character variable, -3 is coded as NA and should be altered
-      # -1 is coded as do not know
-p2734 number of live births
-p3829 number of stillbirths
-p3839 number of spontaneous abortions
-p3849 number of pregnancy terminations
+  p3839_i0 = ifelse((p3839_i0 == "Do not know"), "NA", p3839_i0),
+  p3839_i0 = ifelse((p3839_i0 == "Prefer not to answer"), "NA", p3839_i0),
+  p3839_i0 = as.integer(p3839_i0),
+  p3849_i0 = ifelse((p3849_i0 == "Do not know"), "NA", p3849_i0),
+  p3849_i0 = ifelse((p3849_i0 == "Prefer not to answer"), "NA", p3849_i0),
+  p3849_i0 = as.integer(p3849_i0)
+  )
 
-
+# counting total number of pregnancies
 data <- data %>% mutate(
-  p6150_i0 = ifelse(is.na(p6150_i0), "None", p6150_i0),
-  p6150_i0 = as.character(p6150_i0),
+  pregnancies = p2734_i0 + p3829_i0 + p3839_i0 + p3849_i0)
+
+
+# gallbladder related conditions
+data <- data %>% mutate(
   p20002_i0 = ifelse(is.na(p20002_i0), "None", p20002_i0),
   p20002_i0 = as.character(p20002_i0),
-  related_disease = case_when(
-    str_detect(p20002_i0, "hypert") | str_detect(p6150_i0, "High") | str_detect(p20002_i0, "myocardial") |
-      str_detect(p6150_i0, "Heart") | str_detect(p20002_i0, "stroke") | str_detect(p20002_i0, "ischaemic") |
-      str_detect(p20002_i0, "haemorrhage") | str_detect(p6150_i0, "Stroke") | str_detect(p20002_i0, "cholesterol") |
-      str_detect(p20002_i0, "cholangitis") | str_detect(p20002_i0, "cholelithiasis") |
-      str_detect(p20002_i0, "cholecyst") | str_detect(p20002_i0, "primary biliary cirrhosis") |
-      str_detect(p20002_i0, "alcoholic cirrhosis") | str_detect(p6150_i0, "Angina") |  p2443_i0 == "Yes" ~ "yes",
-    p2443_i0 == "No" | p6150_i0 == "None" | p20002_i0 == "None" ~ "none of the above",
-    str_detect(p2443_i0, "know") | str_detect(p2443_i0, "answer") ~ "none of the above",
-    TRUE ~ "none of the above"
-  ))
+  related_conditions = case_when(
+    str_detect(p20002_i0, "cholesterol") | str_detect(p20002_i0, "hepatitis") |
+      str_detect(p20002_i0, "cirrhosis") | str_detect(p2443_i0, "Yes") ~ "yes",
+    TRUE ~ "none of the above"),
+  family_diabetes = case_when(
+    str_detect(p20107_i0, "Diabetes") |str_detect(p20110_i0, "Diabetes") |
+      str_detect(p20111_i0, "Diabetes") ~ "yes",
+    TRUE ~ "no")
+)
 
-data <- data %>% mutate(
-  p20107_i0 = ifelse(is.na(p20107_i0), "None", p20107_i0),
-  p20110_i0 = ifelse(is.na(p20110_i0), "None", p20110_i0),
-  p20111_i0 = ifelse(is.na(p20111_i0), "None", p20111_i0),
-  p20107_i0 = as.character(p20107_i0),
-  p20110_i0 = as.character(p20110_i0),
-  p20111_i0 = as.character(p20111_i0),
-  disease_family = case_when(
-    str_detect(p20107_i0, "Diabetes") | str_detect(p20110_i0, "Diabetes") | str_detect(p20111_i0, "Diabetes") |
-      str_detect(p20107_i0, "High blood pressure") | str_detect(p20110_i0, "High blood pressure") |
-      str_detect(p20111_i0, "High blood pressure") | str_detect(p20107_i0, "Stroke") | str_detect(p20110_i0, "Stroke") |
-      str_detect(p20111_i0, "Stroke") | str_detect(p20107_i0, "Heart disease") | str_detect(p20110_i0, "Heart disease") |
-      str_detect(p20111_i0, "Heart disease") ~ "yes",
-    p20107_i0 == "None" | p20110_i0 == "None" | p20111_i0 == "None" ~ "none of the above",
-    TRUE ~ "none of the above" # If none of the conditions match
-  ),
-  disease_family = as.factor(disease_family),
-  cancer = case_when(
-    str_detect(p2453_i0, "Do not know") ~ "don't know",
-    str_detect(p2453_i0, "Yes") ~ "yes",
-    p2453_i0 == "No" ~ "no",
-    str_detect(p2453_i0, "answer") ~ "no answer",
-    TRUE ~ "no answer"
-  ),
-  cancer = as.factor(cancer))
-
-
-
+# cohabitation
 data <- data %>% mutate(
   cohabitation = case_when(
     p709_i0 == 1 ~ "alone",
@@ -205,6 +178,7 @@ data <- data %>% mutate(
     TRUE ~ "no answer"  # Handling cases not covered by the conditions
   ))
 
+# creating alcohol variable (maybe not needed)
 data <- data %>% mutate(
   p26030_i0 = ifelse(is.na(p26030_i0), 0, p26030_i0),
   p26030_i1 = ifelse(is.na(p26030_i1), 0, p26030_i1),
@@ -222,6 +196,7 @@ data <- data %>% mutate(
   alcohol_weekly = alcohol_daily * 7)
 
 
+# recruitment centre and pea servings
 data <- data %>% mutate(
   region = case_when(
     str_detect(p54_i0, "Barts") | str_detect(p54_i0, "Croydon") | str_detect(p54_i0, "Hounslow")  ~ "London",
@@ -261,8 +236,8 @@ filtered_data <- subset(filtered_data, !is.na(education)) #126263
 filtered_data <- subset(filtered_data, !is.na(cohabitation)) # 125643
 filtered_data <- subset(filtered_data, !is.na(physical_activity)) # no change
 filtered_data <- subset(filtered_data, !is.na(smoking)) # no change
-filtered_data <- subset(filtered_data, !is.na(related_disease)) # no change
-filtered_data <- subset(filtered_data, !is.na(disease_family)) # no change
+filtered_data <- subset(filtered_data, !is.na(related_conditions)) # no change
+filtered_data <- subset(filtered_data, !is.na(family_diabetes)) # no change
 filtered_data <- subset(filtered_data, !is.na(yearly_income)) # no change
 filtered_data <- subset(filtered_data, !is.na(bmi30)) #123822
 data <- filtered_data
@@ -270,16 +245,21 @@ data <- filtered_data
 
 # Remove recoded variables from sorted data -------------------------------
 
-
 variables_to_remove <- c("p20111", "p20110", "p20107", "p23104",
                          "p6150", "p20002", "p2453", "p2443", "p31",
                          "p20116", "p26030", "p3456", "p21022",
                          "p22040", "p6141", "p6138", "p22189",
                          "p21000", "p54", "p738", "p30650",
                          "p30620", "p20165", "p100002",
-                         "p100001", "p709")
+                         "p100001", "p709", "p3839", "p3829", "p3849",
+                         "p2784", "p2814", "p2306", "p30840", "p2734")
 
 data <- data %>%
   select(-matches(variables_to_remove))
 
+# Save the changes as parquet and upload to the RAP folder for easy download
+# next time you sign in
+arrow::write_parquet(data, here("data/data.parquet"))
 
+# Upload to the project RAP folder.
+ukbAid::upload_data(here("data/data.parquet"), username = "FieLangmann")
