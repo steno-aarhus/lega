@@ -1,7 +1,7 @@
-# This script will split p41270 (ICD10-codes) and p41271 (ICD9-codes) into
-# columns and match the date of diagnosis with the diagnosis code for that
-# specific data. This is useful when using ICD10 diagnoses as outcomes in
-# time-to-event analyses
+# This script will split p41270 (ICD10-codes), p41271 (ICD9-codes),  p41272
+# (OPCS4-codes), and p41273 (OPCS3-codes) into columns and match the date of
+# diagnosis with the diagnosis code for that specific data. This is useful
+# when using ICD10 diagnoses as outcomes in time-to-event analyses
 
 # Load packages -----------------------------------------------------------
 library(tidyverse)
