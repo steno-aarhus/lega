@@ -1,3 +1,3 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-download_project_data|stem|6a1105d0856c0e5d|6f397872f9f59b63|2c530c1562a7fbd1|-405941752|/home/rstudio-server/lega/data/data.parquet|t19872.6979025609s|b18e4afcfffc8647|84697126|file|local|vector|||3.893||
+download_project_data|stem|c9752de6341a7dca|6f397872f9f59b63|2c530c1562a7fbd1|-405941752|/home/rstudio-server/lega/data/data.parquet|t19873.4648549746s|b8b3ef33bd0c3de3|78321110|file|local|vector|||5.514||
 package_deps|object|535b3a382fbab6a8|||||||||||||||
