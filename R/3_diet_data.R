@@ -6,6 +6,7 @@ library(dplyr)
 
 # Load saved data:
 targets::tar_make()
+# restart session
 source(here::here("R/1_data_start.R"))
 
 
