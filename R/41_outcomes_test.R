@@ -7,15 +7,19 @@ library(dplyr)
 library(here)
 library(ggplot2)
 
+# smaller dataframe for testing
 data2 <- data[1:100, ]
+
 # Defining gallbladder disease dates  -------------------------------------
+
 ## ICD10 codes ---------------------------------------------------------
-icd10_subset <- data2 %>%
+icd10_subset <- data %>%
     select(starts_with("p41270"), starts_with("p41280"), "id") %>%
     # splitting diagnoses string-variable each time a | is in the string
     separate_wider_delim(p41270, delim = "|", names = paste0("p41270var_a", 0:258), too_few = "debug") %>%
     select(matches("p41270|p41280|id")) %>%
     pivot_longer(cols = matches("_a[0-9]*$"), names_to = c(".value", "a"), names_sep = "_") %>%
+
     # creating outcome variables with date info from p41280
     mutate(
         # gallstone (K80.X)
@@ -26,7 +30,7 @@ icd10_subset <- data2 %>%
         icd10_cholecystit_date = as.Date(icd10_cholecystit_date, format = "%Y-%m-%d"))
 
 # Retrieve the first non-NA date for each outcome
-first_non_na_dates <- icd10_subset %>%
+first_non_na_icd10 <- icd10_subset %>%
     select(id, icd10_gallstone_date, icd10_cholecystit_date) %>%
     pivot_longer(cols = starts_with("icd10_"), names_to = "condition", values_to = "date") %>%
     filter(!is.na(date)) %>%
@@ -36,84 +40,46 @@ first_non_na_dates <- icd10_subset %>%
     ungroup()
 
 # Join the dates back to the original data
-data2 <- data2 %>%
-    left_join(first_non_na_dates, by = "id")
-
-### Delete old ICD10 diagnosis and dates ------------------------------------
-# delete <- c("p41280", "p41270")
-# data <- data %>%
-#     select(-matches(paste0(delete)))
+data <- data %>%
+    left_join(first_non_na_icd10, by = "id")
 
 
 ## ICD9 codes ---------------------------------------------------------
 # Split the diagnosis-variable into separate columns based on delimiter "|"
-icd9 <- data %>%
+icd9_subset <- data %>%
     select(starts_with("p41271"), starts_with("p41281"), "id") %>%
-    separate_wider_delim(p41271,
-                         delim = "|",
-                         names = paste0("p41271var_a", 0:46), too_few = "debug")
-
-# Transform from wide to long format to match ICD-codes with date of diagnosis
-icd9_subset <- icd9 %>%
+    # splitting diagnoses string-variable each time a | is in the string
+    separate_wider_delim(p41271, delim = "|", names = paste0("p41271var_a", 0:46), too_few = "debug") %>%
     select(matches("p41271|p41281|id")) %>%
-    pivot_longer(cols = matches("_a[0-9]*$"),
-                 names_to = c(".value", "a"),
-                 names_sep = "_")
+    pivot_longer(cols = matches("_a[0-9]*$"), names_to = c(".value", "a"), names_sep = "_") %>%
 
-# Defining dates of gallstone (574X)
-icd9_gallstone <- icd9_subset %>%
-    mutate(icd9_gallstone_date = ifelse(str_detect(p41271var, "574"),
-                                        as.character(c_across(starts_with("p41281"))),
-                                        NA),
-           icd9_gallstone_date = as.Date(icd9_gallstone_date, format = "%Y-%m-%d"))
+    # creating outcome variables with date info from p41281
+    mutate(
+        # gallstone
+        icd9_gallstone_date = ifelse(str_detect(p41271var, "574"), as.character(c_across(starts_with("p41281"))), NA),
+        icd9_gallstone_date = as.Date(icd9_gallstone_date, format = "%Y-%m-%d"),
+        # acute cholecystitis
+        icd9_acute_date = ifelse(str_detect(p41271var, "5750"), as.character(c_across(starts_with("p41281"))), NA),
+        icd9_acute_date = as.Date(icd9_acute_date, format = "%Y-%m-%d"),
+        # other cholecystitis
+        icd9_other_date = ifelse(str_detect(p41271var, "5751"), as.character(c_across(starts_with("p41281"))), NA),
+        icd9_other_date = as.Date(icd9_other_date, format = "%Y-%m-%d")
+    )
 
-first_non_na_gallstone <- icd9_gallstone %>%
-    filter(!is.na(icd9_gallstone_date)) %>%
-    group_by(id) %>%
+# Retrieve the first non-NA date for each outcome
+first_non_na_icd9 <- icd9_subset %>%
+    select(id, icd9_gallstone_date, icd9_acute_date, icd9_other_date) %>%
+    pivot_longer(cols = starts_with("icd9_"), names_to = "condition", values_to = "date") %>%
+    filter(!is.na(date)) %>%
+    group_by(id, condition) %>%
     slice(1) %>%
+    pivot_wider(names_from = condition, values_from = date) %>%
     ungroup()
 
+# Join the dates back to the original data
 data <- data %>%
-    left_join(first_non_na_gallstone %>% select(id, icd9_gallstone_date), by = "id")
+    left_join(first_non_na_icd9, by = "id")
 
-
-# Defining date of acute cholecystitis
-icd9_acute <- icd9_subset %>%
-    mutate(icd9_acute_date = ifelse(str_detect(p41271var, "5750"),
-                                    as.character(c_across(starts_with("p41281"))),
-                                    NA),
-           icd9_acute_date = as.Date(icd9_acute_date, format = "%Y-%m-%d"))
-
-first_non_na_acute <- icd9_acute %>%
-    filter(!is.na(icd9_acute_date)) %>%
-    group_by(id) %>%
-    slice(1) %>%
-    ungroup()
-
-data <- data %>%
-    left_join(first_non_na_acute %>% select(id, icd9_acute_date), by = "id")
-
-# Defining date of other cholecystitis
-icd9_other <- icd9_subset %>%
-    mutate(icd9_other_date = ifelse(str_detect(p41271var, "5751"),
-                                    as.character(c_across(starts_with("p41281"))),
-                                    NA),
-           icd9_other_date = as.Date(icd9_other_date, format = "%Y-%m-%d"))
-
-first_non_na_other <- icd9_other %>%
-    filter(!is.na(icd9_other_date)) %>%
-    group_by(id) %>%
-    slice(1) %>%
-    ungroup()
-
-data <- data %>%
-    left_join(first_non_na_other %>% select(id, icd9_other_date), by = "id")
-
-
-### Delete old ICD9 diagnosis and dates ------------------------------------
-delete <- c("p41281", "p41271")
-data <- data %>%
-    select(-matches(paste0(delete)))
 
 
 ## OPCS 4 codes ---------------------------------------------------------
@@ -176,13 +142,6 @@ data <- data %>%
     left_join(first_non_na_gallstone %>% select(id, opcs4_gallstone_date), by = "id")
 
 
-
-### Delete old OPCS4 diagnosis and dates ------------------------------------
-delete <- c("p41282", "p41272")
-data <- data %>%
-    select(-matches(paste0(delete)))
-
-
 ## OPCS 3 codes ---------------------------------------------------------
 opcs3 <- data %>%
     select(starts_with("p41273"), starts_with("p41283"), "id") %>%
@@ -230,12 +189,6 @@ first_non_na_gallstone <- opcs3_gallstone %>%
 data <- data %>%
     left_join(first_non_na_gallstone %>% select(id, opcs3_gallstone_date), by = "id")
 
-### Delete old OPCS3 diagnosis and dates ------------------------------------
-delete <- c("p41283", "p41273")
-data <- data %>%
-    select(-matches(paste0(delete)))
-
-
 
 # Define variables for survival analysis ----------------------------------
 
@@ -246,10 +199,7 @@ data <- data %>%
            loss_to_follow_up = p191,
            loss_to_follow_up = as.Date(loss_to_follow_up))
 
-# remove p-values
-remove <- c("p191", "p40000_i0", "p40000_i1")
-data <- data %>%
-    select(-matches(remove))
+
 
 ## birth date as origin for survival analysis ------------------------------
 # Merging birth year and month of birth into one column:
@@ -271,7 +221,6 @@ data$date_birth <- as.Date(paste0(data$date_birth, "-15"))
 
 ## Set cut-off date for follow-up ------------------------------------------
 # Estimated last follow-up date for cholecystectomy (stagnation of diagnoses)
-# Create the plot
 ggplot(data, aes(x = opcs4_removal_date, y = id)) +
     geom_point() + # Use points to show individual data points
     geom_smooth(method = "lm", se = FALSE) + # Add linear regression line
@@ -282,14 +231,11 @@ ggplot(data, aes(x = opcs4_removal_date, y = id)) +
 
 # The density is very high in the right of the plot - I will estimate the last
 # diagnosis date in data:
-
 dates <- data %>%
     subset(!is.na(opcs4_removal_date))
 
 # Find the last date of diagnosis
 last_date <- max(dates$opcs4_removal_date)
-
-# Print or use the last date as needed
 print(last_date)
 
 # # Administrative censoring at October 31st, 2022
@@ -393,7 +339,7 @@ data <- data %>%
 
 
 # Remove those with outcome before baseline (=last webQ) --------
-# time of last completed 24h recall as baseline date
+
 data <- data %>%
     mutate(ques_comp_t0 = p105010_i0,
            ques_comp_t1 = p105010_i1,
@@ -405,29 +351,21 @@ data <- data %>%
            ques_comp_t1 = substr(ques_comp_t1, 1, 10),
            ques_comp_t2 = substr(ques_comp_t2, 1, 10),
            ques_comp_t3 = substr(ques_comp_t3, 1, 10),
-           ques_comp_t4 = substr(ques_comp_t4, 1, 10)
-    )
+           ques_comp_t4 = substr(ques_comp_t4, 1, 10)) %>%
 
-
-# New column with baseline start date as last completed questionnaire
-data <- data %>%
-    # Convert ques_0 to ques_4 to date format
-    mutate(across(starts_with("ques_"), as.Date)) %>%
-    # Gather all columns into key-value pairs
-    pivot_longer(cols = starts_with("ques_"), names_to = "questionnaire", values_to = "date_filled") %>%
-    # Group by participant ID and select the row with the latest date_filled for each participant
-    group_by(id) %>%
-    slice(which.max(date_filled)) %>%
-    ungroup() %>%
-    # Rename the remaining column to indicate the last filled questionnaire
-    rename(last_filled_questionnaire = questionnaire)
-
-data <- data %>%
+           #baseline start date as last completed questionnaire
+           mutate(across(starts_with("ques_"), as.Date)) %>%
+               # Gather all columns into key-value pairs
+               pivot_longer(cols = starts_with("ques_"), names_to = "questionnaire", values_to = "date_filled") %>%
+               # Group by participant ID and select the row with the latest date_filled for each participant
+               group_by(id) %>%
+               slice(which.max(date_filled)) %>%
+               ungroup() %>%
+               # Rename the remaining column to indicate the last filled questionnaire
+               rename(last_filled_questionnaire = questionnaire) %>%
     mutate(date_filled = as.Date(date_filled))
 
-remove <- c("p105010_i0", "p105010_i1", "p105010_i2", "p105010_i3","p105010_i4")
-data <- data %>%
-    select(-matches(remove))
+
 
 diagnosed_before <- function(data) {
     filtered_data <- data %>%
@@ -517,6 +455,20 @@ data_time <- data %>%
 data <- data %>%
     subset(data$time>=0)
 
+#
+# # Remove redundant variables --------------------------------------------
+#
+# remove <- c("p191", "p40000_i0", "p40000_i1","p105010_i0", "p105010_i1", "p105010_i2",
+#             "p105010_i3","p105010_i4", "p41280", "p41270", "p41281", "p41271", "p41282",
+#             "p41272","p41283", "p41273")
+# data <- data %>%
+#     select(-matches(remove))
+#
+#
+# data <- data %>%
+#     select(-matches("p191", "p40000_i0", "p40000_i1","p105010_i0", "p105010_i1", "p105010_i2",
+#                     "p105010_i3","p105010_i4", "p41280", "p41270", "p41281", "p41271", "p41282",
+#                     "p41272","p41283", "p41273"))
 # Save data ---------------------------------------------------------------
 arrow::write_parquet(data, here("data/data.parquet"))
 ukbAid::upload_data(here("data/data.parquet"), username = "FieLangmann")
