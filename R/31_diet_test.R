@@ -43,3 +43,25 @@ calculate_food_intake <- function(data) {
 
 
 diet <- calculate_food_intake(data)
+
+calculate_food_intake <- function(data) {
+    # estimating average daily and weekly intakes of food groups in g
+  data <- data |>
+    mutate(
+      cereal_refined_total = rowSums(pick(matches("p26113|p26079|p26071|p26072|p26073|p26075|p26068|p26083")")), na.rm = TRUE),
+      whole_grain_total = rowSums(pick(matches("p26074|p26076|p26077|p26078|p26105|p26114")), na.rm = TRUE))
+            ) |>
+        calculate_daily() |>
+        calculate_weekly() |>
+        ungroup()
+    return(diet_data)
+}
+
+
+
+# Fra legliv
+data <- data |>
+    mutate(
+      hummus_guac = rowSums(pick(matches("p26144")), na.rm = TRUE) / 2,
+      peas_corn = rowSums(pick(matches("p26115")), na.rm = TRUE) / 2,
+      legume_daily = rowSums(pick(matches("p26086|p26101|p26136|p26137|hummus_guac|peas_corn")), na.rm = TRUE) / p20077
