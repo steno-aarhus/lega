@@ -19,18 +19,6 @@ data <- data %>%
 data <- data %>%
   mutate(id = 1:n(), .before = everything())
 
-# Remove variables and columns --------------------------------------------
-# Delete follow-up instances for confounder variables
-variables_to_edit <- c("p738", "p2443", "p2453", "p3456", "p6150",
-                       "p20002","p20107", "p20110", "p20111", "p20161", "p20162",
-                       "p21000", "p22040", "p22506", "p23104", "p2443",
-                       "p2453", "p6141", "p709", "p30840", "p2306", "p2814",
-                       "p2784", "p2734", "p3829", "p3839", "p3849")
-
-data <- data %>%
-  select(-matches(paste0(variables_to_edit, "_i[1-4]")))
-
-
 # Recoding covariables (not foods) ------------------------------------------------------
 # Baseline characteristics
 data <- data %>% mutate(
