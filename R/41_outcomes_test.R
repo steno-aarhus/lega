@@ -345,6 +345,24 @@ diagnosed_before <- function(data) {
 
     return(data)
 }
+
+diagnosed_before <- function(data) {
+    filtered_data <- data %>%
+        filter(if_any(
+            c(icd10_gallstone_date, icd10_obstruction_date, icd9_gallstone_date,
+              icd9_obstruction_date, opcs4_removal_date, opcs4_gallstone_date,
+              opcs3_removal_date, opcs3_gallstone_date, icd10_cholecystit_date,
+              icd9_acute_date, icd9_other_date),
+            ~ . < date_filled
+        ))
+
+    data <- data %>%
+        anti_join(filtered_data, by = "id")
+
+    return(data)
+}
+
+
 data <- diagnosed_before(data)
 
 
