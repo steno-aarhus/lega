@@ -45,7 +45,6 @@ data <- data %>%
 
 
 ## ICD9 codes ---------------------------------------------------------
-# Split the diagnosis-variable into separate columns based on delimiter "|"
 icd9_subset <- data %>%
     select(starts_with("p41271"), starts_with("p41281"), "id") %>%
     # splitting diagnoses string-variable each time a | is in the string
@@ -81,113 +80,80 @@ data <- data %>%
     left_join(first_non_na_icd9, by = "id")
 
 
-
 ## OPCS 4 codes ---------------------------------------------------------
 opcs4 <- data %>%
     select(starts_with("p41272"), starts_with("p41282"), "id") %>%
-    separate_wider_delim(p41272,
-                         delim = "|",
-                         names = paste0("p41272var_a", 0:125), too_few = "debug")
-
-# Transform from wide to long format to match ICD-codes with date of diagnosis
-opcs4_subset <- opcs4 %>%
+    # splitting diagnoses string-variable each time a | is in the string
+    separate_wider_delim(p41272, delim = "|", names = paste0("p41272var_a", 0:125), too_few = "debug") %>%
     select(matches("p41272|p41282|id")) %>%
-    pivot_longer(cols = matches("_a[0-9]*$"),
-                 names_to = c(".value", "a"),
-                 names_sep = "_")
-# Defining dates of cholecystectomy
-opcs4_removal <- opcs4_subset %>% mutate(
-    opcs4_removal_date = case_when(
-        str_detect(p41272var, "J18.1") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J18.2") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J18.3") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J18.8") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J18.9") ~ as.character(c_across(starts_with("p41282"))),
-        TRUE ~ NA_character_),
-    opcs4_removal_date = as.Date(opcs4_removal_date, format = "%Y-%m-%d"))
+    pivot_longer(cols = matches("_a[0-9]*$"), names_to = c(".value", "a"), names_sep = "_") %>%
 
-first_non_na_removal <- opcs4_removal %>%
-    filter(!is.na(opcs4_removal_date)) %>%
-    group_by(id) %>%
+    # creating outcome variables with date info from p41282
+    mutate(
+        # gallbladder removal
+        opcs4_removal_date = case_when(
+            str_detect(p41272var, "J18.1") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J18.2") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J18.3") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J18.8") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J18.9") ~ as.character(c_across(starts_with("p41282"))),
+            TRUE ~ NA_character_),
+        opcs4_removal_date = as.Date(opcs4_removal_date, format = "%Y-%m-%d"),
+        opcs4_gallstone_date = case_when(
+            str_detect(p41272var, "J33.1") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J33.2") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J52.1") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J21.1") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J41.1") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J41.3") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J49.1") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J49.2") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J24.2") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J24.3") ~ as.character(c_across(starts_with("p41282"))),
+            str_detect(p41272var, "J26.1") ~ as.character(c_across(starts_with("p41282"))),
+            TRUE ~ NA_character_),
+        opcs4_gallstone_date = as.Date(opcs4_gallstone_date, format = "%Y-%m-%d")
+        )
+
+first_non_na_opcs4 <- opcs4 %>%
+    select(id, opcs4_removal_date, opcs4_gallstone_date) %>%
+    pivot_longer(cols = starts_with("opcs4_"), names_to = "condition", values_to = "date") %>%
+    filter(!is.na(date)) %>%
+    group_by(id, condition) %>%
     slice(1) %>%
+    pivot_wider(names_from = condition, values_from = date) %>%
     ungroup()
-
-data <- data %>%
-    left_join(first_non_na_removal %>% select(id, opcs4_removal_date), by = "id")
-
-# Defining dates of gallstone removal
-opcs4_gallstone <- opcs4_subset %>% mutate(
-    opcs4_gallstone_date = case_when(
-        str_detect(p41272var, "J33.1") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J33.2") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J52.1") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J21.1") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J41.1") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J41.3") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J49.1") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J49.2") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J24.2") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J24.3") ~ as.character(c_across(starts_with("p41282"))),
-        str_detect(p41272var, "J26.1") ~ as.character(c_across(starts_with("p41282"))),
-        TRUE ~ NA_character_),
-    opcs4_gallstone_date = as.Date(opcs4_gallstone_date, format = "%Y-%m-%d"))
-
-first_non_na_gallstone <- opcs4_gallstone %>%
-    filter(!is.na(opcs4_gallstone_date)) %>%
-    group_by(id) %>%
-    slice(1) %>%
-    ungroup()
-
-data <- data %>%
-    left_join(first_non_na_gallstone %>% select(id, opcs4_gallstone_date), by = "id")
 
 
 ## OPCS 3 codes ---------------------------------------------------------
 opcs3 <- data %>%
     select(starts_with("p41273"), starts_with("p41283"), "id") %>%
-    separate_wider_delim(p41273,
-                         delim = "|",
-                         names = paste0("p41272var_a", 0:15), too_few = "debug")
-
-# Transform from wide to long format to match ICD-codes with date of diagnosis
-opcs3_subset <- opcs3 %>%
+    # splitting diagnoses string-variable each time a | is in the string
+    separate_wider_delim(p41273, delim = "|", names = paste0("p41272var_a", 0:15), too_few = "debug")
     select(matches("p41273|p41283|id")) %>%
-    pivot_longer(cols = matches("_a[0-9]*$"),
-                 names_to = c(".value", "a"),
-                 names_sep = "_")
+    pivot_longer(cols = matches("_a[0-9]*$"), names_to = c(".value", "a"), names_sep = "_") %>%
 
-# Defining dates of cholecystectomy
-opcs3_removal <- opcs3_subset %>% mutate(
-    opcs3_removal_date = case_when(
-        str_detect(p41273, "522") ~ as.character(c_across(starts_with("p41283"))),
-        str_detect(p41273, "522.2") ~ as.character(c_across(starts_with("p41283"))),
-        TRUE ~ NA_character_),
-    opcs3_removal_date = as.Date(opcs3_removal_date, format = "%Y-%m-%d"))
+        # creating outcome variables with date info from p41283
+        mutate(
+            opcs3_removal_date = case_when(
+                str_detect(p41273, "522") ~ as.character(c_across(starts_with("p41283"))),
+                str_detect(p41273, "522.2") ~ as.character(c_across(starts_with("p41283"))),
+                TRUE ~ NA_character_),
+            opcs3_removal_date = as.Date(opcs3_removal_date, format = "%Y-%m-%d"),
+            opcs3_gallstone_date = ifelse(str_detect(p41273, "511"),
+                                          as.character(c_across(starts_with("p41283"))),
+                                          NA),
+            opcs3_gallstone_date = as.Date(opcs3_gallstone_date, format = "%Y-%m-%d")
+            )
 
-first_non_na_removal <- opcs3_removal %>%
-    filter(!is.na(opcs3_removal_date)) %>%
-    group_by(id) %>%
+first_non_na_opcs3 <- opcs3 %>%
+    select(id, opcs3_removal_date, opcs3_gallstone_date) %>%
+    pivot_longer(cols = starts_with("opcs3_"), names_to = "condition", values_to = "date") %>%
+    filter(!is.na(date)) %>%
+    group_by(id, condition) %>%
     slice(1) %>%
+    pivot_wider(names_from = condition, values_from = date) %>%
     ungroup()
-
-data <- data %>%
-    left_join(first_non_na_removal %>% select(id, opcs3_removal_date), by = "id")
-
-# Defining dates of gallstone removal
-opcs3_gallstone <- opcs3_subset %>%
-    mutate(opcs3_gallstone_date = ifelse(str_detect(p41273, "511"),
-                                         as.character(c_across(starts_with("p41283"))),
-                                         NA),
-           opcs3_gallstone_date = as.Date(opcs3_gallstone_date, format = "%Y-%m-%d"))
-
-first_non_na_gallstone <- opcs3_gallstone %>%
-    filter(!is.na(opcs3_gallstone_date)) %>%
-    group_by(id) %>%
-    slice(1) %>%
-    ungroup()
-
-data <- data %>%
-    left_join(first_non_na_gallstone %>% select(id, opcs3_gallstone_date), by = "id")
 
 
 # Define variables for survival analysis ----------------------------------
@@ -200,7 +166,6 @@ data <- data %>%
            loss_to_follow_up = as.Date(loss_to_follow_up))
 
 
-
 ## birth date as origin for survival analysis ------------------------------
 # Merging birth year and month of birth into one column:
 
@@ -208,10 +173,8 @@ month_names <- c("January", "February", "March", "April", "May", "June",
                  "July", "August", "September", "October", "November", "December")
 
 data <- data %>%
-    mutate(month_of_birth_num = sprintf("%02d", match(p52, month_names)))
-
-data <- data %>%
-    unite(date_birth, p34, month_of_birth_num, sep = "-")
+    mutate(month_of_birth_num = sprintf("%02d", match(p52, month_names))) %>%
+        unite(date_birth, p34, month_of_birth_num, sep = "-")
 
 remove(month_names)
 
@@ -243,11 +206,13 @@ data <- data %>%
     mutate(censoring = as.Date("2022-10-31"))
 
 
-## estimate survival time --------------------------------------------------
-# gallstone or removal of gallbladder
+## Estimating survival time and outcome event--------------------------------------------------
+
+# Defining survival time as first ocurrence of outcome
 data <- data %>%
     mutate(
-        survival_time_tmp = case_when(
+        # gallstone or removal of gallbladder
+        survival_time_gst = case_when(
             !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_birth, units = "days")),
             !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_birth, units = "days")),
             !is.na(icd9_obstruction_date) ~ as.numeric(difftime(icd9_obstruction_date, date_birth, units = "days")),
@@ -259,26 +224,14 @@ data <- data %>%
             !is.na(loss_to_follow_up) ~ as.numeric(difftime(loss_to_follow_up, date_birth, units = "days")),
             TRUE ~ as.numeric(difftime(censoring, date_birth, units = "days"))
         ),
-        # Use min to get the minimum survival time across columns
-        survival_gallstone = pmin(survival_time_tmp, na.rm = TRUE),
+        # Using pmin to get the minimum survival time across columns
+        survival_gallstone = pmin(survival_time_gst, na.rm = TRUE),
         survival_gallstone = survival_gallstone/365.25,
         # Remove temporary variable
-        survival_time_tmp = NULL
-    )
+        survival_time_gst = NULL,
 
-# binary variable to indicate if gallstone happened
-data <- data %>%
-    mutate(gallstone = case_when(
-        !is.na(icd10_gallstone_date) |
-            !is.na(icd9_gallstone_date) | !is.na(icd9_obstruction_date) |
-            !is.na(opcs4_removal_date) | !is.na(opcs4_gallstone_date) |
-            !is.na(opcs3_removal_date) | !is.na(opcs3_gallstone_date) ~ 1,
-        TRUE ~ 0))
-
-# cholecystitis
-data <- data %>%
-    mutate(
-        survival_time_tmp = case_when(
+        # cholecystitis
+        survival_time_cholecystit = case_when(
             !is.na(icd10_cholecystit_date) ~ as.numeric(difftime(icd10_cholecystit_date, date_birth, units = "days")),
             !is.na(icd9_acute_date) ~ as.numeric(difftime(icd9_acute_date, date_birth, units = "days")),
             !is.na(icd9_other_date) ~ as.numeric(difftime(icd9_other_date, date_birth, units = "days")),
@@ -287,23 +240,13 @@ data <- data %>%
             TRUE ~ as.numeric(difftime(censoring, date_birth, units = "days"))
         ),
         # Use min to get the minimum survival time across columns
-        survival_cholecystit = pmin(survival_time_tmp, na.rm = TRUE),
+        survival_cholecystit = pmin(survival_time_cholecystit, na.rm = TRUE),
         survival_cholecystit = survival_cholecystit/365.25,
         # Remove temporary variable
-        survival_time_tmp = NULL
-    )
+        survival_time_cholecystit = NULL,
 
-# binary variable to indicate if cholecystitis happened
-data <- data %>%
-    mutate(cholecystit = case_when(
-        !is.na(icd10_cholecystit_date) | !is.na(icd9_acute_date) |
-            !is.na(icd9_other_date) ~ 1,
-        TRUE ~ 0))
-
-# all GBD
-data <- data %>%
-    mutate(
-        survival_time_tmp = case_when(
+        # any gallbladder disease
+        survival_time_gbd = case_when(
             !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_birth, units = "days")),
             !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_birth, units = "days")),
             !is.na(icd9_obstruction_date) ~ as.numeric(difftime(icd9_obstruction_date, date_birth, units = "days")),
@@ -319,23 +262,34 @@ data <- data %>%
             TRUE ~ as.numeric(difftime(censoring, date_birth, units = "days"))
         ),
         # Use min to get the minimum survival time across columns
-        survival_gbd = pmin(survival_time_tmp, na.rm = TRUE),
+        survival_gbd = pmin(survival_time_gbd, na.rm = TRUE),
         survival_gbd = survival_gbd/365.25,
         # Remove temporary variable
-        survival_time_tmp = NULL
-    )
+        survival_time_gbd = NULL,
 
-# binary variable to indicate if gbd happened
-data <- data %>%
-    mutate(gbd = case_when(
-        !is.na(icd10_gallstone_date) |
-            !is.na(icd9_gallstone_date) | !is.na(icd9_obstruction_date) |
-            !is.na(opcs4_removal_date) | !is.na(opcs4_gallstone_date) |
-            !is.na(opcs3_removal_date) | !is.na(opcs3_gallstone_date) |
+        # Create binary variable to indicate if outcome happened
+        # gallstone
+        gallstone = case_when(
+            !is.na(icd10_gallstone_date) |
+                !is.na(icd9_gallstone_date) | !is.na(icd9_obstruction_date) |
+                !is.na(opcs4_removal_date) | !is.na(opcs4_gallstone_date) |
+                !is.na(opcs3_removal_date) | !is.na(opcs3_gallstone_date) ~ 1,
+            TRUE ~ 0),
+        # cholecystitis
+        cholecystit = case_when(
             !is.na(icd10_cholecystit_date) | !is.na(icd9_acute_date) |
-            !is.na(icd9_other_date) ~ 1,
-        TRUE ~ 0))
-
+                !is.na(icd9_other_date) ~ 1,
+            TRUE ~ 0),
+        # any gallbladder disease
+        gbd = case_when(
+            !is.na(icd10_gallstone_date) |
+                !is.na(icd9_gallstone_date) | !is.na(icd9_obstruction_date) |
+                !is.na(opcs4_removal_date) | !is.na(opcs4_gallstone_date) |
+                !is.na(opcs3_removal_date) | !is.na(opcs3_gallstone_date) |
+                !is.na(icd10_cholecystit_date) | !is.na(icd9_acute_date) |
+                !is.na(icd9_other_date) ~ 1,
+            TRUE ~ 0)
+    )
 
 
 # Remove those with outcome before baseline (=last webQ) --------
