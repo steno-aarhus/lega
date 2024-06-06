@@ -2,17 +2,17 @@
 library(tidyverse)
 library(magrittr)
 library(dplyr)
+library(here)
 
-# Load saved data:
-targets::tar_make()
-source(here::here("R/1_data_start.R"))
+# Load data
+data <- read_csv(here("data/data.csv"))
 
 # Average weekly dietary intake of food groups -----------------------------------
 # Food groups intakes are summed across rows and divided by the number of 24h recalls
 # completed (p20077) and multiplied with 7 to estimate the weekly intake of each food.
 
 calculate_weekly_diet <- function(variables, number_recalls) {
-  rowSums(dplyr::pick(tidyselect::matches(variables)), na.rm = TRUE) / number_recalls) * 7
+  rowSums(dplyr::pick(tidyselect::matches(variables)), na.rm = TRUE) / number_recalls * 7
 }
 
 data <- data %>%
