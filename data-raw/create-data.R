@@ -1,4 +1,3 @@
-
 # Keep only the necessary variables for RAP -------------------------------
 
 library(magrittr)
