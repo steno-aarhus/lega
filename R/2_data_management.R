@@ -5,6 +5,7 @@ library(dplyr)
 library(magrittr)
 library(tidyr)
 library(stringr)
+library(here)
 
 # Load data
 data <- read_csv(here("data/data.csv"))
@@ -99,7 +100,7 @@ data <- data %>% mutate(
   p3849_i0 = ifelse((p3849_i0 == "Do not know"), NA, p3849_i0),
   p3849_i0 = ifelse((p3849_i0 == "Prefer not to answer"), NA, p3849_i0),
   p3849_i0 = as.numeric(p3849_i0),
-  p2734_i0 = as.integer(p2734_i0),
+  p2734_i0 = as.numeric(p2734_i0),
   p3829_i0 = as.numeric(p3829_i0)
   )
 
@@ -249,7 +250,7 @@ data <- data %>%
 
 # Save the changes as parquet and upload to the RAP folder for easy download
 # next time you sign in
-arrow::write_parquet(data, here("data/data.parquet"))
+# arrow::write_parquet(data, here("data/data.parquet"))
 
 # Upload to the project RAP folder.
 ukbAid::upload_data(here("data/data.parquet"), username = "FieLangmann")
