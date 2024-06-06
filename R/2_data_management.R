@@ -7,7 +7,7 @@ library(tidyr)
 library(stringr)
 
 # Load data
-source(here::here("R/1_data_start.R"))
+data <- read_csv(here("data/data.csv"))
 
 # Remove ineligible number of recalls ------------
 data <- data %>%
@@ -93,17 +93,19 @@ data <- data %>% mutate(
 # preparing pregnancy outcomes for summed pregnancies
 # converting from character to numeric. All no answers coded as NA
 data <- data %>% mutate(
-  p3839_i0 = ifelse((p3839_i0 == "Do not know"), "NA", p3839_i0),
-  p3839_i0 = ifelse((p3839_i0 == "Prefer not to answer"), "NA", p3839_i0),
-  p3839_i0 = as.integer(p3839_i0),
-  p3849_i0 = ifelse((p3849_i0 == "Do not know"), "NA", p3849_i0),
-  p3849_i0 = ifelse((p3849_i0 == "Prefer not to answer"), "NA", p3849_i0),
-  p3849_i0 = as.integer(p3849_i0)
+  p3839_i0 = ifelse((p3839_i0 == "Do not know"), NA, p3839_i0),
+  p3839_i0 = ifelse((p3839_i0 == "Prefer not to answer"), NA, p3839_i0),
+  p3839_i0 = as.numeric(p3839_i0),
+  p3849_i0 = ifelse((p3849_i0 == "Do not know"), NA, p3849_i0),
+  p3849_i0 = ifelse((p3849_i0 == "Prefer not to answer"), NA, p3849_i0),
+  p3849_i0 = as.numeric(p3849_i0),
+  p2734_i0 = as.integer(p2734_i0),
+  p3829_i0 = as.numeric(p3829_i0)
   )
 
 # counting total number of pregnancies
 data <- data %>% mutate(
-  pregnancies = p2734_i0 + p3829_i0 + p3839_i0 + p3849_i0)
+  pregnancies =  p2734_i0 + p3829_i0 + p3839_i0 + p3849_i0, na.rm = TRUE)
 
 
 # gallbladder related conditions
