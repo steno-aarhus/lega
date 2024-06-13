@@ -178,14 +178,9 @@ data <- data %>% mutate(
   p26030_i4 = ifelse(is.na(p26030_i4), 0, p26030_i4))
 
 data <- data %>% mutate(
-  alcohol_intake = rowSums(select(., starts_with("p26030"))))
-
-data <- data %>% mutate(
-  alcohol_daily = alcohol_intake/p20077)
-
-data <- data %>% mutate(
+  alcohol_intake = rowSums(select(., starts_with("p26030"))),
+  alcohol_daily = alcohol_intake/p20077,
   alcohol_weekly = alcohol_daily * 7)
-
 
 # recruitment centre and pea servings
 data <- data %>% mutate(
