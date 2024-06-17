@@ -14,9 +14,6 @@ library(broom)
 
 
 # Load data --------------------------------------------------------
-targets::tar_make()
-# Restart session
-source(here::here("R/1_data_start.R"))
 
 
 # Legumes including peas; substitution models ------------------------------
@@ -94,7 +91,7 @@ fish_sensi2 <- tidy(fish_sensi2, exponentiate = TRUE, conf.int = TRUE)
 
 # Varying 24h recalls -----------------------------------------------------
 data <- data %>%
-  mutate(legumes80 = legume_weekly/80,
+  mutate(legumes80 = legumes_weekly/80,
          meats80 = meats_weekly/80,
          poultry80 = poultry_weekly/80,
          fish80 = fish_weekly/80)
@@ -226,8 +223,8 @@ fish_data4 <- tidy(fish_data4, exponentiate = TRUE, conf.int = TRUE)
 
 
 
-# # Removing high ALT and AST from analysis-----------------------------------------------
-# # removing high ALT and AST
+# # Removing high bilirubin  from analysis-----------------------------------------------
+# removing top 10 % (90th percentile) of bilirubin
 # data <- data %>% mutate(
 #   alt_level = case_when(
 #     alt <= 45 & sex == "Female" | alt <= 70 & sex == "Male" ~ 0,
