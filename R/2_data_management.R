@@ -91,9 +91,9 @@ data <- data %>% mutate(
       TRUE ~ "no"),
   estrogen_treatment = case_when(
     hrt == "yes" | oral_contraceptive == "yes" ~ "yes",
-    TRUE == "no" ~ "no")
+    TRUE ~ "no")
   )
-  )
+
 
 # preparing pregnancy outcomes for summed pregnancies
 # converting from character to numeric. All no answers coded as NA
