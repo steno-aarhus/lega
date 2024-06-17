@@ -26,9 +26,6 @@ data <- data %>%
 
 
 # Gallbladder disease ----------------------------------------------------
-# estimate total follow-up time for GBD
-
-# estimate median follow-up time for GBD
 
 # define outcome
 data <- data %>% mutate(
@@ -216,11 +213,6 @@ fish_model3 <- tidy(fish_model3, exponentiate = TRUE, conf.int = TRUE)
 
 
 # Gallstones only ---------------------------------------------------------
-
-# estimate total follow-up time for gallstone
-
-# estimate median follow-up time for gallstone
-
 
 ## Model 1 ----------------------------------------------------------
 # meats
