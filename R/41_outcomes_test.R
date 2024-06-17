@@ -30,10 +30,10 @@ icd10_subset <- data %>%
         icd10_cholecystit_date = as.Date(icd10_cholecystit_date, format = "%Y-%m-%d"),
         # gallbladder obstruction (K82.0)
         icd10_gbobstruction_date = ifelse(str_detect(p41270var, "K82.0"), as.character(c_across(starts_with("p41280"))), NA),
-        icd10_gbobstruction_date = as.Date(icd10_gbobstruction_date, format = "%Y-%m%d"),
+        icd10_gbobstruction_date = as.Date(icd10_gbobstruction_date, format = "%Y-%m-%d"),
         # bile obstruction (K83.1)
         icd10_bileobstruction_date = ifelse(str_detect(p41270var, "K83.1"), as.character(c_across(starts_with("p41280"))), NA),
-        icd10_bileobstruction_date = as.Date(icd10_bileobstruction_date, format = "%Y-%m%d"))
+        icd10_bileobstruction_date = as.Date(icd10_bileobstruction_date, format = "%Y-%m-%d"))
 
 # Retrieve the first non-NA date for each outcome
 first_non_na_icd10 <- icd10_subset %>%
@@ -225,14 +225,16 @@ data <- data %>%
 
 ## Estimating survival time and outcome event--------------------------------------------------
 
-# Defining survival time as first ocurrence of outcome
+# Defining survival time as first occurrence of outcome
 data <- data %>%
     mutate(
         # gallstone or removal of gallbladder
-            # missing variables to be added: icd10_bileobstruction_date, icd10_gbobstruction_date, icd9_bileobstruction_date
         survival_time_gst = case_when(
             !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_birth, units = "days")),
+            !is.na(icd10_bileobstruction_date) ~ as.numeric(difftime(icd10_bileobstruction_date, date_birth, units = "days")),
+            !is.na(icd10_gbobstruction_date) ~ as.numeric(difftime(icd10_gbobstruction_date, date_birth, units = "days")),
             !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_birth, units = "days")),
+            !is.na(icd9_bileobstruction_date) ~ as.numeric(difftime(icd9_bileobstruction_date, date_birth, units = "days")),
             !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_birth, units = "days")),
             !is.na(opcs4_gallstone_date) ~ as.numeric(difftime(opcs4_gallstone_date, date_birth, units = "days")),
             !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_birth, units = "days")),
@@ -264,10 +266,12 @@ data <- data %>%
         survival_time_cholecystit = NULL,
 
         # any gallbladder disease
-        # missing variables to be added: icd10_bileobstruction_date, icd10_gbobstruction_date, icd9_bileobstruction_date
         survival_time_gbd = case_when(
             !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_birth, units = "days")),
+            !is.na(icd10_bileobstruction_date) ~ as.numeric(difftime(icd10_bileobstruction_date, date_birth, units = "days")),
+            !is.na(icd10_gbobstruction_date) ~ as.numeric(difftime(icd10_gbobstruction_date, date_birth, units = "days")),
             !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_birth, units = "days")),
+            !is.na(icd9_bileobstruction_date) ~ as.numeric(difftime(icd9_bileobstruction_date, date_birth, units = "days")),
             !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_birth, units = "days")),
             !is.na(opcs4_gallstone_date) ~ as.numeric(difftime(opcs4_gallstone_date, date_birth, units = "days")),
             !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_birth, units = "days")),
@@ -286,11 +290,11 @@ data <- data %>%
         survival_time_gbd = NULL,
 
         # Create binary variable to indicate if outcome happened
-            # missing variables to be added: icd10_bileobstruction_date, icd10_gbobstruction_date, icd9_bileobstruction_date
         # gallstone
         gallstone = case_when(
-            !is.na(icd10_gallstone_date) |
-                !is.na(icd9_gallstone_date) |
+            !is.na(icd10_gallstone_date) | !is.na(icd10_bileobstruction_date) |
+                !is.na(icd10_gbobstruction_date) | !is.na(icd9_gallstone_date) |
+                !is.na(icd9_bileobstruction_date) |
                 !is.na(opcs4_removal_date) | !is.na(opcs4_gallstone_date) |
                 !is.na(opcs3_removal_date) | !is.na(opcs3_gallstone_date) ~ 1,
             TRUE ~ 0),
@@ -301,8 +305,9 @@ data <- data %>%
             TRUE ~ 0),
         # any gallbladder disease
         gbd = case_when(
-            !is.na(icd10_gallstone_date) |
-                !is.na(icd9_gallstone_date) | !is.na(icd9_other_date) |
+            !is.na(icd10_gallstone_date) | !is.na(icd10_bileobstruction_date) |
+                !is.na(icd10_gbobstruction_date) | !is.na(icd9_gallstone_date) |
+                !is.na(icd9_other_date) | !is.na(icd9_bileobstruction_date) |
                 !is.na(opcs4_removal_date) | !is.na(opcs4_gallstone_date) |
                 !is.na(opcs3_removal_date) | !is.na(opcs3_gallstone_date) |
                 !is.na(icd10_cholecystit_date) | !is.na(icd9_acute_date)
@@ -313,6 +318,7 @@ data <- data %>%
 
 # Remove those with outcome before baseline (=last webQ) --------
 
+# Setting last completed WebQ as baseline
 data <- data %>%
     mutate(ques_comp_t0 = p105010_i0,
            ques_comp_t1 = p105010_i1,
@@ -338,35 +344,12 @@ data <- data %>%
                rename(last_filled_questionnaire = questionnaire) %>%
     mutate(date_filled = as.Date(date_filled))
 
-
-# missing variables to be added: icd10_bileobstruction_date, icd10_gbobstruction_date, icd9_bileobstruction_date
-diagnosed_before <- function(data) {
-    filtered_data <- data %>%
-        filter(
-            icd10_gallstone_date < date_filled |
-                icd9_gallstone_date < date_filled |
-                opcs4_removal_date < date_filled |
-                opcs4_gallstone_date < date_filled |
-                opcs3_removal_date < date_filled |
-                opcs3_gallstone_date < date_filled |
-                icd10_cholecystit_date < date_filled |
-                icd9_acute_date < date_filled |
-                icd9_other_date < date_filled
-        )
-
-    data <- data %>%
-        anti_join(
-            filtered_data,
-            by = "id"
-        )
-
-    return(data)
-}
-
+# Removing those diagnosed before baseline
 diagnosed_before <- function(data) {
     filtered_data <- data %>%
         filter(if_any(
-            c(icd10_gallstone_date, icd9_gallstone_date,
+            c(icd10_gallstone_date, icd10_bileobstruction_date, icd10_gbobstruction_date,
+              icd9_gallstone_date, icd9_bileobstruction_date,
               opcs4_removal_date, opcs4_gallstone_date,
               opcs3_removal_date, opcs3_gallstone_date, icd10_cholecystit_date,
               icd9_acute_date, icd9_other_date),
@@ -379,76 +362,32 @@ diagnosed_before <- function(data) {
     return(data)
 }
 
+data <- diagnosed_before(data)
 
-data2 <- diagnosed_before(data)
+# Removing those who were lost to follow-up or died before baseline
+left_study <- function(data) {
+    filtered_data <- data %>%
+        filter(if_any(
+            c(date_of_death, loss_to_follow_up),
+            ~ . < date_filled
+        ))
+
+    data <- data %>%
+        anti_join(filtered_data, by = "id")
+
+    return(data)
+}
+
+data <- left_study(data)
 
 
+# Remove redundant variables --------------------------------------------
 
-# counting and removing those with event before baseline
-# defining time in study
-# missing variables to be added: icd10_bileobstruction_date, icd10_gbobstruction_date, icd9_bileobstruction_date
-
+remove <- c("p191", "p40000_i0", "p40000_i1","p105010_i0", "p105010_i1", "p105010_i2",
+            "p105010_i3","p105010_i4", "p41280", "p41270", "p41281", "p41271", "p41282",
+            "p41272","p41283", "p41273")
 data <- data %>%
-    mutate(
-        survival_time_gst10 = case_when(
-            !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_gst9 = case_when(
-            !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_rem4 = case_when(
-            !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_gst4 = case_when(
-            !is.na(opcs4_gallstone_date) ~ as.numeric(difftime(opcs4_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_rem3 = case_when(
-            !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_gst3 = case_when(
-            !is.na(opcs3_gallstone_date) ~ as.numeric(difftime(opcs3_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_chol = case_when(
-            !is.na(icd10_cholecystit_date) ~ as.numeric(difftime(icd10_cholecystit_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_acute = case_when(
-            !is.na(icd9_acute_date) ~ as.numeric(difftime(icd9_acute_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_other = case_when(
-            !is.na(icd9_other_date) ~ as.numeric(difftime(icd9_other_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_ltfu = case_when(
-            !is.na(loss_to_follow_up) ~ as.numeric(difftime(loss_to_follow_up, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_death = case_when(
-            !is.na(date_of_death) ~ as.numeric(difftime(date_of_death, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_cenc = difftime(censoring, date_filled, units = "days"),
-        time = pmin(survival_time_gst10, survival_time_gst9, survival_time_rem4, survival_time_gst4,
-                    survival_time_rem3, survival_time_gst3, survival_time_chol,
-                    survival_time_acute, survival_time_other, survival_time_death,
-                    survival_time_cenc, survival_time_ltfu, na.rm = TRUE),
-        time = time/365.25
-    )
+    select(-matches(remove))
 
-# counting and removing those with event before baseline
-data_time <- data %>%
-    subset(data$time<0)
-
-# remove those with event before baseline
-data <- data %>%
-    subset(data$time>=0)
-
-#
-# # Remove redundant variables --------------------------------------------
-#
-# remove <- c("p191", "p40000_i0", "p40000_i1","p105010_i0", "p105010_i1", "p105010_i2",
-#             "p105010_i3","p105010_i4", "p41280", "p41270", "p41281", "p41271", "p41282",
-#             "p41272","p41283", "p41273")
-# data <- data %>%
-#     select(-matches(remove))
-#
-#
-# Save data ---------------------------------------------------------------
-# arrow::write_parquet(data, here("data/data.parquet"))
-# ukbAid::upload_data(here("data/data.parquet"), username = "FieLangmann")
+# save data locally to be able to upload to RAP in processing.R
+readr::write_csv(data, here::here("data/data_lega.csv"))
