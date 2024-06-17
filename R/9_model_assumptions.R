@@ -1,4 +1,19 @@
-# model assumptions
+# model assumptions: proportional hazards
+# Schoenfeld residuals
+
+# Load packages
+library(tidyverse)
+library(Hmisc)
+library(survival)
+library(ggsurvfit)
+library(dplyr)
+library(here)
+
+
+# Load data
+data <- readr::read_csv("data/data_lega.csv")
+
+
 # defining 80 g/week variable for each food
 data <- data %>%
     mutate(legumes80 = legumes_weekly/80,
