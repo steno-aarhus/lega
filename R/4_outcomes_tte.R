@@ -303,16 +303,8 @@ data <- data %>%
                 !is.na(icd9_other_date) ~ 1,
             TRUE ~ 0),
         # any gallbladder disease
-        gbd = case_when(
-            !is.na(icd10_gallstone_date) | !is.na(icd10_bileobstruction_date) |
-                !is.na(icd10_gbobstruction_date) | !is.na(icd9_gallstone_date) |
-                !is.na(icd9_other_date) | !is.na(icd9_bileobstruction_date) |
-                !is.na(opcs4_removal_date) | !is.na(opcs4_gallstone_date) |
-                !is.na(opcs3_removal_date) | !is.na(opcs3_gallstone_date) |
-                !is.na(icd10_cholecystit_date) | !is.na(icd9_acute_date)
-                 ~ 1,
-            TRUE ~ 0)
-    )
+        gbd = gallstone + cholecystit
+        )
 
 
 # Remove those with outcome before baseline (=last webQ) --------
