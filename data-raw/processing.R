@@ -1,7 +1,7 @@
 # Processing
 # Load packages -----------------------------------------------------------
 library(tidyverse)
-
+library(ukbAid)
 # Save data to RAP --------------------------------------------------------
 
 # save data locally to be able to upload to RAP
