@@ -100,15 +100,18 @@ data <- data %>% mutate(
   p3849_i0 = ifelse((p3849_i0 == "Do not know"), NA, p3849_i0),
   p3849_i0 = ifelse((p3849_i0 == "Prefer not to answer"), NA, p3849_i0),
   p3849_i0 = as.numeric(p3849_i0),
-  p2734_i0 = as.numeric(p2734_i0),
+  p2734_i0 = as.integer(p2734_i0),
   p3829_i0 = as.numeric(p3829_i0)
   )
 
 # counting total number of pregnancies
-data <- data %>% mutate(
-  pregnancies =  p2734_i0 + p3829_i0 + p3839_i0 + p3849_i0, na.rm = TRUE)
-
-
+data <- data %>%
+  mutate(
+    pregnancies = case_when(
+      sex == "Female" ~ rowSums(select(., p2734_i0, p3829_i0, p3839_i0, p3849_i0), na.rm = TRUE),
+      sex == "Male" ~ NA_real_
+    )
+  )
 # gallbladder related conditions
 data <- data %>% mutate(
   p20002_i0 = ifelse(is.na(p20002_i0), "None", p20002_i0),
@@ -159,6 +162,7 @@ data <- data %>% mutate(
     ~ "no answer"
   ))
 
+# smoking
 data <- data %>% mutate(
   smoking = case_when(
     str_detect(p20116_i0, "Never") ~ "never",
@@ -169,7 +173,7 @@ data <- data %>% mutate(
     TRUE ~ "no answer"  # Handling cases not covered by the conditions
   ))
 
-# creating alcohol variable (maybe not needed)
+# creating alcohol variable for baseline food intake table
 data <- data %>% mutate(
   p26030_i0 = ifelse(is.na(p26030_i0), 0, p26030_i0),
   p26030_i1 = ifelse(is.na(p26030_i1), 0, p26030_i1),
@@ -212,22 +216,23 @@ data <- data %>% mutate(
   peas = pea_servings * 80) #assuming 1 serving 80g
 
 
-# Removing individuals with missing information on covariates
-filtered_data <- subset(data, !is.na(age))
-filtered_data <- subset(filtered_data, !is.na(region))
-filtered_data <- subset(filtered_data, !is.na(sex))
-filtered_data <- subset(filtered_data, !is.na(ethnicity)) #126772
-filtered_data <- subset(filtered_data, !is.na(deprivation)) #126623
-filtered_data <- subset(filtered_data, !is.na(education)) #126263
-filtered_data <- subset(filtered_data, !is.na(cohabitation)) # 125643
-filtered_data <- subset(filtered_data, !is.na(physical_activity)) # no change
-filtered_data <- subset(filtered_data, !is.na(smoking)) # no change
-filtered_data <- subset(filtered_data, !is.na(related_conditions)) # no change
-filtered_data <- subset(filtered_data, !is.na(family_diabetes)) # no change
-filtered_data <- subset(filtered_data, !is.na(yearly_income)) # no change
-filtered_data <- subset(filtered_data, !is.na(bmi30)) #123822
+# Removing and counting missing information on covariates
+# filtered_data <- subset(data, !is.na(age))
+# filtered_data <- subset(filtered_data, !is.na(region))
+# filtered_data <- subset(filtered_data, !is.na(sex))
+# filtered_data <- subset(filtered_data, !is.na(ethnicity)) #126772
+# filtered_data <- subset(filtered_data, !is.na(deprivation)) #126623
+# filtered_data <- subset(filtered_data, !is.na(education)) #126263
+# filtered_data <- subset(filtered_data, !is.na(cohabitation)) # 125643
+# filtered_data <- subset(filtered_data, !is.na(physical_activity)) # no change
+# filtered_data <- subset(filtered_data, !is.na(smoking)) # no change
+# filtered_data <- subset(filtered_data, !is.na(related_conditions)) # no change
+# filtered_data <- subset(filtered_data, !is.na(family_diabetes)) # no change
+# filtered_data <- subset(filtered_data, !is.na(yearly_income)) # no change
+# filtered_data <- subset(filtered_data, !is.na(bmi30)) #123822
+# removing all missings at once
+filtered_data <- subset(data, complete.cases(data[c("age", "region", "sex", "ethnicity", "deprivation", "education", "cohabitation", "physical_activity", "smoking", "related_conditions", "family_diabetes", "yearly_income", "bmi30")]))
 data <- filtered_data
-
 
 # Remove recoded variables from sorted data -------------------------------
 
@@ -248,4 +253,4 @@ data <- data %>%
 # arrow::write_parquet(data, here("data/data.parquet"))
 
 # Upload to the project RAP folder.
-ukbAid::upload_data(here("data/data.parquet"), username = "FieLangmann")
+# ukbAid::upload_data(here("data/data.parquet"), username = "FieLangmann")
