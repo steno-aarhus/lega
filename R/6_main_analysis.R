@@ -96,8 +96,8 @@ meat_model2 <- coxph(Surv(survival_gbd, any_gbd == 1) ~
                          #other variables
                          strata(age_strata, region, sex) +
                          ethnicity + deprivation + education + yearly_income +
-                         cohabitation + physical_activity + smoking +
-                         hrt + oral_contraceptive +
+                         cohabitation  + physical_activity + smoking +
+                         estrogen_treatment +
                          pregnancies + related_conditions + family_diabetes,
                      data = data, ties='breslow')
 
@@ -117,7 +117,7 @@ poultry_model2 <- coxph(Surv(survival_gbd, any_gbd == 1) ~
                             strata(age_strata, region, sex) +
                             ethnicity + deprivation + education + yearly_income +
                             cohabitation + physical_activity + smoking +
-                            hrt + oral_contraceptive +
+                            estrogen_treatment +
                             pregnancies + related_conditions + family_diabetes,
                         data = data, ties='breslow')
 
@@ -139,7 +139,7 @@ fish_model2 <- coxph(Surv(survival_gbd, any_gbd == 1) ~
                          strata(age_strata, region, sex) +
                          ethnicity + deprivation + education + yearly_income +
                          cohabitation + physical_activity + smoking +
-                         hrt + oral_contraceptive +
+                         estrogen_treatment +
                          pregnancies + related_conditions + family_diabetes,
                      data = data, ties='breslow')
 
@@ -163,7 +163,7 @@ meat_model3 <- coxph(Surv(survival_gbd, any_gbd == 1) ~
                          strata(age_strata, region, sex) +
                          ethnicity + deprivation + education + yearly_income +
                          cohabitation + physical_activity + smoking +
-                         hrt + oral_contraceptive +
+                         estrogen_treatment +
                          pregnancies + related_conditions + family_diabetes + bmi30,
                      data = data, ties='breslow')
 
@@ -184,9 +184,9 @@ poultry_model3 <- coxph(Surv(survival_gbd, any_gbd == 1) ~
                             strata(age_strata, region, sex) +
                             ethnicity + deprivation + education + yearly_income +
                             cohabitation + physical_activity + smoking +
-                            hrt + oral_contraceptive +
+                            estrogen_treatment +
                             pregnancies + related_conditions + family_diabetes + bmi30,
-                        data = data, ties='breslow'
+                        data = data, ties='breslow')
 
 poultry_model3 <- tidy(poultry_model3, exponentiate = TRUE, conf.int = TRUE)
 
@@ -206,9 +206,9 @@ fish_model3 <- coxph(Surv(survival_gbd, any_gbd == 1) ~
                          strata(age_strata, region, sex) +
                          ethnicity + deprivation + education + yearly_income +
                          cohabitation + physical_activity + smoking +
-                         hrt + oral_contraceptive +
+                         estrogen_treatment +
                          pregnancies + related_conditions + family_diabetes + bmi30,
-                     data = data, ties='breslow'
+                     data = data, ties='breslow')
 
 fish_model3 <- tidy(fish_model3, exponentiate = TRUE, conf.int = TRUE)
 
@@ -301,7 +301,7 @@ poultry_model2 <- coxph(Surv(survival_gallstone, gbd == 1) ~
                             strata(age_strata, region, sex) +
                             ethnicity + deprivation + education + yearly_income +
                             cohabitation + physical_activity + smoking +
-                            hrt + oral_contraceptive +
+                            estrogen_treatment +
                             pregnancies + related_conditions + family_diabetes,
                         data = data, ties='breslow')
 
@@ -323,7 +323,7 @@ fish_model2 <- coxph(Surv(survival_gallstone, gbd == 1) ~
                          strata(age_strata, region, sex) +
                          ethnicity + deprivation + education + yearly_income +
                          cohabitation + physical_activity + smoking +
-                         hrt + oral_contraceptive +
+                         estrogen_treatment +
                          pregnancies + related_conditions + family_diabetes,
                      data = data, ties='breslow')
 
@@ -347,7 +347,7 @@ meat_model3 <- coxph(Surv(survival_gallstone, gbd == 1) ~
                          strata(age_strata, region, sex) +
                          ethnicity + deprivation + education + yearly_income +
                          cohabitation + physical_activity + smoking +
-                         hrt + oral_contraceptive +
+                         estrogen_treatment +
                          pregnancies + related_conditions + family_diabetes + bmi30,
                      data = data, ties='breslow')
 
@@ -368,7 +368,7 @@ poultry_model3 <- coxph(Surv(survival_gallstone, gbd == 1) ~
                             strata(age_strata, region, sex) +
                             ethnicity + deprivation + education + yearly_income +
                             cohabitation + physical_activity + smoking +
-                            hrt + oral_contraceptive +
+                            estrogen_treatment +
                             pregnancies + related_conditions + family_diabetes + bmi30,
                         data = data, ties='breslow')
 
@@ -390,7 +390,7 @@ fish_model3 <- coxph(Surv(survival_gallstone, gbd == 1) ~
                          strata(age_strata, region, sex) +
                          ethnicity + deprivation + education + yearly_income +
                          cohabitation + physical_activity + smoking +
-                         hrt + oral_contraceptive +
+                         estrogen_treatment +
                          pregnancies + related_conditions + family_diabetes + bmi30,
                      data = data, ties='breslow')
 
