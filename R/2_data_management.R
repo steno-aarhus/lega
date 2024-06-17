@@ -88,7 +88,11 @@ data <- data %>% mutate(
   oral_contraceptive = case_when(
       str_detect(p2784_i0, "Yes") ~ "yes",
       str_detect(p2784_i0, "answer") ~ "unknown",
-      TRUE ~ "no")
+      TRUE ~ "no"),
+  estrogen_treatment = case_when(
+    hrt == "yes" | oral_contraceptive == "yes" ~ "yes",
+    TRUE == "no" ~ "no")
+  )
   )
 
 # preparing pregnancy outcomes for summed pregnancies
