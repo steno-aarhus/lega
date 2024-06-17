@@ -388,5 +388,4 @@ remove <- c("p191", "p40000_i0", "p40000_i1","p105010_i0", "p105010_i1", "p10501
 data <- data %>%
     select(-matches(remove))
 
-# save data locally to be able to upload to RAP in processing.R
-readr::write_csv(data, here::here("data/data_lega.csv"))
+
