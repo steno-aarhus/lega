@@ -308,24 +308,24 @@ or fish with legumes.
 -   Replacing red and processed meats, poultry, or fish with legumes
     (e.g., per 80 g/week)
 
-Age will be used as the underlying time scale in the analyses. Person-years at risk were calculated from the date of last completed Oxford WebQ to the date of death, loss to follow-up, diagnosis of gallbladder disease , or right censoring, whichever occurred first. As participants in UKB are still followed-up today, participants will be
+Age will be used as the underlying time scale in the analyses. Person-years at risk were calculated from the date of last completed Oxford WebQ to the date of death, loss to follow-up, diagnosis of any gallbladder disease, or right censoring, whichever occurred first. As participants in UKB are still followed-up today, participants will be
 right censored at the date of the most recent registry update of full
 follow-up for the outcomes. The substitution analyses will be
 conducted with different adjustment levels.
 
 **Model 1** will be stratified for age (<45, 45-49, 50-54, 55-59, 60-64, ≤65 years) at recruitment and geographical region of recruitment (ten UK regions), and adjusted for sex, and intake of all other dietary components apart from the two substitutes. When substituting g legumes/week, the unit for all dietary components will be g/week and the total weekly intake of all foods will be held stable in the analysis
 
-**Model 2** will be further adjusted for ethnic group (white, mixed background, Asian, black, other, and unknown), socioeconomic status (Townsend deprivation score, educational level, yearly income), cohabitation (alone, with spouse or partner, with non-partner, unknown), physical activity (low [≤ 918 METs/week], moderate [≥918 – 3706 METs/week], high [≤37069 METs/week], and unknown), smoking status (never, former, current 1-15 cigarettes per day, current ≥15 cigarettes per day, unknown), rapid  weight loss (yes, no), history of gallbladder related conditions (yes, no), and family history of gallbladder related conditions (yes, no).
+**Model 2** will be further adjusted for ethnic group (white or other), socioeconomic status (Townsend deprivation score, educational level, yearly income), cohabitation (alone, with spouse or partner, with non-partner, unknown), physical activity (low [≤ 918 METs/week], moderate [≥918 – 3706 METs/week], high [≤37069 METs/week], and unknown), smoking status (never, former, current 1-15 cigarettes per day, current ≥15 cigarettes per day, unknown), rapid  weight loss (yes, no), history of gallbladder related conditions (yes, no), and family history of gallbladder related conditions (yes, no).
 
 **Model 3** will be further adjusted for anthropometry (BMI ≥ 30 kg/m2), as
 obesity may either confound or mediate the association between replacing
 red and processed meats, poultry, or fish with legumes and risk of gallbladder disease.
 
 ### Secondary and sensitivity analyses
-Cox proportional hazards regression substitution analyses will be conducted in a study sample restricted to consumers of legumes (i.e. removing non legume consumers). 
+Cox proportional hazards regression substitution analyses will be conducted in a study sample restricted to consumers of legumes only (i.e. removing non legume consumers). 
 To evaluate the association between overall legume intake and GBD risk, hazard ratios associated with a 80 g/week increase in legumes without substituting any other foods will
-be estimated following adjustment levels in model 2. In these analyses, no single food components will be excluded from β3’ and there will not be adjusted for the total intake of all foods (β2). This analysis will also be conducted among consumers only.
-
+be estimated following adjustment levels in model 2. In these analyses, total weekly intake of all foods will not be held stable to ensure that no substitution is implied in the interpretation of results. 
+ 
 To evaluate the robustness of the main analyses, sensitivity analyses
 will include varying numbers of Oxford WebQ returns, removal of
 participants in the highest 90th percentile of total bilirubin levels, and exclusion of soy milk from the estimated legume consumption, as soy milk is unlikely to culinarily replace red and processed meat, poultry, or fish. Furthermore, consumption of
