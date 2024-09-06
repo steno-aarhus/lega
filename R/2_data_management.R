@@ -37,11 +37,13 @@ data <- data %>% mutate(
   ),
   age_strata = as.factor(age_strata),
   ethnicity = case_when(
-    p21000_i0 == "White" | p21000_i0 == "British" | p21000_i0 == "Irish" | p21000_i0 == "Any other white background" ~ "white",
-    p21000_i0 == "Chinese" | p21000_i0 == "Asian or Asian British" | p21000_i0 =="Indian" | p21000_i0 == "Pakistani" | p21000_i0 == "Bangladeshi" | p21000_i0 == "Any other Asian background" ~ "Asian",
-    p21000_i0 == "Black or Black British" | p21000_i0 == "Caribbean" | p21000_i0 == "African" | p21000_i0 == "Any other Black background" ~ "black",
-    p21000_i0 == "Mixed" | p21000_i0 == "White and Black Caribbean" |p21000_i0 == "White and Black African" | p21000_i0 == "White and Asian" | p21000_i0 == "Any other mixed background" |
-      p21000_i0 == "Other ethnic group" | p21000_i0 == "Do not know" | p21000_i0 == "Prefer not to answer" | str_detect(p21000_i0, "NA") ~ "mixed or other"
+      p21000_i0 == "White" | p21000_i0 == "British" | p21000_i0 == "Irish" | p21000_i0 == "Any other white background" ~ "white",
+      p21000_i0 == "Chinese" | p21000_i0 == "Asian or Asian British" | p21000_i0 =="Indian" | p21000_i0 == "Pakistani" |
+          p21000_i0 == "Bangladeshi" | p21000_i0 == "Any other Asian background" | p21000_i0 == "Black or Black British" |
+          p21000_i0 == "Caribbean" | p21000_i0 == "African" | p21000_i0 == "Any other Black background" |
+          p21000_i0 == "Mixed" | p21000_i0 == "White and Black Caribbean" |p21000_i0 == "White and Black African" |
+          p21000_i0 == "White and Asian" | p21000_i0 == "Any other mixed background" | p21000_i0 == "Other ethnic group" |
+          p21000_i0 == "Do not know" | p21000_i0 == "Prefer not to answer" | str_detect(p21000_i0, "NA") ~ "other"
   ),
   deprivation = p22189,
   yearly_income = case_when(
@@ -135,35 +137,8 @@ data <- data %>% mutate(
   cohabitation = case_when(
     p709_i0 == 1 ~ "alone",
     str_detect(p6141_i0, "Husband, wife or partner") ~ "with spouse/partner",
-    p6141_i0 == "Son and/or daughter (include step-children)" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister"|
-      p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Other related" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Grandchild" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Grandchild|Other related" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Grandparent"|
-      p6141_i0 == "Son and/or daughter (include step-children)|Grandchild|Other related|Other unrelated" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Grandchild|Other unrelated" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Other related|Other unrelated" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Other unrelated" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Other related" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Other unrelated" |
-      p6141_i0 == "Mother and/or father" |
-      p6141_i0 == "Mother and/or father|Grandchild" |
-      p6141_i0 == "Mother and/or father|Grandparent" |
-      p6141_i0 == "Mother and/or father|Other related" |
-      p6141_i0 == "Mother and/or father|Other unrelated" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Mother and/or father" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Grandchild"|
-      p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Other related" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Other unrelated" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Mother and/or father|Grandchild|Other unrelated" |
-      p6141_i0 == "Son and/or daughter (include step-children)|Brother and/or sister|Mother and/or father|Other related" |
-      p6141_i0 == "Other related" |
-      p6141_i0 == "Other unrelated"
-    ~ "other non-partner",
-    p6141_i0 == "Prefer not to answer"
-    ~ "no answer"
+    p6141_i0 == "Prefer not to answer" ~ "no answer",
+    TRUE = "other non-partner"
   ))
 
 # smoking
