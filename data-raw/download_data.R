@@ -1,5 +1,5 @@
 # File-navn in RAP under "users" MUST be: "username-data-project_id-timestamp.csv",
-# fx "FieLangmann-data-leha-2024-06-04T07-58-00.csv"
+# fx "FieLangmann-data-lega-2024-06-04T07-58-00.csv"
 # When that is done, run this:
 
 library(ukbAid)
