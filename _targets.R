@@ -8,7 +8,7 @@ package_deps <- desc::desc_get_deps()$package |>
 
 # Set target options:
 tar_option_set(
-  packages = package_deps,
+  packages = ukbAid::proj_get_dependencies(),
   format = "qs", # Optionally set the default storage format. qs is fast.
   #
   # This likely isn't necessary for most UK Biobank users at SDCA/AU.
@@ -24,7 +24,11 @@ tar_option_set(
 # Run the R scripts in the R/ folder with your custom functions:
 # tar_source()
 # Or just some files:
-# source(here::here("R/functions.R"))
+# source(here::here("data-raw/download_data.R"))
+source(here::here("R/data_wrangling.R"))
+source(here::here("R/descriptives.R"))
+source(here::here("R/model_control.R"))
+source(here::here("R/analyses.R"))
 
 # Things to run in order to work.
 list(
