@@ -38,5 +38,81 @@ list(
     # TODO: This will eventually need to be changed to "parquet".
         command = ukbAid::download_data(file_ext = "parquet"),
         format = "file"
-    )
+    ),
+    # load data
+    tar_target(
+        name = unsorted_data,
+        command = readr::read_csv(download_data)
+    ),
+    # remove those with less than 2 diet recalls
+    tar_target(
+        name = adequate_recalls,
+        command = unsorted_data |>
+            two_recalls()
+    ),
+    # add id
+    tar_target(
+        name = id_data,
+        command = adequate_recalls |>
+            data_id()
+    ),
+    # wrangle covariates (not food)
+    tar_target(
+        name = covariates,
+        command = id_data |>
+            sociodemographics() |>
+            lifestyle() |>
+            alcohol() |>
+            alcohol_intake() |>
+            illness() |>
+            hormones() |>
+            pregnancies() |>
+            bilirubin() |>
+            remove_missings() |>
+            remove_p_vars()
+    ),
+    # wrangle diet data
+    tar_target(
+        name = diet_data,
+        command = covariates |>
+            pea_servings() |>
+            food_groups() |>
+            remove_diet_p_vars()
+    ),
+    # wrangle outcome variables
+    tar_target(
+        name = outcome_data,
+        command = diet_data |>
+            icd10_diagnoses() |>
+            icd9_diagnoses() |>
+            opcs4_diagnoses() |>
+            opcs3_diagnoses() |>
+            date_birth() |>
+            censoring_date() |>
+            outcome_variables()
+    ),
+    # eligibility criteria based on outcomes
+    tar_target(
+        name = eligible_participants,
+        command = outcome_data |>
+            last_completed_recall() |>
+            diagnosed_before() |>
+            left_study() |>
+            remove_outcome_p_vars()
+    ),
+    # define survival time
+    tar_target(
+        name = sorted_data,
+        command = eligible_participants |>
+            survival_time() |>
+            define_exposure_variables()
+    ),
+
+
+# descriptive analyses ----------------------------------------------------
+    tar_target(
+        name = events,
+        command = sorted_data |>
+            number_events()
+    ),
 )
