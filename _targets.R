@@ -107,12 +107,27 @@ list(
             survival_time() |>
             define_exposure_variables()
     ),
-
-
-# descriptive analyses ----------------------------------------------------
+    # descriptive analyses
     tar_target(
         name = events,
         command = sorted_data |>
             number_events()
     ),
+    tar_target(
+        name = table1,
+        command = sorted_data |>
+            baseline_table()
+    ),
+    tar_target(
+    name = suppl_base_table,
+    command = sorted_data |>
+        supplementary_baseline_table()
+),
+tar_target(
+    name = follow_up_year,
+    command = sorted_data |>
+        person_years_followup()
+),
+
+
 )
