@@ -322,7 +322,7 @@ red and processed meats, poultry, or fish with legumes and risk of gallbladder d
 ### Secondary and sensitivity analyses
 Cox proportional hazards regression substitution analyses will be conducted in a study sample restricted to consumers of legumes only (i.e. removing non legume consumers). 
 To evaluate the association between overall legume intake and GBD risk, hazard ratios associated with a 80 g/week increase in legumes without substituting any other foods will
-be estimated following adjustment levels in model 2. In these analyses, total weekly intake of all foods will not be held stable to ensure that no substitution is implied in the interpretation of results. 
+be estimated following adjustment levels in model 2. This analysis was also conducted among consumers of legumes only. In these analyses, total weekly intake of all foods will not be held stable to ensure that no substitution is implied in the interpretation of results. 
  
 To evaluate the robustness of the main analyses, sensitivity analyses
 will include varying numbers of Oxford WebQ returns, removal of
