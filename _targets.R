@@ -24,7 +24,7 @@ tar_option_set(
 # Run the R scripts in the R/ folder with your custom functions:
 # tar_source()
 # Or just some files:
-source(here::here("data-raw/download_data.R"))
+# source(here::here("data-raw/download_data.R"))
 source(here::here("R/data_wrangling.R"))
 source(here::here("R/descriptives.R"))
 source(here::here("R/model_control.R"))
