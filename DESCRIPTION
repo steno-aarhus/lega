@@ -12,6 +12,7 @@ Imports:
     Hmisc,
     kableExtra,
     knitr,
+    magrittr,
     remotes,
     rmarkdown,
     survival,
