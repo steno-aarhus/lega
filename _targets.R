@@ -195,6 +195,5 @@ tar_target(
     name = normal_bilirubin,
     command = sorted_data |>
         bilirubin_analyses()
-),
-#
-# )
+))
+
