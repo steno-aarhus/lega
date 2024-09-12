@@ -16,6 +16,11 @@ library(tidyverse)
 library(gt)
 
 targets::tar_config_set(store = here::here("_targets"))
+# table1 <- targets::tar_read(table1)
+# suppl_base_table <- targets::tar_read(suppl_base_table)
+# follow_up_year <- targets::tar_read(follow_up_year)
+# events <- targets::tar_read(events)
+
 main_analyses1 <- targets::tar_read(main_analyses1)
 main_analyses2 <- targets::tar_read(main_analyses2)
 main_analyses3 <- targets::tar_read(main_analyses3)
@@ -40,6 +45,19 @@ Objective:
 Research Design and Methods:
 
 Results:
+Table 1
+
+
+Supplementary table 2
+
+
+Years of follow-up 
+
+
+Number of events
+
+
+
 Main analyses
 ```{r, echo=FALSE}
 data.frame(
