@@ -24,7 +24,7 @@ tar_option_set(
 # Run the R scripts in the R/ folder with your custom functions:
 # tar_source()
 # Or just some files:
-# source(here::here("data-raw/download_data.R"))
+source(here::here("data-raw/download_data.R"))
 source(here::here("R/data_wrangling.R"))
 source(here::here("R/descriptives.R"))
 source(here::here("R/model_control.R"))
@@ -32,11 +32,11 @@ source(here::here("R/analyses.R"))
 
 # Things to run in order to work.
 list(
-    # TODO: Uncomment this *after* finishing running `data-raw/create-data.R`
+    # download data
     tar_target(
-        name = download_project_data,
-    # TODO: This will eventually need to be changed to "parquet".
-        command = ukbAid::download_data(file_ext = "parquet"),
+        name = download_data,
+        # TODO: This will eventually need to be changed to "parquet".
+        command = ukbAid::download_data(file_ext = "csv", username = "FieLangmann"),
         format = "file"
     ),
     # load data
