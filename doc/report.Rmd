@@ -12,19 +12,22 @@ format: html
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(gt)
+
 targets::tar_config_set(store = here::here("_targets"))
 main_analyses1 <- targets::tar_read(main_analyses1)
 main_analyses2 <- targets::tar_read(main_analyses2)
 main_analyses3 <- targets::tar_read(main_analyses3)
-consumers_main
-consumers_total
-gallstone_analyses
-cholecystit_analyses
-legume_pea
-no_soy
-multiple_recalls
-normal_bilirubin
-
+consumers_main <- targets::tar_read(consumers_main)
+consumers_total <- targets::tar_read(consumers_total)
+gallstone_analyses <- targets::tar_read(gallstone_analyses)
+cholecystit_analyses <- targets::tar_read(cholecystit_analyses)
+legume_pea <- targets::tar_read(legume_pea)
+no_soy <- targets::tar_read(no_soy)
+multiple_recalls <- targets::tar_read(multiple_recalls)
+normal_bilirubin <- targets::tar_read(normal_bilirubin)
+ 
 source(here::here("R/descriptives.R"))
 # source(here::here("R/model_control.R"))
 source(here::here("R/analyses.R"))
@@ -40,19 +43,28 @@ Results:
 Main analyses
 ```{r, echo=FALSE}
 data.frame(
-      model = c("Model 1", "Model 2"),
+      model = c("Model 1", "Model 2", "Model 3"),
       meat = c((glue::glue("{main_analyses1$meat_model1[1,2]} 
                            ({main_analyses1$meat_model1[1,6]}; {main_analyses1$meat_model1[1,7]})")),
                 (glue::glue("{main_analyses2$meat_model2[1,2]} 
                            ({main_analyses2$meat_model2[1,6]}; {main_analyses2$meat_model2[1,7]})")),
                (glue::glue("{main_analyses3$meat_model3[1,2]} 
                            ({main_analyses3$meat_model3[1,6]}; {main_analyses3$meat_model3[1,7]})"))),
-      poultry = ,
-      fish = 
-    
-      
-      
-      ) %>%
+      poultry = c((glue::glue("{main_analyses1$poultry_model1[1,2]}
+                           ({main_analyses1$poultry_model1[1,6]};
+                           {main_analyses1$poultry_model1[1,7]})")),
+                (glue::glue("{main_analyses2$poultry_model2[1,2]} 
+                           ({main_analyses2$poultry_model2[1,6]};
+                           {main_analyses2$poultry_model2[1,7]})")),
+               (glue::glue("{main_analyses3$poultry_model3[1,2]} 
+                           ({main_analyses3$poultry_model3[1,6]};
+                           {main_analyses3$poultry_model3[1,7]})"))),
+      fish = c((glue::glue("{main_analyses1$fish_model1[1,2]}
+                           ({main_analyses1$fish_model1[1,6]}; {main_analyses1$fish_model1[1,7]})")),
+                (glue::glue("{main_analyses2$fish_model2[1,2]} 
+                           ({main_analyses2$fish_model2[1,6]}; {main_analyses2$fish_model2[1,7]})")),
+               (glue::glue("{main_analyses3$fish_model3[1,2]} 
+                           ({main_analyses3$fish_model3[1,6]}; {main_analyses3$fish_model3[1,7]})")))) %>%
     gt() %>%
     tab_caption("Consuming 80 g/week of legumes instead of 80 g/week of")
 
@@ -61,26 +73,47 @@ data.frame(
 Secondary analyses
 ```{r, echo=FALSE}
 data.frame(
-      model = c("Consumers only", "Total intake", "Gallstones only", "Cholecystit only"),
+      model = c("Consumers only", "Gallstones only", "Cholecystit only"),
       meat = c((glue::glue("{consumers_main$meat_model2[1,2]}
                            ({consumers_main$meat_model2[1,6]}; 
                            {consumers_main$meat_model2[1,7]})")), #consumers only
-               (glue::glue("{consumers_total$meat_model2[1,2]}
-                           ({consumers_total$meat_model2[1,6]}; 
-                           {consumers_total$meat_model2[1,7]})")), #consumers total
                (glue::glue("{gallstone_analyses$meat_model2[1,2]}
                            ({gallstone_analyses$meat_model2[1,6]}; 
                            {gallstone_analyses$meat_model2[1,7]})")), #gallstone analyses
                (glue::glue("{cholecystit_analyses$meat_model2[1,2]}
                            ({cholecystit_analyses$meat_model2[1,6]}; 
                            {cholecystit_analyses$meat_model2[1,7]})"))),   #cholecystit analyses
-      poultry = ,
-      fish =
-      
-      ) %>%
+      poultry = c((glue::glue("{consumers_main$poultry_model2[1,2]}
+                           ({consumers_main$poultry_model2[1,6]}; 
+                           {consumers_main$poultry_model2[1,7]})")), #consumers only
+               (glue::glue("{gallstone_analyses$poultry_model2[1,2]}
+                           ({gallstone_analyses$poultry_model2[1,6]}; 
+                           {gallstone_analyses$poultry_model2[1,7]})")), #gallstone analyses
+               (glue::glue("{cholecystit_analyses$poultry_model2[1,2]}
+                           ({cholecystit_analyses$poultry_model2[1,6]}; 
+                           {cholecystit_analyses$poultry_model2[1,7]})"))),   #cholecystit analyses
+      fish = c((glue::glue("{consumers_main$fish_model2[1,2]}
+                           ({consumers_main$fish_model2[1,6]}; 
+                           {consumers_main$fish_model2[1,7]})")), #consumers only
+               (glue::glue("{gallstone_analyses$fish_model2[1,2]}
+                           ({gallstone_analyses$fish_model2[1,6]}; 
+                           {gallstone_analyses$fish_model2[1,7]})")), #gallstone analyses
+               (glue::glue("{cholecystit_analyses$fish_model2[1,2]}
+                           ({cholecystit_analyses$fish_model2[1,6]}; 
+                           {cholecystit_analyses$fish_model2[1,7]})")))) %>%   #cholecystit analyses
     gt() %>%
     tab_caption("Consuming 80 g/week of legumes instead of 80 g/week of")
 
+```
+Consumers total
+```{r, echo=FALSE}
+data.frame(
+      model = c("No substitution"),
+      meat = c((glue::glue("{consumers_total[1,2]} 
+      ({consumers_total[1,6]}; 
+                           {consumers_total[1,7]})")))) %>% 
+     gt() %>%
+    tab_caption("Consuming 80 g/week of legumes with no substitution")
 ```
 
 Sensitivity analyses
@@ -99,9 +132,32 @@ data.frame(
                (glue::glue("{normal_bilirubin$meat_model2[1,2]}
                            ({normal_bilirubin$meat_model2[1,6]}; 
                            {normal_bilirubin$meat_model2[1,7]})"))),  #normal_bilirubin
-      poultry = ,
-      fish = 
-          ) %>% 
+      
+            poultry = c((glue::glue("{legume_pea$poultry_model2[1,2]}
+                           ({legume_pea$poultry_model2[1,6]}; 
+                           {legume_pea$poultry_model2[1,7]})")), #legume_pea
+               (glue::glue("{no_soy$poultry_model2[1,2]}
+                           ({no_soy$poultry_model2[1,6]}; 
+                           {no_soy$poultry_model2[1,7]})")), #no_soy
+               (glue::glue("{multiple_recalls$poultry_model2[1,2]}
+                           ({multiple_recalls$poultry_model2[1,6]}; 
+                           {multiple_recalls$poultry_model2[1,7]})")), #multiple_recalls
+               (glue::glue("{normal_bilirubin$poultry_model2[1,2]}
+                           ({normal_bilirubin$poultry_model2[1,6]}; 
+                           {normal_bilirubin$poultry_model2[1,7]})"))),  #normal_bilirubin
+      
+            fish = c((glue::glue("{legume_pea$fish_model2[1,2]}
+                           ({legume_pea$fish_model2[1,6]}; 
+                           {legume_pea$fish_model2[1,7]})")), #legume_pea
+               (glue::glue("{no_soy$fish_model2[1,2]}
+                           ({no_soy$fish_model2[1,6]}; 
+                           {no_soy$fish_model2[1,7]})")), #no_soy
+               (glue::glue("{multiple_recalls$fish_model2[1,2]}
+                           ({multiple_recalls$fish_model2[1,6]}; 
+                           {multiple_recalls$fish_model2[1,7]})")), #multiple_recalls
+               (glue::glue("{normal_bilirubin$fish_model2[1,2]}
+                           ({normal_bilirubin$fish_model2[1,6]}; 
+                           {normal_bilirubin$fish_model2[1,7]})")))) %>%   #normal_bilirubin
     gt() %>%
     tab_caption("Consuming 80 g/week of legumes instead of 80 g/week of")
 
