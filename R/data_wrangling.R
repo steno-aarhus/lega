@@ -362,7 +362,7 @@ icd10_diagnoses <- function(data) {
 
     # Join the dates back to the original data
     data <- data %>%
-        left_join(first_non_na_icd10, by = "id")
+        left_join(icd10_subset, by = "id")
 
     return(data)
 }
@@ -390,10 +390,9 @@ icd9_diagnoses <- function(data) {
             # bile duct obstruction (5762)
             icd9_bileobstruction_date = ifelse(str_detect(p41271var, "5762"), as.character(c_across(starts_with("p41281"))), NA),
             icd9_bileobstruction_date = as.Date(icd9_bileobstruction_date, format = "%Y-%m-%d")
-        )
+        ) %>%
 
     # Retrieve the first non-NA date for each outcome
-    first_non_na_icd9 <- icd9_subset %>%
         select(id, icd9_gallstone_date, icd9_acute_date, icd9_other_date, icd9_bileobstruction_date) %>%
         pivot_longer(cols = starts_with("icd9_"), names_to = "condition", values_to = "date") %>%
         filter(!is.na(date)) %>%
@@ -404,7 +403,7 @@ icd9_diagnoses <- function(data) {
 
     # Join the dates back to the original data
     data <- data %>%
-        left_join(first_non_na_icd9, by = "id")
+        left_join(icd9_subset, by = "id")
 
     return(data)
 }
@@ -443,9 +442,9 @@ opcs4_diagnoses <- function(data) {
                 str_detect(p41272var, "J26.1") ~ as.character(c_across(starts_with("p41282"))),
                 TRUE ~ NA_character_),
             opcs4_gallstone_date = as.Date(opcs4_gallstone_date, format = "%Y-%m-%d")
-        )
+        ) %>%
 
-    first_non_na_opcs4 <- opcs4 %>%
+        # Retrieve the first non-NA date for each outcome
         select(id, opcs4_removal_date, opcs4_gallstone_date) %>%
         pivot_longer(cols = starts_with("opcs4_"), names_to = "condition", values_to = "date") %>%
         filter(!is.na(date)) %>%
@@ -456,7 +455,7 @@ opcs4_diagnoses <- function(data) {
 
     # Join the dates back to the original data
     data <- data %>%
-        left_join(first_non_na_opcs4, by = "id")
+        left_join(opcs4, by = "id")
 
     return(data)
 }
@@ -481,9 +480,9 @@ opcs3_diagnoses <- function(data) {
                                           as.character(c_across(starts_with("p41283"))),
                                           NA),
             opcs3_gallstone_date = as.Date(opcs3_gallstone_date, format = "%Y-%m-%d")
-        )
+        ) %>%
 
-    first_non_na_opcs3 <- opcs3 %>%
+        # Retrieve the first non-NA date for each outcome
         select(id, opcs3_removal_date, opcs3_gallstone_date) %>%
         pivot_longer(cols = starts_with("opcs3_"), names_to = "condition", values_to = "date") %>%
         filter(!is.na(date)) %>%
@@ -495,7 +494,7 @@ opcs3_diagnoses <- function(data) {
 
     # Join the dates back to the original data
     data <- data %>%
-        left_join(first_non_na_opcs3, by = "id")
+        left_join(opcs3, by = "id")
 
     return(data)
 }
