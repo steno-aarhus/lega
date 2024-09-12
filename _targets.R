@@ -33,9 +33,16 @@ source(here::here("R/analyses.R"))
 # Things to run in order to work.
 list(
     # download data
+    # TODO: Uncomment this *after* finishing running `data-raw/create-data.R`
     tar_target(
-        name = download_data,
-        command = ukbAid::download_data(file_ext = "csv", username = "FieLangmann"),
+        name = project_data,
+        # TODO: This will eventually need to be changed to "parquet".
+        command = rap_copy_from(
+            rap_get_path_user_files(user = rap_get_user()) |>
+                sort() |>
+                head(1),
+            here::here("data/data.csv")
+        ),
         format = "file"
     ),
     # load data
