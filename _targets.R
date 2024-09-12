@@ -136,6 +136,59 @@ list(
 #     command = sorted_data |>
 #         person_years_followup()
 # ),
+# main analyses -----------------------------------------------------------
+tar_target(
+    name = main_analyses1,
+    command = sorted_data |>
+        main_model1()
+),
+tar_target(
+    name = main_analyses2,
+    command = sorted_data |>
+        main_model2()
+),
+tar_target(
+    name = main_analyses3,
+    command = sorted_data |>
+        main_model3()
+),
+model_control()
+# secondary analyses ------------------------------------------------------
+tar_target(
+    name = consumers_main,
+    command = sorted_data |>
+        consumers_analyses()
+),
+tar_target(
+    name = consumers_total,
+    command = sorted_data |>
+        total_intake()
+),
+
+gallstone_model2
+cholecystit_model2()
+
 #
+# sensitivity analyses ----------------------------------------------------
+tar_target(
+    name = legume_pea,
+    command = sorted_data |>
+        legumes_and_peas()
+),
+tar_target(
+    name = no_soy,
+    command = sorted_data |>
+        legumes_without_soy()
+),
+tar_target(
+    name = multiple_recalls,
+    command = sorted_data |>
+        three_recalls_analyses()
+),
+tar_target(
+    name = normal_,
+    command = sorted_data |>
+        bilirubin_analyses()
+),
 #
 # )
