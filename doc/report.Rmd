@@ -12,6 +12,14 @@ format: html
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+targets::tar_config_set(store = here::here("_targets"))
+main_analyses1 <- targets::tar_read(main_analyses1)
+main_analyses2 <- targets::tar_read(main_analyses2)
+main_analyses3 <- targets::tar_read(main_analyses3)
+
+source(here::here("R/descriptives.R"))
+# source(here::here("R/model_control.R"))
+source(here::here("R/analyses.R"))
 ```
 
 # Abstract
@@ -21,6 +29,32 @@ Objective:
 Research Design and Methods:
 
 Results:
+Main analyses
+```{r, echo=FALSE}
+data.frame(
+      model = c("Model 1", "Model 2"),
+      meat = c((glue::glue("{main_analyses1$meat_model1[1,2]} 
+                           ({main_analyses1$meat_model1[1,6]}; {main_analyses1$meat_model1[1,7]})")),
+                glue::glue("{main_analyses2$meat_model2[1,2]} 
+                           ({main_analyses2$meat_model2[1,6]}; {main_analyses2$meat_model2[1,7]})"))) %>%
+    gt() %>%
+    tab_caption("Consuming 80 g/week of legumes instead of 80 g/week of")
+
+```
+
+Secondary analyses
+```{r, echo=FALSE}
+# data.frame(
+#       model = c("Model 1", "Model 2"),
+#       meat = c((glue::glue("{main_analyses1$meat_model1[1,2]} 
+#                            ({main_analyses1$meat_model1[1,6]}; {main_analyses1$meat_model1[1,7]})")),
+#                 glue::glue("{main_analyses2$meat_model2[1,2]} 
+#                            ({main_analyses2$meat_model2[1,6]}; {main_analyses2$meat_model2[1,7]})"))) %>%
+#     gt() %>%
+#     tab_caption("Consuming 80 g/week of legumes instead of 80 g/week of")
+
+
+```
 
 Conclusions:
 
