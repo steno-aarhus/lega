@@ -1,6 +1,7 @@
 # Analyses
+
 create_formula <- function(xvars, covars) {
-    outcome <- "Surv(survival_gbd, nafld == 1)"
+    outcome <- "Surv(survival_gbd, gbd == 1)"
     reformulate(c(xvars, covars), response = outcome)
 }
 
@@ -20,7 +21,7 @@ main_model1 <- function(data) {
     )
 
     model1_results <- model1_formulas |>
-        map(~ coxph(.x, data = data, ties = "breslow")) |>
+        map(~ survival::coxph(.x, data = data, ties = "breslow")) |>
         map2(names(model1_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
                  mutate(model = .y))
@@ -28,14 +29,6 @@ main_model1 <- function(data) {
     return(model1_results)
 }
 
-legumes80 + poultry80 + fish80+
-    #other food components
-    cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
-    dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
-    veggie_weekly + potato_weekly + egg_weekly +
-    non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
-    sauce_weekly + food_weight_weekly + strata(age_strata, region, sex),
-data = data, ties='breslow')
 
 
 main_model2<- function(data) {
