@@ -165,7 +165,7 @@ gallstone_model2<- function(data) {
 
     model2_gallstone <- model2_gallstone_formulas |>
         map(~ coxph(.x, data = data, ties = "breslow")) |>
-        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+        map2(names(model2_gallstone_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
                  mutate(model = .y))
 
@@ -198,7 +198,7 @@ cholecystit_model2<- function(data) {
 
     model2_cholecystit <- model2_cholecystit_formulas |>
         map(~ coxph(.x, data = data, ties = "breslow")) |>
-        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+        map2(names(model2_cholecystit_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
                  mutate(model = .y))
 
@@ -312,14 +312,15 @@ percentile_90 <- quantile(data$bilirubin, probs = 0.90, na.rm = TRUE)
 lower_bili <- data %>%
     subset(bilirubin < percentile_90)
 
-    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
-                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
-                 "veggie_weekly", "potato_weekly", "egg_weekly",
-                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
-                 "sauce_weekly", "food_weight_weekly", "alc_spline", "ethnicity",
-                 "deprivation", "education", "cohabitation", "physical_activity",
-                 "smoking", "related_disease", "disease_family", "yearly_income",
-                 "strata(region, age_strata, sex)")
+covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
+             "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
+             "veggie_weekly", "potato_weekly", "egg_weekly",
+             "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
+             "sauce_weekly", "food_weight_weekly", "ethnicity",
+             "deprivation", "education", "cohabitation", "physical_activity",
+             "smoking", "estrogen_treatment", "pregnancies", "yearly_income",
+             "related_conditions", "family_diabetes",
+             "strata(region, age_strata, sex)")
 
     model2_formulas <- list(
         meat_model2 = create_formula(c("legumes80", "poultry80", "fish80"), covars2),
