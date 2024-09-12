@@ -85,120 +85,120 @@ supplementary_baseline_table <- function(data) {
 
 
 
-# Estimate follow-up time -------------------------------------------------
-
-# all gallbladder diseases
-# defining time in study
-data <- data %>%
-    mutate(
-        survival_icd10_gallstone_date = case_when(
-            !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_loss_to_follow_up = case_when(
-            !is.na(loss_to_follow_up) ~ as.numeric(difftime(loss_to_follow_up, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_date_of_death = case_when(
-            !is.na(date_of_death) ~ as.numeric(difftime(date_of_death, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_opcs3_gallstone_date = case_when(
-            !is.na(opcs3_gallstone_date) ~ as.numeric(difftime(opcs3_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_opcs3_removal_date = case_when(
-            !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_opcs4_gallstone_date = case_when(
-            !is.na(opcs4_gallstone_date) ~ as.numeric(difftime(opcs4_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_opcs4_removal_date = case_when(
-            !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_icd9_bileobstruction_date = case_when(
-            !is.na(icd9_bileobstruction_date) ~ as.numeric(difftime(icd9_bileobstruction_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_icd9_gallstone_date = case_when(
-            !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_icd10_gbobstruction_date = case_when(
-            !is.na(icd10_gbobstruction_date) ~ as.numeric(difftime(icd10_gbobstruction_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_icd10_bileobstruction_date = case_when(
-            !is.na(icd10_bileobstruction_date) ~ as.numeric(difftime(icd10_bileobstruction_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_icd10_cholecystit_date = case_when(
-            !is.na(icd10_cholecystit_date) ~ as.numeric(difftime(icd10_cholecystit_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_icd9_acute_date = case_when(
-            !is.na(icd9_acute_date) ~ as.numeric(difftime(icd9_acute_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_icd9_other_date = case_when(
-            !is.na(icd9_other_date) ~ as.numeric(difftime(icd9_other_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_cenc = difftime(censoring, date_filled, units = "days"),
-        gbd_time = pmin(survival_icd10_gallstone_date, survival_time_cenc,
-                        survival_icd10_bileobstruction_date, survival_icd10_gbobstruction_date,
-                        survival_icd9_gallstone_date, survival_icd9_bileobstruction_date,
-                        survival_opcs4_removal_date, survival_opcs3_removal_date,
-                        survival_opcs3_gallstone_date, survival_date_of_death,
-                        survival_loss_to_follow_up, survival_icd10_cholecystit_date,
-                        survival_icd9_acute_date, survival_icd9_other_date,
-                        na.rm = TRUE),
-        gbd_time = gbd_time/365.25
-    )
-
-# total follow-up time for GBD
-sum(data$gbd_time) #1,238,698 years
-# median follow-up time for GBD
-summary(data$gbd_time) #10.48 (IQR: 10.42-10.92) years
-
-
-# for gallstone
-# defining time in study
-data <- data %>%
-    mutate(
-        survival_icd10_gallstone_date = case_when(
-            !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_loss_to_follow_up = case_when(
-            !is.na(loss_to_follow_up) ~ as.numeric(difftime(loss_to_follow_up, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_date_of_death = case_when(
-            !is.na(date_of_death) ~ as.numeric(difftime(date_of_death, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_opcs3_gallstone_date = case_when(
-            !is.na(opcs3_gallstone_date) ~ as.numeric(difftime(opcs3_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_opcs3_removal_date = case_when(
-            !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_opcs4_gallstone_date = case_when(
-            !is.na(opcs4_gallstone_date) ~ as.numeric(difftime(opcs4_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_opcs4_removal_date = case_when(
-            !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_icd9_bileobstruction_date = case_when(
-            !is.na(icd9_bileobstruction_date) ~ as.numeric(difftime(icd9_bileobstruction_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_icd9_gallstone_date = case_when(
-            !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_icd10_gbobstruction_date = case_when(
-            !is.na(icd10_gbobstruction_date) ~ as.numeric(difftime(icd10_gbobstruction_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_icd10_bileobstruction_date = case_when(
-            !is.na(icd10_bileobstruction_date) ~ as.numeric(difftime(icd10_bileobstruction_date, date_filled, units = "days")),
-            TRUE ~ NA),
-        survival_time_cenc = difftime(censoring, date_filled, units = "days"),
-        gallstone_time = pmin(survival_icd10_gallstone_date, survival_time_cenc,
-                              survival_icd10_bileobstruction_date, survival_icd10_gbobstruction_date,
-                              survival_icd9_gallstone_date, survival_icd9_bileobstruction_date,
-                              survival_opcs4_removal_date, survival_opcs3_removal_date,
-                              survival_opcs3_gallstone_date, survival_date_of_death,
-                              survival_loss_to_follow_up, na.rm = TRUE),
-        gallstone_time = gallstone_time/365.25
-    )
-
-# total follow-up time for gallstone
-sum(data$gallstone_time) #1,239,148 years
-# median follow-up time for gallstone
-summary(data$gallstone_time) # 10.48 (IQR: 10.42-10.92) years
+# # Estimate follow-up time -------------------------------------------------
+#
+# # all gallbladder diseases
+# # defining time in study
+# data <- data %>%
+#     mutate(
+#         survival_icd10_gallstone_date = case_when(
+#             !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_loss_to_follow_up = case_when(
+#             !is.na(loss_to_follow_up) ~ as.numeric(difftime(loss_to_follow_up, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_date_of_death = case_when(
+#             !is.na(date_of_death) ~ as.numeric(difftime(date_of_death, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_opcs3_gallstone_date = case_when(
+#             !is.na(opcs3_gallstone_date) ~ as.numeric(difftime(opcs3_gallstone_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_opcs3_removal_date = case_when(
+#             !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_opcs4_gallstone_date = case_when(
+#             !is.na(opcs4_gallstone_date) ~ as.numeric(difftime(opcs4_gallstone_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_opcs4_removal_date = case_when(
+#             !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_icd9_bileobstruction_date = case_when(
+#             !is.na(icd9_bileobstruction_date) ~ as.numeric(difftime(icd9_bileobstruction_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_icd9_gallstone_date = case_when(
+#             !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_icd10_gbobstruction_date = case_when(
+#             !is.na(icd10_gbobstruction_date) ~ as.numeric(difftime(icd10_gbobstruction_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_icd10_bileobstruction_date = case_when(
+#             !is.na(icd10_bileobstruction_date) ~ as.numeric(difftime(icd10_bileobstruction_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_icd10_cholecystit_date = case_when(
+#             !is.na(icd10_cholecystit_date) ~ as.numeric(difftime(icd10_cholecystit_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_icd9_acute_date = case_when(
+#             !is.na(icd9_acute_date) ~ as.numeric(difftime(icd9_acute_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_icd9_other_date = case_when(
+#             !is.na(icd9_other_date) ~ as.numeric(difftime(icd9_other_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_time_cenc = difftime(censoring, date_filled, units = "days"),
+#         gbd_time = pmin(survival_icd10_gallstone_date, survival_time_cenc,
+#                         survival_icd10_bileobstruction_date, survival_icd10_gbobstruction_date,
+#                         survival_icd9_gallstone_date, survival_icd9_bileobstruction_date,
+#                         survival_opcs4_removal_date, survival_opcs3_removal_date,
+#                         survival_opcs3_gallstone_date, survival_date_of_death,
+#                         survival_loss_to_follow_up, survival_icd10_cholecystit_date,
+#                         survival_icd9_acute_date, survival_icd9_other_date,
+#                         na.rm = TRUE),
+#         gbd_time = gbd_time/365.25
+#     )
+#
+# # total follow-up time for GBD
+# sum(data$gbd_time) #1,238,698 years
+# # median follow-up time for GBD
+# summary(data$gbd_time) #10.48 (IQR: 10.42-10.92) years
+#
+#
+# # for gallstone
+# # defining time in study
+# data <- data %>%
+#     mutate(
+#         survival_icd10_gallstone_date = case_when(
+#             !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_loss_to_follow_up = case_when(
+#             !is.na(loss_to_follow_up) ~ as.numeric(difftime(loss_to_follow_up, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_date_of_death = case_when(
+#             !is.na(date_of_death) ~ as.numeric(difftime(date_of_death, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_opcs3_gallstone_date = case_when(
+#             !is.na(opcs3_gallstone_date) ~ as.numeric(difftime(opcs3_gallstone_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_opcs3_removal_date = case_when(
+#             !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_opcs4_gallstone_date = case_when(
+#             !is.na(opcs4_gallstone_date) ~ as.numeric(difftime(opcs4_gallstone_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_opcs4_removal_date = case_when(
+#             !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_icd9_bileobstruction_date = case_when(
+#             !is.na(icd9_bileobstruction_date) ~ as.numeric(difftime(icd9_bileobstruction_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_icd9_gallstone_date = case_when(
+#             !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_icd10_gbobstruction_date = case_when(
+#             !is.na(icd10_gbobstruction_date) ~ as.numeric(difftime(icd10_gbobstruction_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_icd10_bileobstruction_date = case_when(
+#             !is.na(icd10_bileobstruction_date) ~ as.numeric(difftime(icd10_bileobstruction_date, date_filled, units = "days")),
+#             TRUE ~ NA),
+#         survival_time_cenc = difftime(censoring, date_filled, units = "days"),
+#         gallstone_time = pmin(survival_icd10_gallstone_date, survival_time_cenc,
+#                               survival_icd10_bileobstruction_date, survival_icd10_gbobstruction_date,
+#                               survival_icd9_gallstone_date, survival_icd9_bileobstruction_date,
+#                               survival_opcs4_removal_date, survival_opcs3_removal_date,
+#                               survival_opcs3_gallstone_date, survival_date_of_death,
+#                               survival_loss_to_follow_up, na.rm = TRUE),
+#         gallstone_time = gallstone_time/365.25
+#     )
+#
+# # total follow-up time for gallstone
+# sum(data$gallstone_time) #1,239,148 years
+# # median follow-up time for gallstone
+# summary(data$gallstone_time) # 10.48 (IQR: 10.42-10.92) years
