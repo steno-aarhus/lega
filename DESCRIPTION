@@ -2,6 +2,7 @@ Package: lega
 Type: Project
 Version: 0.0.1
 Imports:
+    broom,
     duckdb,
     eventglm,
     flextable,
