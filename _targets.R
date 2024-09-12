@@ -1,5 +1,7 @@
 # Load packages required to define the pipeline:
 library(targets)
+library(magrittr)
+library(ukbAid)
 # library(tarchetypes) # Load other packages as needed.
 
 # Tell targets your needed packages.
@@ -27,7 +29,7 @@ tar_option_set(
 # source(here::here("data-raw/download_data.R"))
 source(here::here("R/data_wrangling.R"))
 source(here::here("R/descriptives.R"))
-source(here::here("R/model_control.R"))
+# source(here::here("R/model_control.R"))
 source(here::here("R/analyses.R"))
 
 # Things to run in order to work.
@@ -48,7 +50,7 @@ list(
     # load data
     tar_target(
         name = unsorted_data,
-        command = readr::read_csv(download_data)
+        command = readr::read_csv(project_data)
     ),
     # remove those with less than 2 diet recalls
     tar_target(
