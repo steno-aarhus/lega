@@ -122,12 +122,15 @@ list(
     name = suppl_base_table,
     command = sorted_data |>
         supplementary_baseline_table()
-),
-tar_target(
-    name = follow_up_year,
-    command = sorted_data |>
-        person_years_followup()
-),
+    )
+    )
 
-
-)
+#
+# tar_target(
+#     name = follow_up_year,
+#     command = sorted_data |>
+#         person_years_followup()
+# ),
+#
+#
+# )

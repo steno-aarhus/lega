@@ -29,7 +29,7 @@ baseline_table <- function(data) {
     )
     # making the descriptive table
     table1 <- data %>%
-        select(legume_groups, legumes_weekly, gbd, age, sex, yearly_income, education,
+        select(legume_groups, legume_weekly, gbd, age, sex, yearly_income, education,
                deprivation, cohabitation, ethnicity, physical_activity, smoking,
                region, bmi30, hrt, oral_contraceptive, pregnancies, related_conditions, family_diabetes,
                meats_weekly, poultry_weekly, fish_weekly,
@@ -59,7 +59,7 @@ supplementary_baseline_table <- function(data) {
         select(gbd, age, sex, yearly_income, education,
                deprivation, cohabitation, ethnicity, physical_activity, smoking,
                region, bmi30, hrt, oral_contraceptive, pregnancies, related_conditions, family_diabetes,
-               legumes_weekly, meats_weekly, poultry_weekly, fish_weekly,
+               legume_weekly, meats_weekly, poultry_weekly, fish_weekly,
                cereal_refined_weekly, whole_grain_weekly, mixed_dish_weekly,
                dairy_weekly, fats_weekly, fruit_weekly, nut_weekly, veggie_weekly,
                potato_weekly, egg_weekly, non_alc_beverage_weekly,
