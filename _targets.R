@@ -35,7 +35,6 @@ list(
     # download data
     tar_target(
         name = download_data,
-        # TODO: This will eventually need to be changed to "parquet".
         command = ukbAid::download_data(file_ext = "csv", username = "FieLangmann"),
         format = "file"
     ),
@@ -122,8 +121,7 @@ list(
     name = suppl_base_table,
     command = sorted_data |>
         supplementary_baseline_table()
-    )
-    )
+    ))
 
 #
 # tar_target(
