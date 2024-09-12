@@ -270,99 +270,99 @@ legumes_without_soy<- function(data) {
 
 
 
-# Varying 24h recalls -----------------------------------------------------
-
-three_recalls_analyses()
-
-
-data <- data %>%
-    mutate(legumes80 = legumes_weekly/80,
-           meats80 = meats_weekly/80,
-           poultry80 = poultry_weekly/80,
-           fish80 = fish_weekly/80)
-data3 <- data %>%
-    subset(p20077>=3)
-data4 <- data %>%
-    subset(p20077>=4)
-
-
-## data3 = three 24h recalls -----------------------------------------------------------------
-# any gallbladder disease
-# meats
-meat_data3 <- coxph(Surv(survival_gbd, any_gbd == 1) ~
-                        # removing meat
-                        legumes80 + poultry80 + fish80+
-                        #other food components
-                        cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
-                        dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
-                        veggie_weekly + potato_weekly + egg_weekly +
-                        non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
-                        sauce_weekly + food_weight_weekly +
-                        #other variables
-                        strata(age_strata, region, sex) +
-                        ethnicity + deprivation + education + yearly_income +
-                        cohabitation + physical_activity + smoking +
-                        estrogen_treatment +
-                        pregnancies + related_conditions + family_diabetes,
-                    data = data3, ties='breslow')
-
-meat_data3 <- tidy(meat_data3, exponentiate = TRUE, conf.int = TRUE)
-
-
-# excluding those with ALT levels above 40 UL
-# bilirubin_analyses<- function(data) {
-    normal_liver <- data %>%
-        subset(alt < 40)
-
-    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
-                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
-                 "veggie_weekly", "potato_weekly", "egg_weekly",
-                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
-                 "sauce_weekly", "food_weight_weekly", "alc_spline", "ethnicity",
-                 "deprivation", "education", "cohabitation", "physical_activity",
-                 "smoking", "related_disease", "disease_family", "yearly_income",
-                 "strata(region, age_strata, sex)")
-
-    model2_formulas <- list(
-        meat_model2 = create_formula(c("legumes80", "poultry80", "fish80"), covars2),
-        poultry_model2 = create_formula(c("legumes80", "meats80", "fish80"), covars2),
-        fish_model2 = create_formula(c("legumes80", "meats80", "poultry80"), covars2)
-    )
-
-    model2_results_liver <- model2_formulas |>
-        map(~ coxph(.x, data = normal_liver, ties = "breslow")) |>
-        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-                 mutate(model = .y))
-
-    return(model2_results_liver)
-}
-
-
-# # Removing high bilirubin  from analysis-----------------------------------------------
-# removing top 10 % (90th percentile) of bilirubin
-percentile_90 <- quantile(data$bilirubin, probs = 0.90, na.rm = TRUE)
-lower_bili <- data %>%
-    subset(bilirubin < percentile_90)
-
-## main analysis model 2 on subset -----------------------------------------------------------------
-# any gallbladder disease
-# meats
-meat_bili <- coxph(Surv(survival_gbd, any_gbd == 1) ~
-                       # removing meat
-                       legumes80 + poultry80 + fish80+
-                       #other food components
-                       cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
-                       dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
-                       veggie_weekly + potato_weekly + egg_weekly +
-                       non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
-                       sauce_weekly + food_weight_weekly +
-                       #other variables
-                       strata(age_strata, region, sex) +
-                       ethnicity + deprivation + education + yearly_income +
-                       cohabitation + physical_activity + smoking +
-                       estrogen_treatment +
-                       pregnancies + related_conditions + family_diabetes,
-                   data = lower_bili, ties='breslow')
-
-meat_bili <- tidy(meat_bili, exponentiate = TRUE, conf.int = TRUE)
+# # Varying 24h recalls -----------------------------------------------------
+#
+# three_recalls_analyses()
+#
+#
+# data <- data %>%
+#     mutate(legumes80 = legumes_weekly/80,
+#            meats80 = meats_weekly/80,
+#            poultry80 = poultry_weekly/80,
+#            fish80 = fish_weekly/80)
+# data3 <- data %>%
+#     subset(p20077>=3)
+# data4 <- data %>%
+#     subset(p20077>=4)
+#
+#
+# ## data3 = three 24h recalls -----------------------------------------------------------------
+# # any gallbladder disease
+# # meats
+# meat_data3 <- coxph(Surv(survival_gbd, any_gbd == 1) ~
+#                         # removing meat
+#                         legumes80 + poultry80 + fish80+
+#                         #other food components
+#                         cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
+#                         dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
+#                         veggie_weekly + potato_weekly + egg_weekly +
+#                         non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
+#                         sauce_weekly + food_weight_weekly +
+#                         #other variables
+#                         strata(age_strata, region, sex) +
+#                         ethnicity + deprivation + education + yearly_income +
+#                         cohabitation + physical_activity + smoking +
+#                         estrogen_treatment +
+#                         pregnancies + related_conditions + family_diabetes,
+#                     data = data3, ties='breslow')
+#
+# meat_data3 <- tidy(meat_data3, exponentiate = TRUE, conf.int = TRUE)
+#
+#
+# # excluding those with ALT levels above 40 UL
+# # bilirubin_analyses<- function(data) {
+#     normal_liver <- data %>%
+#         subset(alt < 40)
+#
+#     covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
+#                  "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
+#                  "veggie_weekly", "potato_weekly", "egg_weekly",
+#                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
+#                  "sauce_weekly", "food_weight_weekly", "alc_spline", "ethnicity",
+#                  "deprivation", "education", "cohabitation", "physical_activity",
+#                  "smoking", "related_disease", "disease_family", "yearly_income",
+#                  "strata(region, age_strata, sex)")
+#
+#     model2_formulas <- list(
+#         meat_model2 = create_formula(c("legumes80", "poultry80", "fish80"), covars2),
+#         poultry_model2 = create_formula(c("legumes80", "meats80", "fish80"), covars2),
+#         fish_model2 = create_formula(c("legumes80", "meats80", "poultry80"), covars2)
+#     )
+#
+#     model2_results_liver <- model2_formulas |>
+#         map(~ coxph(.x, data = normal_liver, ties = "breslow")) |>
+#         map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+#                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+#                  mutate(model = .y))
+#
+#     return(model2_results_liver)
+# }
+#
+#
+# # # Removing high bilirubin  from analysis-----------------------------------------------
+# # removing top 10 % (90th percentile) of bilirubin
+# percentile_90 <- quantile(data$bilirubin, probs = 0.90, na.rm = TRUE)
+# lower_bili <- data %>%
+#     subset(bilirubin < percentile_90)
+#
+# ## main analysis model 2 on subset -----------------------------------------------------------------
+# # any gallbladder disease
+# # meats
+# meat_bili <- coxph(Surv(survival_gbd, any_gbd == 1) ~
+#                        # removing meat
+#                        legumes80 + poultry80 + fish80+
+#                        #other food components
+#                        cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
+#                        dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
+#                        veggie_weekly + potato_weekly + egg_weekly +
+#                        non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
+#                        sauce_weekly + food_weight_weekly +
+#                        #other variables
+#                        strata(age_strata, region, sex) +
+#                        ethnicity + deprivation + education + yearly_income +
+#                        cohabitation + physical_activity + smoking +
+#                        estrogen_treatment +
+#                        pregnancies + related_conditions + family_diabetes,
+#                    data = lower_bili, ties='breslow')
+#
+# meat_bili <- tidy(meat_bili, exponentiate = TRUE, conf.int = TRUE)
