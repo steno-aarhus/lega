@@ -22,4 +22,4 @@ library(magrittr)
 
 readr::read_csv(here::here("data-raw/rap-variables.csv")) %>%
     dplyr::pull(id) %>%
-    ukbAid::create_csv_from_database(username = "FieLangmann")
+    ukbAid::proj_create_dataset(username = "FieLangmann")
