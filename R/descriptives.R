@@ -31,7 +31,7 @@ baseline_table <- function(data) {
     table1 <- data %>%
         select(legume_groups, legume_weekly, gbd, age, sex, yearly_income, education,
                deprivation, cohabitation, ethnicity, physical_activity, smoking,
-               region, bmi30, hrt, oral_contraceptive, pregnancies, related_conditions, family_diabetes,
+               weight_loss, bmi30, hrt, oral_contraceptive, pregnancies, bilirubin, related_conditions, family_diabetes,
                meats_weekly, poultry_weekly, fish_weekly,
                cereal_refined_weekly, whole_grain_weekly, mixed_dish_weekly,
                dairy_weekly, fats_weekly, fruit_weekly, nut_weekly, veggie_weekly,
