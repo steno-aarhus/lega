@@ -315,8 +315,6 @@ For this cohort study, only participants with two or more 24 h dietary
 assessments and complete information on covariates will be included in
 the analyses.
 
-## Sample size rationale
-
 # Variables
 
 ## Measures variables
@@ -413,8 +411,6 @@ in model 2 from the main analysis (i.e. all covariates are included
 except BMI). All analyses will be conducted in R with a significance
 level of 5%.
 
-## Transformations
-
 ## Inference criteria
 
 All analyses will be evaluated based on two-sided p-values. Values below
@@ -436,7 +432,4 @@ from analyses.
 Missing data on covariates at baseline will also be a cause for
 exclusion of participants.
 
-# Other
-
 # References
-
