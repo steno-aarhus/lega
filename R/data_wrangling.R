@@ -195,7 +195,13 @@ pregnancies <- function(data) {
 bilirubin <- function(data) {
     data <- data %>% mutate(
         bilirubin = p30840_i0,
-        bilirubin = as.numeric(bilirubin)
+        bilirubin = as.numeric(bilirubin),
+        bili_cat = case_when(
+            p30840_i0 < 21 ~ "normal",
+            p30840_i0 >= 21 ~ "elevated",
+            TRUE ~ "unknown"
+        ),
+        bili_cat = as.factor(bili_cat)
     )
     return(data)
 }

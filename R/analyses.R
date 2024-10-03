@@ -36,7 +36,8 @@ main_model2<- function(data) {
                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
                  "sauce_weekly", "food_weight_weekly", "ethnicity",
                  "deprivation", "education", "cohabitation", "physical_activity",
-                 "smoking", "estrogen_treatment", "pregnancies", "yearly_income",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
                  "related_conditions", "family_diabetes",
                  "strata(region, age_strata, sex)")
 
@@ -63,7 +64,8 @@ main_model3<- function(data) {
                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
                  "sauce_weekly", "food_weight_weekly", "ethnicity",
                  "deprivation", "education", "cohabitation", "physical_activity",
-                 "smoking", "estrogen_treatment", "pregnancies", "yearly_income",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
                  "related_conditions", "family_diabetes", "bmi30",
                  "strata(region, age_strata, sex)")
 
@@ -93,7 +95,8 @@ consumers_analyses<- function(data) {
                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
                  "sauce_weekly", "food_weight_weekly", "ethnicity",
                  "deprivation", "education", "cohabitation", "physical_activity",
-                 "smoking", "estrogen_treatment", "pregnancies", "yearly_income",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
                  "related_conditions", "family_diabetes",
                  "strata(region, age_strata, sex)")
 
@@ -129,7 +132,7 @@ total_intake <- function(data) {
             sauce_weekly + meats_weekly + poultry_weekly + fish_weekly +
             # other variables
             ethnicity + deprivation + education +
-            cohabitation + physical_activity + smoking +
+            cohabitation + physical_activity + smoking + bilirubin + weight_loss +
             related_conditions + family_diabetes + yearly_income + estrogen_treatment +
             pregnancies + strata(region, age_strata, sex),
         data = consumers, ties = "breslow"
@@ -153,7 +156,8 @@ gallstone_model2<- function(data) {
                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
                  "sauce_weekly", "food_weight_weekly", "ethnicity",
                  "deprivation", "education", "cohabitation", "physical_activity",
-                 "smoking", "estrogen_treatment", "pregnancies", "yearly_income",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
                  "related_conditions", "family_diabetes",
                  "strata(region, age_strata, sex)")
 
@@ -186,7 +190,8 @@ cholecystit_model2<- function(data) {
                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
                  "sauce_weekly", "food_weight_weekly", "ethnicity",
                  "deprivation", "education", "cohabitation", "physical_activity",
-                 "smoking", "estrogen_treatment", "pregnancies", "yearly_income",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
                  "related_conditions", "family_diabetes",
                  "strata(region, age_strata, sex)")
 
@@ -215,7 +220,8 @@ legumes_and_peas<- function(data) {
                         "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
                         "sauce_weekly", "food_weight_weekly", "ethnicity",
                         "deprivation", "education", "cohabitation", "physical_activity",
-                        "smoking", "estrogen_treatment", "pregnancies", "yearly_income",
+                        "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                        "pregnancies", "yearly_income",
                         "related_conditions", "family_diabetes",
                         "strata(region, age_strata, sex)")
 
@@ -251,7 +257,8 @@ legumes_without_soy<- function(data) {
                           "non_alc_beverage_soymilk_weekly", "alc_beverage_weekly", "snack_weekly",
                           "sauce_weekly", "food_weight_weekly", "ethnicity",
                           "deprivation", "education", "cohabitation", "physical_activity",
-                          "smoking", "estrogen_treatment", "pregnancies", "yearly_income",
+                          "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                          "pregnancies", "yearly_income",
                           "related_conditions", "family_diabetes",
                           "strata(region, age_strata, sex)")
 
@@ -283,7 +290,8 @@ three_recalls_analyses <- function(data) {
                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
                  "sauce_weekly", "food_weight_weekly", "ethnicity",
                  "deprivation", "education", "cohabitation", "physical_activity",
-                 "smoking", "estrogen_treatment", "pregnancies", "yearly_income",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
                  "related_conditions", "family_diabetes",
                  "strata(region, age_strata, sex)")
 
@@ -318,7 +326,8 @@ covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
              "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
              "sauce_weekly", "food_weight_weekly", "ethnicity",
              "deprivation", "education", "cohabitation", "physical_activity",
-             "smoking", "estrogen_treatment", "pregnancies", "yearly_income",
+             "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+             "pregnancies", "yearly_income",
              "related_conditions", "family_diabetes",
              "strata(region, age_strata, sex)")
 
