@@ -14,6 +14,7 @@ Imports:
     kableExtra,
     knitr,
     magrittr,
+    ps,
     qs,
     remotes,
     rmarkdown,
