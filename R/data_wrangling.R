@@ -173,7 +173,7 @@ hormones <- function(data) {
         p3849_i0 = ifelse((p3849_i0 == "Do not know"), NA, p3849_i0),
         p3849_i0 = ifelse((p3849_i0 == "Prefer not to answer"), NA, p3849_i0),
         p3849_i0 = as.numeric(p3849_i0),
-        p2734_i0 = as.integer(p2734_i0),
+        p2734_i0 = as.numeric(p2734_i0),
         p3829_i0 = as.numeric(p3829_i0)
     )
     return(data)
