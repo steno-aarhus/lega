@@ -32,6 +32,15 @@ author:
     affiliation:
       - ref: 1
       - ref: 2
+- name: Aurora Perez-Cornago
+    orcid: "0000-0002-5652-356X"
+    roles:
+      - "conceptualization"
+      - "writing – review & editing"
+      - "data curation"
+      - "supervision"
+    affiliations:
+      - ref: 3
   - name: Christina Catherine Dahm
     orcid: "0000-0003-0481-2893"
     roles:
@@ -46,6 +55,8 @@ affiliations:
     name: Aarhus University
   - id: 2
     name: Steno Diabetes Center Aarhus
+  - id: 3
+    name: Joint Research Centre, European Commission
 date: 2024-10-02
 format: 
   preprint-typst: 
