@@ -9,7 +9,7 @@ model_assumption <- function(data) {
       fish80 = fish_weekly / 80
     )
   meat_model2 <- coxph(
-    Surv(survival_time, gbd == 1) ~
+    Surv(survival_gbd, gbd == 1) ~
       # removing meat
       legumes80 + poultry80 + fish80 +
       # other food components
@@ -21,8 +21,8 @@ model_assumption <- function(data) {
       # other variables
       ethnicity + deprivation + education +
       cohabitation + physical_activity + smoking +
-      estrogen_treatment + bilirubin + weight_loss + 
-      pregnancies + related_conditions + family_diabetes + 
+      estrogen_treatment + bilirubin + weight_loss +
+      pregnancies + related_conditions + family_diabetes +
       yearly_income + strata(region, age_strata, sex),
     data = data, ties = "breslow"
   )
@@ -32,7 +32,7 @@ model_assumption <- function(data) {
 
   # poultry
   poultry_model2 <- coxph(
-    Surv(survival_time, gbd == 1) ~
+    Surv(survival_gbd, gbd == 1) ~
       # removing meat
       legumes80 + meats80 + fish80 +
       # other food components
@@ -44,8 +44,8 @@ model_assumption <- function(data) {
       # other variables
       ethnicity + deprivation + education +
       cohabitation + physical_activity + smoking +
-      estrogen_treatment + bilirubin + weight_loss + 
-      pregnancies + related_conditions + family_diabetes + 
+      estrogen_treatment + bilirubin + weight_loss +
+      pregnancies + related_conditions + family_diabetes +
       yearly_income + strata(region, age_strata, sex),
     data = data, ties = "breslow"
   )
@@ -55,7 +55,7 @@ model_assumption <- function(data) {
 
   # fish
   fish_model2 <- coxph(
-    Surv(survival_time, gbd == 1) ~
+    Surv(survival_gbd, gbd == 1) ~
       # removing meat
       legumes80 + meats80 + poultry80 +
       # other food components
@@ -67,8 +67,8 @@ model_assumption <- function(data) {
       # other variables
       ethnicity + deprivation + education +
       cohabitation + physical_activity + smoking +
-      estrogen_treatment + bilirubin + weight_loss + 
-      pregnancies + related_conditions + family_diabetes + 
+      estrogen_treatment + bilirubin + weight_loss +
+      pregnancies + related_conditions + family_diabetes +
       yearly_income + strata(region, age_strata, sex),
     data = data, ties = "breslow"
   )
