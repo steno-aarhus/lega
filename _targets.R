@@ -211,5 +211,22 @@ tar_target(
     name = men_analyses,
     command = sorted_data |>
         men_strata()
+),
+tar_target(
+    name = women_analyses,
+    command = sorted_data |>
+        women_strata()
+),
+tar_target(
+    name = age_analyses,
+    command = sorted_data |>
+        age_strata()
+),
+tar_target(
+    name = bmi_analyses,
+    command = sorted_data |>
+        bmi_strata()
 ))
+
+
 
