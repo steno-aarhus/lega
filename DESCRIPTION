@@ -16,6 +16,7 @@ Imports:
     magrittr,
     ps,
     qs,
+    qs2,
     remotes,
     rmarkdown,
     survival,
