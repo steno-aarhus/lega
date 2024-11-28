@@ -31,6 +31,7 @@ source(here::here("R/data_wrangling.R"))
 source(here::here("R/descriptives.R"))
 source(here::here("R/model_assumptions.R"))
 source(here::here("R/analyses.R"))
+source(here::here("R/extra_analyses.R"))
 
 # Things to run in order to work.
 list(
@@ -152,7 +153,7 @@ tar_target(
     command = sorted_data |>
         main_model3()
 ),
-tar_target( 
+tar_target(
   name = model_control,
   command = sorted_data |>
   model_assumption()
@@ -168,16 +169,7 @@ tar_target(
     command = sorted_data |>
         total_intake()
 ),
-tar_target(
-    name = gallstone_analyses,
-    command = sorted_data |>
-        gallstone_model2()
-),
-tar_target(
-    name = cholecystit_analyses,
-    command = sorted_data |>
-        cholecystit_model2()
-),
+
 
 # # sensitivity analyses ----------------------------------------------------
 tar_target(
@@ -199,5 +191,25 @@ tar_target(
     name = normal_bilirubin,
     command = sorted_data |>
         bilirubin_analyses()
+),
+
+
+# Extra analyses ----------------------------------------------------------
+# gallstone only
+tar_target(
+    name = gallstone_analyses,
+    command = sorted_data |>
+        gallstone_model2()
+),
+# cholecystit only
+tar_target(
+    name = cholecystit_analyses,
+    command = sorted_data |>
+        cholecystit_model2()
+),
+tar_target(
+    name = sex_analyses,
+    command = sorted_data |>
+        sex_strata()
 ))
 
