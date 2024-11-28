@@ -208,8 +208,8 @@ tar_target(
         cholecystit_model2()
 ),
 tar_target(
-    name = sex_analyses,
+    name = men_analyses,
     command = sorted_data |>
-        sex_strata()
+        men_strata()
 ))
 
