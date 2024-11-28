@@ -142,75 +142,6 @@ total_intake <- function(data) {
     return(total)
 }
 
-
-# Gallstones only ---------------------------------------------------------
-create_formula_gallstone <- function(xvars, covars) {
-    outcome <- "Surv(survival_gallstone, gallstone == 1)"
-    reformulate(c(xvars, covars), response = outcome)
-}
-
-gallstone_model2<- function(data) {
-    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
-                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
-                 "veggie_weekly", "potato_weekly", "egg_weekly",
-                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
-                 "sauce_weekly", "food_weight_weekly", "ethnicity",
-                 "deprivation", "education", "cohabitation", "physical_activity",
-                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
-                 "pregnancies", "yearly_income",
-                 "related_conditions", "family_diabetes",
-                 "strata(region, age_strata, sex)")
-
-    model2_gallstone_formulas <- list(
-        meat_model2 = create_formula_gallstone(c("legumes80", "poultry80", "fish80"), covars2),
-        poultry_model2 = create_formula_gallstone(c("legumes80", "meats80", "fish80"), covars2),
-        fish_model2 = create_formula_gallstone(c("legumes80", "meats80", "poultry80"), covars2)
-    )
-
-    model2_gallstone <- model2_gallstone_formulas |>
-        map(~ coxph(.x, data = data, ties = "breslow")) |>
-        map2(names(model2_gallstone_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-                 mutate(model = .y))
-
-    return(model2_gallstone)
-}
-
-
-# Cholecystit only --------------------------------------------------------
-create_formula_cholecystit <- function(xvars, covars) {
-    outcome <- "Surv(survival_gallstone, cholecystit == 1)"
-    reformulate(c(xvars, covars), response = outcome)
-}
-
-cholecystit_model2<- function(data) {
-    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
-                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
-                 "veggie_weekly", "potato_weekly", "egg_weekly",
-                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
-                 "sauce_weekly", "food_weight_weekly", "ethnicity",
-                 "deprivation", "education", "cohabitation", "physical_activity",
-                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
-                 "pregnancies", "yearly_income",
-                 "related_conditions", "family_diabetes",
-                 "strata(region, age_strata, sex)")
-
-    model2_cholecystit_formulas <- list(
-        meat_model2 = create_formula_cholecystit(c("legumes80", "poultry80", "fish80"), covars2),
-        poultry_model2 = create_formula_cholecystit(c("legumes80", "meats80", "fish80"), covars2),
-        fish_model2 = create_formula_cholecystit(c("legumes80", "meats80", "poultry80"), covars2)
-    )
-
-    model2_cholecystit <- model2_cholecystit_formulas |>
-        map(~ coxph(.x, data = data, ties = "breslow")) |>
-        map2(names(model2_cholecystit_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-                 mutate(model = .y))
-
-    return(model2_cholecystit)
-}
-
-
 # sensitivity analyses ----------------------------------------------------
 # peas included in legume component
 legumes_and_peas<- function(data) {
@@ -345,3 +276,78 @@ covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
 
     return(model2_results_bili)
 }
+
+
+# Extra analyses ---------------------------------------------------------
+## Gallstones only ---------------------------------------------------------
+create_formula_gallstone <- function(xvars, covars) {
+    outcome <- "Surv(survival_gallstone, gallstone == 1)"
+    reformulate(c(xvars, covars), response = outcome)
+}
+
+gallstone_model2<- function(data) {
+    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
+                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
+                 "veggie_weekly", "potato_weekly", "egg_weekly",
+                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
+                 "sauce_weekly", "food_weight_weekly", "ethnicity",
+                 "deprivation", "education", "cohabitation", "physical_activity",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
+                 "related_conditions", "family_diabetes",
+                 "strata(region, age_strata, sex)")
+
+    model2_gallstone_formulas <- list(
+        meat_model2 = create_formula_gallstone(c("legumes80", "poultry80", "fish80"), covars2),
+        poultry_model2 = create_formula_gallstone(c("legumes80", "meats80", "fish80"), covars2),
+        fish_model2 = create_formula_gallstone(c("legumes80", "meats80", "poultry80"), covars2)
+    )
+
+    model2_gallstone <- model2_gallstone_formulas |>
+        map(~ coxph(.x, data = data, ties = "breslow")) |>
+        map2(names(model2_gallstone_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    return(model2_gallstone)
+}
+
+
+## Cholecystit only --------------------------------------------------------
+create_formula_cholecystit <- function(xvars, covars) {
+    outcome <- "Surv(survival_gallstone, cholecystit == 1)"
+    reformulate(c(xvars, covars), response = outcome)
+}
+
+cholecystit_model2<- function(data) {
+    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
+                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
+                 "veggie_weekly", "potato_weekly", "egg_weekly",
+                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
+                 "sauce_weekly", "food_weight_weekly", "ethnicity",
+                 "deprivation", "education", "cohabitation", "physical_activity",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
+                 "related_conditions", "family_diabetes",
+                 "strata(region, age_strata, sex)")
+
+    model2_cholecystit_formulas <- list(
+        meat_model2 = create_formula_cholecystit(c("legumes80", "poultry80", "fish80"), covars2),
+        poultry_model2 = create_formula_cholecystit(c("legumes80", "meats80", "fish80"), covars2),
+        fish_model2 = create_formula_cholecystit(c("legumes80", "meats80", "poultry80"), covars2)
+    )
+
+    model2_cholecystit <- model2_cholecystit_formulas |>
+        map(~ coxph(.x, data = data, ties = "breslow")) |>
+        map2(names(model2_cholecystit_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    return(model2_cholecystit)
+}
+
+## Sex strata any GBD ---------------------------------------------------------
+
+## Age strata any GBD ---------------------------------------------------------
+
+## BMI strata any GBD ---------------------------------------------------------
