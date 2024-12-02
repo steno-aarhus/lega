@@ -550,8 +550,11 @@ outcome_variables <- function(data) {
             gallstone = case_when(
                 !is.na(icd10_gallstone_date) | !is.na(icd10_bileobstruction_date) |
                     !is.na(icd10_gbobstruction_date) | !is.na(icd9_gallstone_date) |
-                    !is.na(icd9_bileobstruction_date) |
-                    !is.na(opcs4_removal_date) | !is.na(opcs4_gallstone_date) |
+                    !is.na(icd9_bileobstruction_date) ~ 1,
+                TRUE ~ 0),
+            # cholecystectomy
+            cholecystectomy = case_when(
+                !is.na(opcs4_removal_date) | !is.na(opcs4_gallstone_date) |
                     !is.na(opcs3_removal_date) | !is.na(opcs3_gallstone_date) ~ 1,
                 TRUE ~ 0),
             # cholecystitis
@@ -561,7 +564,7 @@ outcome_variables <- function(data) {
                 TRUE ~ 0),
             # any gallbladder disease
             gbd = case_when(
-                gallstone == 1 | cholecystit == 1 ~ 1,
+                gallstone == 1 | cholecystectomy == 1 | cholecystit == 1 ~ 1,
                 TRUE ~ 0)
             )
     return(data)
@@ -654,9 +657,7 @@ survival_time <- function(data) {
                 !is.na(icd10_gbobstruction_date) ~ as.numeric(difftime(icd10_gbobstruction_date, date_birth, units = "days")),
                 !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_birth, units = "days")),
                 !is.na(icd9_bileobstruction_date) ~ as.numeric(difftime(icd9_bileobstruction_date, date_birth, units = "days")),
-                !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_birth, units = "days")),
                 !is.na(opcs4_gallstone_date) ~ as.numeric(difftime(opcs4_gallstone_date, date_birth, units = "days")),
-                !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_birth, units = "days")),
                 !is.na(opcs3_gallstone_date) ~ as.numeric(difftime(opcs3_gallstone_date, date_birth, units = "days")),
                 !is.na(date_of_death) ~ as.numeric(difftime(date_of_death, date_birth, units = "days")),
                 !is.na(loss_to_follow_up) ~ as.numeric(difftime(loss_to_follow_up, date_birth, units = "days")),
@@ -667,6 +668,20 @@ survival_time <- function(data) {
             survival_gallstone = survival_gallstone/365.25,
             # Remove temporary variable
             survival_time_gst = NULL,
+
+            # removal of gallbladder
+            survival_time_removal = case_when(
+                !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_birth, units = "days")),
+                !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_birth, units = "days")),
+                !is.na(date_of_death) ~ as.numeric(difftime(date_of_death, date_birth, units = "days")),
+                !is.na(loss_to_follow_up) ~ as.numeric(difftime(loss_to_follow_up, date_birth, units = "days")),
+                TRUE ~ as.numeric(difftime(censoring, date_birth, units = "days"))
+            ),
+            # Using pmin to get the minimum survival time across columns
+            survival_removal = pmin(survival_time_removal, na.rm = TRUE),
+            survival_removal = survival_removal/365.25,
+            # Remove temporary variable
+            survival_time_removal = NULL,
 
 
             # cholecystitis

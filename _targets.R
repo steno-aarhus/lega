@@ -201,6 +201,12 @@ tar_target(
     command = sorted_data |>
         gallstone_model2()
 ),
+# cholecystectomy only
+tar_target(
+    name = cholecystectomy_analyses,
+    command = sorted_data |>
+        removal_model2()
+),
 # cholecystit only
 tar_target(
     name = cholecystit_analyses,
