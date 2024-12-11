@@ -5,7 +5,22 @@
 library(dplyr)
 library(magrittr)
 library(tidyverse)
-data <- targets::tar_read(eligible_participants)
+data <- targets::tar_read(outcome_data)
+
+data <- data %>%
+    mutate(
+        ques_comp_t0 = p105010_i0,
+        ques_comp_t1 = p105010_i1,
+        ques_comp_t2 = p105010_i2,
+        ques_comp_t3 = p105010_i3,
+        ques_comp_t4 = p105010_i4,
+        # Removing specific time stamp
+        ques_comp_t0 = substr(ques_comp_t0, 1, 10),
+        ques_comp_t1 = substr(ques_comp_t1, 1, 10),
+        ques_comp_t2 = substr(ques_comp_t2, 1, 10),
+        ques_comp_t3 = substr(ques_comp_t3, 1, 10),
+        ques_comp_t4 = substr(ques_comp_t4, 1, 10)
+    )
 
 data <- data %>% mutate(
     ques_comp_t1 = as.Date(ques_comp_t1),
@@ -41,36 +56,6 @@ cat("Mean interval:", mean_interval, "days\n")
 cat("SD of interval:", sd_interval, "days\n")
 
 
-
-
-# Printing knots of alc_spline --------------------------------------------
-library(dplyr)
-library(magrittr)
-library(tidyverse)
-
-data <- targets::tar_read(id_data)
-
-data <- data %>% mutate(
-    alcohol_intake = rowSums(pick(matches("p26030")), na.rm = TRUE),
-    alcohol_daily = alcohol_intake / p20077,
-    alcohol_weekly = alcohol_daily * 7,
-    alc_spline = splines::bs(alcohol_weekly, knots = 4, degree = 3)
-)
-
-# Calculate internal knots based on quantiles
-nknots <- 4  # Number of knots (adjust as needed)
-internal_knots <- quantile(data$alcohol_weekly, probs = seq(0.25, 0.75, length.out = nknots), na.rm = TRUE)
-
-# Generate the spline basis using specified knots
-spline_basis <- splines::bs(data$alcohol_weekly, knots = internal_knots, degree = 3)
-
-# Extract and print the knot positions
-knots <- attr(spline_basis, "knots")
-
-cat("knots are placed at:", knots, "\n")
-
-
-
 # Testing linearity assumption --------------------------------------------
 # investigating the association between weekly intakes of legumes, red and processed meat,
 # poultry, and fish and NAFLD for non-linearity using restricted cubic splines at the
@@ -81,6 +66,8 @@ library(tidyverse)
 library(survival)
 library(splines)
 library(broom)
+
+data <- targets::tar_read(sorted_data)
 
 # Calculate the percentiles for the knots
 knots_legume <- quantile(data$legume_weekly, probs = c(0.1, 0.5, 0.9), na.rm = TRUE)
@@ -98,65 +85,74 @@ data <- data %>% mutate(
 
 
 ## legumes -----------------------------------------------------------------
-legume <- coxph(Surv(survival_gbd, event = gbd) ~ legume_weekly + alc_spline + ethnicity
+legume <- coxph(Surv(survival_gbd, event = gbd) ~ legume_weekly + ethnicity
                 + deprivation + education + cohabitation + physical_activity + smoking
-                + related_disease + disease_family + yearly_income + strata(region, age_strata, sex),
+                + estrogen_treatment + bilirubin + weight_loss + pregnancies
+                + related_conditions + family_diabetes + yearly_income + strata(region, age_strata, sex),
                 data = data,
                 ties = 'breslow')
 
-legume_splines <- coxph(Surv(survival_gbd, event = gbd) ~ legume_spline + alc_spline + ethnicity
+
+legume_splines <- coxph(Surv(survival_gbd, event = gbd) ~ legume_spline + ethnicity
                         + deprivation + education + cohabitation + physical_activity + smoking
-                        + related_disease + disease_family + yearly_income + strata(region, age_strata, sex),
+                        + estrogen_treatment + bilirubin + weight_loss + pregnancies
+                        + related_conditions + family_diabetes + yearly_income + strata(region, age_strata, sex),
                         data = data,
                         ties = 'breslow')
 
 # Perform a likelihood ratio test
-lrt_result <- anova(legume, legume_splines, test = "LRT") %>% print() # p = 0.9728
+lrt_result <- anova(legume, legume_splines, test = "LRT") %>% print() # p = 0.39
 
 ## meat -----------------------------------------------------------------
-meat <- coxph(Surv(survival_gbd, event = gbd) ~ meats_weekly + alc_spline + ethnicity
+meat <- coxph(Surv(survival_gbd, event = gbd) ~ meats_weekly + ethnicity
               + deprivation + education + cohabitation + physical_activity + smoking
-              + related_disease + disease_family + yearly_income + strata(region, age_strata, sex),
+              + estrogen_treatment + bilirubin + weight_loss + pregnancies
+              + related_conditions + family_diabetes + yearly_income + strata(region, age_strata, sex),
               data = data,
               ties = 'breslow')
 
-meat_splines <- coxph(Surv(survival_gbd, event = gbd) ~ meat_spline + alc_spline + ethnicity
+meat_splines <- coxph(Surv(survival_gbd, event = gbd) ~ meat_spline + ethnicity
                       + deprivation + education + cohabitation + physical_activity + smoking
-                      + related_disease + disease_family + yearly_income + strata(region, age_strata, sex),
+                      + estrogen_treatment + bilirubin + weight_loss + pregnancies
+                      + related_conditions + family_diabetes + yearly_income + strata(region, age_strata, sex),
                       data = data,
                       ties = 'breslow')
 
 # Perform a likelihood ratio test
-lrt_result <- anova(meat, meat_splines, test = "LRT") %>% print() # p = 0.6576
+lrt_result <- anova(meat, meat_splines, test = "LRT") %>% print() # p = 0.97
 
 ## poultry -----------------------------------------------------------------
-poultry <- coxph(Surv(survival_gbd, event = gbd) ~ poultry_weekly + alc_spline + ethnicity
+poultry <- coxph(Surv(survival_gbd, event = gbd) ~ poultry_weekly + ethnicity
                  + deprivation + education + cohabitation + physical_activity + smoking
-                 + related_disease + disease_family + yearly_income + strata(region, age_strata, sex),
+                 + estrogen_treatment + bilirubin + weight_loss + pregnancies
+                 + related_conditions + family_diabetes + yearly_income + strata(region, age_strata, sex),
                  data = data,
                  ties = 'breslow')
 
-poultry_splines <- coxph(Surv(survival_gbd, event = gbd) ~ poultry_spline + alc_spline + ethnicity
+poultry_splines <- coxph(Surv(survival_gbd, event = gbd) ~ poultry_spline + ethnicity
                          + deprivation + education + cohabitation + physical_activity + smoking
-                         + related_disease + disease_family + yearly_income + strata(region, age_strata, sex),
+                         + estrogen_treatment + bilirubin + weight_loss + pregnancies
+                         + related_conditions + family_diabetes + yearly_income + strata(region, age_strata, sex),
                          data = data,
                          ties = 'breslow')
 
 # Perform a likelihood ratio test
-lrt_result <- anova(poultry, poultry_splines, test = "LRT") %>% print() # p = 0.9392
+lrt_result <- anova(poultry, poultry_splines, test = "LRT") %>% print() # p = 0.61
 
 ## fish -----------------------------------------------------------------
-fish <- coxph(Surv(survival_gbd, event = gbd) ~ fish_weekly + alc_spline + ethnicity
+fish <- coxph(Surv(survival_gbd, event = gbd) ~ fish_weekly + ethnicity
               + deprivation + education + cohabitation + physical_activity + smoking
-              + related_disease + disease_family + yearly_income + strata(region, age_strata, sex),
+              + estrogen_treatment + bilirubin + weight_loss + pregnancies
+              + related_conditions + family_diabetes + yearly_income + strata(region, age_strata, sex),
               data = data,
               ties = 'breslow')
 
-fish_splines <- coxph(Surv(survival_gbd, event = gbd) ~ fish_spline + alc_spline + ethnicity
+fish_splines <- coxph(Surv(survival_gbd, event = gbd) ~ fish_spline + ethnicity
                       + deprivation + education + cohabitation + physical_activity + smoking
-                      + related_disease + disease_family + yearly_income + strata(region, age_strata, sex),
+                      + estrogen_treatment + bilirubin + weight_loss + pregnancies
+                      + related_conditions + family_diabetes + yearly_income + strata(region, age_strata, sex),
                       data = data,
                       ties = 'breslow')
 
 # Perform a likelihood ratio test
-lrt_result <- anova(fish, fish_splines, test = "LRT") %>% print() # p = 0.5011
+lrt_result <- anova(fish, fish_splines, test = "LRT") %>% print() # p = 0.59
