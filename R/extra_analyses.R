@@ -108,7 +108,7 @@ create_formula <- function(xvars, covars) {
 
 men_strata <- function(data) {
     men <- data %>%
-        subset(sex == "Male")
+        subset(sex == 1)
     covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
                  "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
                  "veggie_weekly", "potato_weekly", "egg_weekly",
@@ -136,7 +136,7 @@ men_strata <- function(data) {
 
 women_strata <- function(data) {
     women <- data %>%
-        subset(sex == "Female")
+        subset(sex == 0)
     covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
                  "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
                  "veggie_weekly", "potato_weekly", "egg_weekly",

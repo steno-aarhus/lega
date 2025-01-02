@@ -48,7 +48,7 @@ main_model2<- function(data) {
     )
 
     model2_results <- model2_formulas |>
-        map(~ coxph(.x, data = data, ties = "breslow")) |>
+        map(~ survival::coxph(.x, data = data, ties = "breslow")) |>
         map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
                  mutate(model = .y))

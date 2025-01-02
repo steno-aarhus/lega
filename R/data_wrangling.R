@@ -31,30 +31,25 @@ sociodemographics <- function(data) {
         ),
         age_strata = as.factor(age_strata),
         ethnicity = case_when(
-            p21000_i0 == "White" | p21000_i0 == "British" | p21000_i0 == "Irish" | p21000_i0 == "Any other white background" ~ "white",
+            p21000_i0 == 1|p21000_i0 == 1001|p21000_i0 == 1002|p21000_i0 == 1003 ~ "White",
             TRUE ~ "other"
         ),
         deprivation = p22189,
         yearly_income = case_when(
-            str_detect(p738_i0, "18,000 to") ~ "18,000-30,999",
-            str_detect(p738_i0, "31,000") ~ "31,000-51,999",
-            str_detect(p738_i0, "52,000") ~ "52,000-100,000",
-            str_detect(p738_i0, "Greater") ~ ">100,000",
-            str_detect(p738_i0, "Less") ~ "<18,000",
+            p738_i0 == "1" ~ "<18,000",
+            p738_i0 == "2" ~ "18,000-30,999",
+            p738_i0 == "3" ~ "31,000-51,999",
+            p738_i0 == "4" ~ "52,000-100,000",
+            p738_i0 == "5" ~ ">100,000",
             TRUE ~ "unknown"
         ),
         yearly_income = as.factor(yearly_income),
-        education_short = as.character(str_sub(p6138_i0, start = 1, end = 28)),
         education = case_when(
-            education_short == "College or University degree" ~ "High",
-            education_short == "A levels/AS levels or equiva" ~ "Intermediate",
-            education_short == "O levels/GCSEs or equivalent" ~ "Intermediate",
-            education_short == "CSEs or equivalent|NVQ or HN" ~ "Low",
-            education_short == "CSEs or equivalent|Other pro" ~ "Low",
-            education_short == "CSEs or equivalent" ~ "Low",
-            education_short == "NVQ or HND or HNC or equival" ~ "Low",
-            education_short == "Other professional qualifica" ~ "Low",
-            education_short == "None of the above" ~ "Low"
+            str_detect(p6138_i0, "1") ~ "High",
+            str_detect(p6138_i0, "2") | str_detect(p6138_i0, "3")  ~ "Intermediate",
+            str_detect(p6138_i0, "4") | str_detect(p6138_i0, "5") |
+                str_detect(p6138_i0, "6") | str_detect(p6138_i0, "-7")  ~ "Low",
+            str_detect(p6138_i0, "-3") ~ "Unknown"
         ),
         education = as.factor(education),
         physical_activity = case_when(
@@ -71,16 +66,16 @@ sociodemographics <- function(data) {
         ),
         # 10 UK recruitment regions
         region = case_when(
-            str_detect(p54_i0, "Barts") | str_detect(p54_i0, "Croydon") | str_detect(p54_i0, "Hounslow") ~ "London",
-            str_detect(p54_i0, "Cardiff") | str_detect(p54_i0, "Swansea") | str_detect(p54_i0, "Wrexham") ~ "Wales",
-            str_detect(p54_i0, "Bury") | str_detect(p54_i0, "Stockport") | str_detect(p54_i0, "Liverpool") | str_detect(p54_i0, "Manchester") ~ "North_West",
-            str_detect(p54_i0, "Newcastle") | str_detect(p54_i0, "Middlesborough") ~ "North_East",
-            str_detect(p54_i0, "Leeds") | str_detect(p54_i0, "Sheffield") ~ "Yorkshire_Humber",
-            str_detect(p54_i0, "Birmingham") | str_detect(p54_i0, "Cheadle") ~ "West_Midlands",
-            str_detect(p54_i0, "Nottingham") | str_detect(p54_i0, "Stoke") ~ "East_Midlands",
-            str_detect(p54_i0, "Oxford") | str_detect(p54_i0, "Reading") ~ "South_East",
-            str_detect(p54_i0, "Bristol") ~ "South_West",
-            str_detect(p54_i0, "Edinburgh") | str_detect(p54_i0, "Glasgow") ~ "Scotland"
+            p54_i0 == 11012 | p54_i0 == 11020 | p54_i0 == 11018 ~ "London",
+            p54_i0 == 11003 | p54_i0 == 11022 | p54_i0 == 11023 ~ "Wales",
+            p54_i0 == 11008 | p54_i0 == 10003 | p54_i0 == 11016 | p54_i0 == 11001  ~ "North-West",
+            p54_i0 == 11009 | p54_i0 == 11017 ~ "North-East",
+            p54_i0 == 11010 | p54_i0 == 11014 ~ "Yorkshire-Humber",
+            p54_i0 == 11021 | p54_i0 == 11024 ~ "West-Midlands",
+            p54_i0 == 11013 | p54_i0 == 11006 ~ "East-Midlands",
+            p54_i0 == 11002 | p54_i0 == 11007 ~ "South-East",
+            p54_i0 == 11011 ~ "South-West",
+            p54_i0 == 11005 | p54_i0 == 11004 ~ "Scotland"
         ),
         region = as.factor(region)
     )
@@ -91,14 +86,14 @@ sociodemographics <- function(data) {
 lifestyle <- function(data) {
     data <- data %>% mutate(
         p3456_i0 = case_when(
-            str_detect(p3456_i0, "know") | str_detect(p3456_i0, "Less") | str_detect(p3456_i0, "answer") ~ NA_character_,
+            p3456_i0 == -10| p3456_i0 == -1| p3456_i0 == -3 ~ 0,
             TRUE ~ p3456_i0
         ),
         smoking = case_when(
-            str_detect(p20116_i0, "Never") ~ "never",
-            str_detect(p20116_i0, "Previous") ~ "former",
-            str_detect(p20116_i0, "Current") & as.numeric(p3456_i0) > 0 & as.numeric(p3456_i0) <= 15 ~ "current <15",
-            str_detect(p20116_i0, "Current") & as.numeric(p3456_i0) > 15 ~ "current > 15",
+            str_detect(p20116_i0, "0") ~ "never",
+            str_detect(p20116_i0, "1") ~ "former",
+            str_detect(p20116_i0, "2") & as.numeric(p3456_i0) > 0 & as.numeric(p3456_i0) <= 15 ~ "current <15",
+            str_detect(p20116_i0, "2") & as.numeric(p3456_i0) > 15 ~ "current > 15",
             TRUE ~ "no answer" # Handling cases not covered by the conditions
         ),
         # bmi
@@ -134,18 +129,16 @@ alcohol_intake <- function(data) {
 # related factors or family history of related diseases
 illness <- function(data) {
     data <- data %>% mutate(
-        p20002_i0 = ifelse(is.na(p20002_i0), "None", p20002_i0),
-        p20002_i0 = as.character(p20002_i0),
         related_conditions = case_when(
-            str_detect(p20002_i0, "cholesterol") | str_detect(p20002_i0, "hepatitis") |
-                str_detect(p20002_i0, "cirrhosis") | str_detect(p2443_i0, "Yes") ~ "yes",
+            str_detect(p20002_i0, "1473") | str_detect(p20002_i0, "1155") |
+                str_detect(p20002_i0, "1158") | str_detect(p20002_i0, "1506") |
+                str_detect(p20002_i0, "1604") | p2443_i0 == 1 ~ "yes",
             TRUE ~ "none of the above"),
         family_diabetes = case_when(
-            str_detect(p20107_i0, "Diabetes") |str_detect(p20110_i0, "Diabetes") |
-                str_detect(p20111_i0, "Diabetes") ~ "yes",
+            str_detect(p20107_i0, "9") | str_detect(p20110_i0, "9") | str_detect(p20111_i0, "9") ~ "yes",
             TRUE ~ "no"),
         weight_loss = case_when(
-            str_detect(p2306_i0, "lost") ~ "yes",
+            p2306_i0 == 3 ~ "yes",
             TRUE ~ "no")
     )
     return(data)
@@ -155,25 +148,27 @@ illness <- function(data) {
 hormones <- function(data) {
     data <- data %>% mutate(
         hrt = case_when(
-            str_detect(p2814_i0, "Yes") ~ "yes",
-            str_detect(p2814_i0, "answer") ~ "unknown",
-            TRUE ~ "no"),
+            p2814_i0 == 1 ~ "yes",
+            p2814_i0 == 0 ~ "no",
+            TRUE ~ "unknown"),
         oral_contraceptive = case_when(
-            str_detect(p2784_i0, "Yes") ~ "yes",
-            str_detect(p2784_i0, "answer") ~ "unknown",
-            TRUE ~ "no"),
+            p2784_i0 == 1 ~ "yes",
+            p2784_i0 == 0 ~ "no",
+            TRUE ~ "unknown"),
         estrogen_treatment = case_when(
             hrt == "yes" | oral_contraceptive == "yes" ~ "yes",
             TRUE ~ "no"),
         # preparing pregnancy outcomes for summed pregnancies
         # converting from character to numeric. All no answers coded as NA
-        p3839_i0 = ifelse((p3839_i0 == "Do not know"), NA, p3839_i0),
-        p3839_i0 = ifelse((p3839_i0 == "Prefer not to answer"), NA, p3839_i0),
+        p3839_i0 = ifelse((p3839_i0 == -1), NA, p3839_i0),
+        p3839_i0 = ifelse((p3839_i0 == -3), NA, p3839_i0),
         p3839_i0 = as.numeric(p3839_i0),
-        p3849_i0 = ifelse((p3849_i0 == "Do not know"), NA, p3849_i0),
-        p3849_i0 = ifelse((p3849_i0 == "Prefer not to answer"), NA, p3849_i0),
+        p3849_i0 = ifelse((p3849_i0 == -1), NA, p3849_i0),
+        p3849_i0 = ifelse((p3849_i0 == -3), NA, p3849_i0),
         p3849_i0 = as.numeric(p3849_i0),
         p2734_i0 = as.numeric(p2734_i0),
+        p3829_i0 = ifelse((p3829_i0 == -1), NA, p3829_i0),
+        p3829_i0 = ifelse((p3829_i0 == -3), NA, p3829_i0),
         p3829_i0 = as.numeric(p3829_i0)
     )
     return(data)
@@ -184,8 +179,8 @@ pregnancies <- function(data) {
     data <- data %>%
         mutate(
             pregnancies = case_when(
-                sex == "Female" ~ rowSums(select(., p2734_i0, p3829_i0, p3839_i0, p3849_i0), na.rm = TRUE),
-                sex == "Male" ~ NA_real_
+                sex == 0 ~ rowSums(select(., p2734_i0, p3829_i0, p3839_i0, p3849_i0), na.rm = TRUE),
+                sex == 1 ~ NA_real_
             )
         )
     return(data)
@@ -350,10 +345,10 @@ icd10_diagnoses <- function(data) {
             icd10_cholecystit_date = ifelse(str_detect(p41270var, "K81"), as.character(c_across(starts_with("p41280"))), NA),
             icd10_cholecystit_date = as.Date(icd10_cholecystit_date, format = "%Y-%m-%d"),
             # gallbladder obstruction (K82.0)
-            icd10_gbobstruction_date = ifelse(str_detect(p41270var, "K82.0"), as.character(c_across(starts_with("p41280"))), NA),
+            icd10_gbobstruction_date = ifelse(str_detect(p41270var, "K820"), as.character(c_across(starts_with("p41280"))), NA),
             icd10_gbobstruction_date = as.Date(icd10_gbobstruction_date, format = "%Y-%m-%d"),
             # bile obstruction (K83.1)
-            icd10_bileobstruction_date = ifelse(str_detect(p41270var, "K83.1"), as.character(c_across(starts_with("p41280"))), NA),
+            icd10_bileobstruction_date = ifelse(str_detect(p41270var, "K831"), as.character(c_across(starts_with("p41280"))), NA),
             icd10_bileobstruction_date = as.Date(icd10_bileobstruction_date, format = "%Y-%m-%d")
         ) %>%
 
@@ -427,25 +422,25 @@ opcs4_diagnoses <- function(data) {
         mutate(
             # gallbladder removal
             opcs4_removal_date = case_when(
-                str_detect(p41272var, "J18.1") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J18.2") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J18.3") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J18.8") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J18.9") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J181") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J182") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J183") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J188") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J189") ~ as.character(c_across(starts_with("p41282"))),
                 TRUE ~ NA_character_),
             opcs4_removal_date = as.Date(opcs4_removal_date, format = "%Y-%m-%d"),
             opcs4_gallstone_date = case_when(
-                str_detect(p41272var, "J33.1") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J33.2") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J52.1") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J21.1") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J41.1") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J41.3") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J49.1") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J49.2") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J24.2") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J24.3") ~ as.character(c_across(starts_with("p41282"))),
-                str_detect(p41272var, "J26.1") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J331") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J332") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J521") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J211") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J411") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J413") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J491") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J492") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J242") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J243") ~ as.character(c_across(starts_with("p41282"))),
+                str_detect(p41272var, "J261") ~ as.character(c_across(starts_with("p41282"))),
                 TRUE ~ NA_character_),
             opcs4_gallstone_date = as.Date(opcs4_gallstone_date, format = "%Y-%m-%d")
         ) %>%
@@ -479,7 +474,7 @@ opcs3_diagnoses <- function(data) {
         mutate(
             opcs3_removal_date = case_when(
                 str_detect(p41273, "522") ~ as.character(c_across(starts_with("p41283"))),
-                str_detect(p41273, "522.2") ~ as.character(c_across(starts_with("p41283"))),
+                str_detect(p41273, "5222") ~ as.character(c_across(starts_with("p41283"))),
                 TRUE ~ NA_character_),
             opcs3_removal_date = as.Date(opcs3_removal_date, format = "%Y-%m-%d"),
             opcs3_gallstone_date = ifelse(str_detect(p41273, "511"),
@@ -508,18 +503,11 @@ opcs3_diagnoses <- function(data) {
 
 # Defining birth date as origin for survival analysis
 date_birth <- function(data) {
-    month_names <- c(
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    )
-
     data <- data %>%
-        mutate(month_of_birth_num = sprintf("%02d", match(p52, month_names))) %>%
-        unite(date_birth, p34, month_of_birth_num, sep = "-")
-    remove(month_names)
-
-    # adding 15 as birthday for all participants:
-    data$date_birth <- as.Date(paste0(data$date_birth, "-15"))
+        mutate(
+            date_birth = paste(p34, p52, "15", sep = "-"), # Combine year, month, and day into "YYYY-MM-DD"
+            date_birth = as.Date(date_birth, format = "%Y-%m-%d") # Convert to Date format
+        )
     return(data)
 }
 
@@ -566,7 +554,7 @@ outcome_variables <- function(data) {
             gbd = case_when(
                 gallstone == 1 | cholecystectomy == 1 | cholecystit == 1 ~ 1,
                 TRUE ~ 0)
-            )
+        )
     return(data)
 }
 # Eligibility criteria based on outcomes ----------------------------------
