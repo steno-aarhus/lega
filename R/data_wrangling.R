@@ -60,8 +60,8 @@ sociodemographics <- function(data) {
         ),
         cohabitation = case_when(
             p709_i0 == 1 ~ "alone",
-            str_detect(p6141_i0, "Husband, wife or partner") ~ "with spouse/partner",
-            p6141_i0 == "Prefer not to answer" ~ "no answer",
+            p6141_i0 == 1 ~ "with spouse/partner",
+            p6141_i0 == -3 ~ "no answer",
             TRUE ~ "other non-partner"
         ),
         # 10 UK recruitment regions
