@@ -278,4 +278,31 @@ covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
 }
 
 
+# Red and processed meats analysed separately
+
+meat_separate<- function(data) {
+    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
+                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
+                 "veggie_weekly", "potato_weekly", "egg_weekly",
+                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
+                 "sauce_weekly", "food_weight_weekly", "ethnicity",
+                 "deprivation", "education", "cohabitation", "physical_activity",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
+                 "related_conditions", "family_diabetes",
+                 "strata(region, age_strata, sex)")
+
+    model2_formulas <- list(
+        red_model2 = create_formula(c("legumes80", "poultry80", "fish80", "processed_weekly"), covars2),
+        processed_model2 = create_formula(c("legumes80", "poultry80", "fish80", "red_weekly"), covars2),
+    )
+
+    model2_results <- model2_formulas |>
+        map(~ survival::coxph(.x, data = data, ties = "breslow")) |>
+        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    return(model2_results)
+}
 
