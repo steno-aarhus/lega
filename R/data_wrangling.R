@@ -60,9 +60,9 @@ sociodemographics <- function(data) {
         ),
         cohabitation = case_when(
             p709_i0 == 1 ~ "alone",
-            p6141_i0 == 1 ~ "with spouse/partner",
-            p6141_i0 == -3 ~ "no answer",
-            TRUE ~ "other non-partner"
+            stringr::str_detect(p6141_i0, "1") ~ "with spouse/partner",
+            p6141_i0 == -3 ~ "unknown",
+            TRUE ~ "with other non-partner"
         ),
         # 10 UK recruitment regions
         region = case_when(
@@ -86,7 +86,7 @@ sociodemographics <- function(data) {
 lifestyle <- function(data) {
     data <- data %>% mutate(
         p3456_i0 = case_when(
-            p3456_i0 == -10| p3456_i0 == -1| p3456_i0 == -3 ~ 0,
+            p3456_i0 == -10| p3456_i0 == -1| p3456_i0 == -3 ~ NA,
             TRUE ~ p3456_i0
         ),
         smoking = case_when(

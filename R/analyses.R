@@ -294,7 +294,7 @@ meat_separate<- function(data) {
 
     model2_formulas <- list(
         red_model2 = create_formula(c("legumes80", "poultry80", "fish80", "processed_weekly"), covars2),
-        processed_model2 = create_formula(c("legumes80", "poultry80", "fish80", "red_weekly"), covars2),
+        processed_model2 = create_formula(c("legumes80", "poultry80", "fish80", "red_weekly"), covars2)
     )
 
     model2_results <- model2_formulas |>
