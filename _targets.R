@@ -232,6 +232,11 @@ tar_target(
     name = bmi_analyses,
     command = sorted_data |>
         bmi_strata()
+),
+tar_target(
+    name = meat_type,
+    command = sorted_data |>
+        meat_separate()
 ))
 
 
