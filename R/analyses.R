@@ -306,3 +306,34 @@ meat_separate<- function(data) {
     return(model2_results)
 }
 
+
+# excluding those with GBD related diseases
+
+healthy_analyses<- function(data) {
+healthy <- data %>%
+    subset(related_conditions == 0)
+
+covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
+             "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
+             "veggie_weekly", "potato_weekly", "egg_weekly",
+             "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
+             "sauce_weekly", "food_weight_weekly", "ethnicity",
+             "deprivation", "education", "cohabitation", "physical_activity",
+             "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+             "pregnancies", "yearly_income", "family_diabetes",
+             "strata(region, age_strata, sex)")
+
+    model2_formulas <- list(
+        meat_model2 = create_formula(c("legumes80", "poultry80", "fish80"), covars2),
+        poultry_model2 = create_formula(c("legumes80", "meats80", "fish80"), covars2),
+        fish_model2 = create_formula(c("legumes80", "meats80", "poultry80"), covars2)
+    )
+
+    model2_results_healthy <- model2_formulas |>
+        map(~ coxph(.x, data = healthy, ties = "breslow")) |>
+        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    return(model2_results_healthy)
+}
