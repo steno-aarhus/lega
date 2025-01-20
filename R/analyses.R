@@ -311,7 +311,7 @@ meat_separate<- function(data) {
 
 healthy_analyses<- function(data) {
 healthy <- data %>%
-    subset(related_conditions == 0)
+    subset(related_conditions == "NA")
 
 covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
              "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
