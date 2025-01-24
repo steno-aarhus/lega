@@ -60,9 +60,9 @@ sociodemographics <- function(data) {
         ),
         cohabitation = case_when(
             p709_i0 == 1 ~ "alone",
-            p6141_i0 == 1 ~ "with spouse/partner",
-            p6141_i0 == -3 ~ "no answer",
-            TRUE ~ "other non-partner"
+            stringr::str_detect(p6141_i0, "1") ~ "with spouse/partner",
+            p6141_i0 == -3 ~ "unknown",
+            TRUE ~ "with other non-partner"
         ),
         # 10 UK recruitment regions
         region = case_when(
@@ -86,7 +86,7 @@ sociodemographics <- function(data) {
 lifestyle <- function(data) {
     data <- data %>% mutate(
         p3456_i0 = case_when(
-            p3456_i0 == -10| p3456_i0 == -1| p3456_i0 == -3 ~ 0,
+            p3456_i0 == -10| p3456_i0 == -1| p3456_i0 == -3 ~ NA,
             TRUE ~ p3456_i0
         ),
         smoking = case_when(
@@ -274,6 +274,8 @@ food_groups <- function(data) {
         mutate(
             legume_weekly = calculate_weekly_diet("p26086|p26101|p26136|p26137", p20077),
             meats_weekly = calculate_weekly_diet("p26066|p26100|p26104|p26117|p26122", p20077),
+            red_weekly = calculate_weekly_diet("p26066|p26100|p26104|p26117", p20077),
+            processed_weekly = calculate_weekly_diet("p26122", p20077),
             poultry_weekly = calculate_weekly_diet("p26121|p26069", p20077),
             fish_weekly = calculate_weekly_diet("p26070|p26109|p26132|p26149", p20077),
             cereal_refined_weekly = calculate_weekly_diet("p26113|p26079|p26071|p26072|p26073|p26075|p26068|p26083", p20077),
