@@ -520,6 +520,8 @@ p26155_i4,Trans fatty acids | Instance 4
 p30840_i0,Total bilirubin | Instance 0
 p40000_i0,Date of death | Instance 0
 p40000_i1,Date of death | Instance 1
+p40061_i2,Proton density fat fraction (PDFF) | Instance 2
+p40061_i3,Proton density fat fraction (PDFF) | Instance 3
 p41270,Diagnoses - ICD10
 p41271,Diagnoses - ICD9
 p41272,Operative procedures - OPCS4
