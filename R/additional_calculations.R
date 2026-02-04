@@ -170,12 +170,12 @@ library(broom)
 library(purrr)
 
 # How many unknown family disease history?
-data <- targets::tar_read(sorted_data)
-table(data$disease_family)
+# data <- targets::tar_read(sorted_data)
+table(data$family_diabetes)
 
 # Excluding unknown family history
 known_history <- data %>%
-    filter(disease_family != "unknown")
+    filter(family_diabetes != "unknown")
 
 create_formula <- function(xvars, covars) {
     outcome <- "Surv(survival_gbd, gbd == 1)"
@@ -201,7 +201,7 @@ main_model2<- function(data) {
     )
 
     model2_results <- model2_formulas |>
-        map(~ survival::coxph(.x, data = data, ties = "breslow")) |>
+        map(~ survival::coxph(.x, data = known_history, ties = "breslow")) |>
         map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
                  mutate(model = .y))
