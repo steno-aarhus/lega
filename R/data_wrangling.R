@@ -136,6 +136,7 @@ illness <- function(data) {
             TRUE ~ "none of the above"),
         family_diabetes = case_when(
             str_detect(p20107_i0, "9") | str_detect(p20110_i0, "9") | str_detect(p20111_i0, "9") ~ "yes",
+            str_detect(p20107_i0, "21") | str_detect(p20110_i0, "21") | str_detect(p20111_i0, "21") ~ "unknown",
             TRUE ~ "no"),
         weight_loss = case_when(
             p2306_i0 == 3 ~ "yes",
