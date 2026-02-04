@@ -14,6 +14,6 @@ rap_copy_to("data/data_lega.csv", "/users/FieLangmann/data_lega.csv")
 # Load data from RAP ------------------------------------------------------
 
 # load data from RAP
-rap_data <- rap_copy_from("/users/FieLangmann/FieLangmann-lega-2024-09-12T06-17-47.csv", "data/data_lega.csv")
+rap_data <- rap_copy_from("/users/FieLangmann/FieLangmann-lega-2026-02-04T12-13-27.csv", "data/data_lega.csv")
 # load data into RStudio
 data <- readr::read_csv("data/data_lega.csv")
