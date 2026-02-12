@@ -16,6 +16,7 @@ Imports:
     knitr,
     magrittr,
     ps,
+    qs (>= 0.27.3),
     qs2,
     remotes,
     rmarkdown,
