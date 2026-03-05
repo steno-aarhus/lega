@@ -2,6 +2,8 @@
 
 -   Protocol:
     [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13882532.svg)](https://doi.org/10.5281/zenodo.13882532)
+-   Paper DOI:
+    [10.1007/s00394-025-03828-1](https://doi.org/10.1007/s00394-025-03828-1)
 
 Western diets high in animal foods and saturated fats has been shown to
 cause a multitude of non-communicable diseases while also having great
@@ -73,4 +75,3 @@ The following folders contain:
 
 -   `R/`: Contains the R scripts and functions to create the figures,
     tables, and results for the project.
-
