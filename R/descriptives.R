@@ -141,3 +141,10 @@ person_years_followup <- function(data) {
     print(summary(data$gbd_time))
     return(data)
 }
+
+# Person-years of follow-up
+person_years_followup <- function(data) {
+    print(sum(data$gbd_time))
+    print(summary(data$gbd_time))
+    return(data)
+}
