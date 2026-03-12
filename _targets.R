@@ -142,6 +142,12 @@ list(
         command = id_data |>
             diff_time_webQ()
     ),
+    tar_target(
+        name = spline_knot_cuts,
+        command = sorted_data |>
+            compute_alcohol_spline()
+    ),
+
 # main analyses -----------------------------------------------------------
 tar_target(
     name = main_analyses1,
