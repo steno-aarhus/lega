@@ -80,71 +80,121 @@ supplementary_baseline_table <- function(data) {
     return(data)
 }
 
-# Estimate follow-up time -------------------------------------------------
-person_years_followup <- function(data) {
-    data <- data %>%
-        mutate(
-            survival_icd10_gallstone_date = case_when(
-                !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_loss_to_follow_up = case_when(
-                !is.na(loss_to_follow_up) ~ as.numeric(difftime(loss_to_follow_up, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_date_of_death = case_when(
-                !is.na(date_of_death) ~ as.numeric(difftime(date_of_death, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_opcs3_gallstone_date = case_when(
-                !is.na(opcs3_gallstone_date) ~ as.numeric(difftime(opcs3_gallstone_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_opcs3_removal_date = case_when(
-                !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_opcs4_gallstone_date = case_when(
-                !is.na(opcs4_gallstone_date) ~ as.numeric(difftime(opcs4_gallstone_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_opcs4_removal_date = case_when(
-                !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_icd9_bileobstruction_date = case_when(
-                !is.na(icd9_bileobstruction_date) ~ as.numeric(difftime(icd9_bileobstruction_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_icd9_gallstone_date = case_when(
-                !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_icd10_gbobstruction_date = case_when(
-                !is.na(icd10_gbobstruction_date) ~ as.numeric(difftime(icd10_gbobstruction_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_icd10_bileobstruction_date = case_when(
-                !is.na(icd10_bileobstruction_date) ~ as.numeric(difftime(icd10_bileobstruction_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_icd10_cholecystit_date = case_when(
-                !is.na(icd10_cholecystit_date) ~ as.numeric(difftime(icd10_cholecystit_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_icd9_acute_date = case_when(
-                !is.na(icd9_acute_date) ~ as.numeric(difftime(icd9_acute_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_icd9_other_date = case_when(
-                !is.na(icd9_other_date) ~ as.numeric(difftime(icd9_other_date, date_filled, units = "days")),
-                TRUE ~ NA),
-            survival_time_cenc = difftime(censoring, date_filled, units = "days"),
-            gbd_time = pmin(survival_icd10_gallstone_date, survival_time_cenc,
-                            survival_icd10_bileobstruction_date, survival_icd10_gbobstruction_date,
-                            survival_icd9_gallstone_date, survival_icd9_bileobstruction_date,
-                            survival_opcs4_removal_date, survival_opcs3_removal_date,
-                            survival_opcs3_gallstone_date, survival_date_of_death,
-                            survival_loss_to_follow_up, survival_icd10_cholecystit_date,
-                            survival_icd9_acute_date, survival_icd9_other_date,
-                            na.rm = TRUE),
-            gbd_time = gbd_time/365.25
-        )
-    print(sum(data$gbd_time))
-    print(summary(data$gbd_time))
-    return(data)
-}
+# # Estimate follow-up time -------------------------------------------------
+# person_years_followup <- function(data) {
+#     data <- data %>%
+#         mutate(
+#             survival_icd10_gallstone_date = case_when(
+#                 !is.na(icd10_gallstone_date) ~ as.numeric(difftime(icd10_gallstone_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_loss_to_follow_up = case_when(
+#                 !is.na(loss_to_follow_up) ~ as.numeric(difftime(loss_to_follow_up, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_date_of_death = case_when(
+#                 !is.na(date_of_death) ~ as.numeric(difftime(date_of_death, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_opcs3_gallstone_date = case_when(
+#                 !is.na(opcs3_gallstone_date) ~ as.numeric(difftime(opcs3_gallstone_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_opcs3_removal_date = case_when(
+#                 !is.na(opcs3_removal_date) ~ as.numeric(difftime(opcs3_removal_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_opcs4_gallstone_date = case_when(
+#                 !is.na(opcs4_gallstone_date) ~ as.numeric(difftime(opcs4_gallstone_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_opcs4_removal_date = case_when(
+#                 !is.na(opcs4_removal_date) ~ as.numeric(difftime(opcs4_removal_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_icd9_bileobstruction_date = case_when(
+#                 !is.na(icd9_bileobstruction_date) ~ as.numeric(difftime(icd9_bileobstruction_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_icd9_gallstone_date = case_when(
+#                 !is.na(icd9_gallstone_date) ~ as.numeric(difftime(icd9_gallstone_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_icd10_gbobstruction_date = case_when(
+#                 !is.na(icd10_gbobstruction_date) ~ as.numeric(difftime(icd10_gbobstruction_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_icd10_bileobstruction_date = case_when(
+#                 !is.na(icd10_bileobstruction_date) ~ as.numeric(difftime(icd10_bileobstruction_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_icd10_cholecystit_date = case_when(
+#                 !is.na(icd10_cholecystit_date) ~ as.numeric(difftime(icd10_cholecystit_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_icd9_acute_date = case_when(
+#                 !is.na(icd9_acute_date) ~ as.numeric(difftime(icd9_acute_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_icd9_other_date = case_when(
+#                 !is.na(icd9_other_date) ~ as.numeric(difftime(icd9_other_date, date_filled, units = "days")),
+#                 TRUE ~ NA),
+#             survival_time_cenc = difftime(censoring, date_filled, units = "days"),
+#             gbd_time = pmin(survival_icd10_gallstone_date, survival_time_cenc,
+#                             survival_icd10_bileobstruction_date, survival_icd10_gbobstruction_date,
+#                             survival_icd9_gallstone_date, survival_icd9_bileobstruction_date,
+#                             survival_opcs4_removal_date, survival_opcs3_removal_date,
+#                             survival_opcs3_gallstone_date, survival_date_of_death,
+#                             survival_loss_to_follow_up, survival_icd10_cholecystit_date,
+#                             survival_icd9_acute_date, survival_icd9_other_date,
+#                             na.rm = TRUE),
+#             gbd_time = gbd_time/365.25
+#         )
+#     print(sum(data$gbd_time))
+#     print(summary(data$gbd_time))
+#    return(data)
+# }
 
 # Person-years of follow-up
 person_years_followup <- function(data) {
     print(sum(data$gbd_time))
     print(summary(data$gbd_time))
     return(data)
+}
+
+# Time between completed Oxford WebQ
+diff_time_webQ <- function(data) {
+    data <- data %>%
+        mutate(
+            ques_comp_t1 = as.Date(ques_comp_t1),
+            ques_comp_t2 = as.Date(ques_comp_t2),
+            ques_comp_t3 = as.Date(ques_comp_t3),
+            ques_comp_t4 = as.Date(ques_comp_t4)
+        ) %>%
+        rowwise() %>%
+        mutate(
+            diff_t1_t2 = as.numeric(difftime(ques_comp_t2, ques_comp_t1, units = "days")),
+            diff_t2_t3 = as.numeric(difftime(ques_comp_t3, ques_comp_t2, units = "days")),
+            diff_t3_t4 = as.numeric(difftime(ques_comp_t4, ques_comp_t3, units = "days"))
+        ) %>%
+        ungroup()
+
+    all_differences <- data %>%
+        select(diff_t1_t2, diff_t2_t3, diff_t3_t4) %>%
+        pivot_longer(
+            cols = everything(),
+            values_to = "interval"
+        ) %>%
+        filter(!is.na(interval)) %>%
+        pull(interval)
+
+    tibble(
+        mean_interval_days = mean(all_differences),
+        sd_interval_days   = sd(all_differences),
+        n_intervals        = length(all_differences)
+    )
+}
+
+# Knots for alcohol splines
+# cut-offs for alcohol splines
+compute_alcohol_spline <- function(data) {
+    data <- data %>%
+    # Knots based on quantiles
+    nknots <- 4  # Number of knots
+    internal_knots <- quantile(data$alcohol_weekly, probs = seq(0.25, 0.75, length.out = nknots), na.rm = TRUE)
+
+    # Generate spline using specified knots
+    spline_basis <- splines::bs(data$alcohol_weekly, knots = internal_knots, degree = 3)
+
+    # Extract and print the knot positions
+    knots <- attr(spline_basis, "knots")
+
+    cat("knots are placed at:", knots, "\n")
 }
