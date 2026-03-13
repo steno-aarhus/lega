@@ -11,7 +11,7 @@ package_deps <- desc::desc_get_deps()$package |>
 # Set target options:
 tar_option_set(
   packages = ukbAid::proj_get_dependencies(),
-  format = "qs", # Optionally set the default storage format. qs is fast.
+  format = "qs2", # Optionally set the default storage format. qs is fast.
   #
   # This likely isn't necessary for most UK Biobank users at SDCA/AU.
   # For distributed computing in tar_make(), supply a {crew} controller
