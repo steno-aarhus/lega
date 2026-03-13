@@ -391,11 +391,6 @@ cholecystit_model2<- function(data) {
 
 # Main analyses stratified by sex
 
-# create_formula <- function(xvars, covars) {
-#     outcome <- "survival::Surv(survival_gbd, gbd == 1)"
-#     reformulate(c(xvars, covars), response = outcome)
-# }
-
 # Males
 men_strata <- function(data) {
     men <- data %>%
@@ -536,65 +531,64 @@ age_strata <- function(data) {
 
 # Main analyses stratified by BMI
 
+bmi_strata<- function(data) {
+    bmi_normal <- data %>%
+        subset(bmi < 25)
+    bmi2530 <- data %>%
+        subset(bmi >= 25 & bmi < 30)
+    above30 <- data %>%
+        subset(bmi >= 30)
+    below30 <- data %>%
+        subset(bmi < 30)
 
-# bmi_strata<- function(data) {
-#     bmi_normal <- data %>%
-#         subset(bmi < 25)
-#     bmi2530 <- data %>%
-#         subset(bmi >= 25 & bmi < 30)
-#     above30 <- data %>%
-#         subset(bmi >= 30)
-#     below30 <- data %>%
-#         subset(bmi < 30)
-#
-#     covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
-#                  "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
-#                  "veggie_weekly", "potato_weekly", "egg_weekly",
-#                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
-#                  "sauce_weekly", "food_weight_weekly", "ethnicity",
-#                  "deprivation", "education", "cohabitation", "physical_activity",
-#                  "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
-#                  "pregnancies", "yearly_income",
-#                  "related_conditions", "family_diabetes",
-#                  "strata(region, age_strata, sex)")
-#
-#     model2_formulas <- list(
-#         meat_model2 = create_formula(c("legumes80", "poultry80", "fish80"), covars2),
-#         poultry_model2 = create_formula(c("legumes80", "meats80", "fish80"), covars2),
-#         fish_model2 = create_formula(c("legumes80", "meats80", "poultry80"), covars2)
-#     )
-#
-#     model2_normal <- model2_formulas |>
-#         map(~ coxph(.x, data = bmi_normal, ties = "breslow")) |>
-#         map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-#                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-#                  mutate(model = .y))
-#
-#     model2_bmi2530 <- model2_formulas |>
-#         map(~ coxph(.x, data = bmi2530, ties = "breslow")) |>
-#         map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-#                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-#                  mutate(model = .y))
-#
-#     model2_above30 <- model2_formulas |>
-#         map(~ coxph(.x, data = above30, ties = "breslow")) |>
-#         map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-#                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-#                  mutate(model = .y))
-#
-#     model2_below30 <- model2_formulas |>
-#         map(~ coxph(.x, data = below30, ties = "breslow")) |>
-#         map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-#                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-#                  mutate(model = .y))
-#
-#     # Combine all results into a list and return it
-#     return(list(
-#         bmi_normal = model2_normal,
-#         bmi2530 = model2_bmi2530,
-#         above30 = model2_above30,
-#         below30 = model2_below30
-#     ))
-# }
-#
+    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
+                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
+                 "veggie_weekly", "potato_weekly", "egg_weekly",
+                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
+                 "sauce_weekly", "food_weight_weekly", "ethnicity",
+                 "deprivation", "education", "cohabitation", "physical_activity",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
+                 "related_conditions", "family_diabetes",
+                 "strata(region, age_strata, sex)")
+
+    model2_formulas <- list(
+        meat_model2 = create_formula(c("legumes80", "poultry80", "fish80"), covars2),
+        poultry_model2 = create_formula(c("legumes80", "meats80", "fish80"), covars2),
+        fish_model2 = create_formula(c("legumes80", "meats80", "poultry80"), covars2)
+    )
+
+    model2_normal <- model2_formulas |>
+        map(~ coxph(.x, data = bmi_normal, ties = "breslow")) |>
+        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    model2_bmi2530 <- model2_formulas |>
+        map(~ coxph(.x, data = bmi2530, ties = "breslow")) |>
+        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    model2_above30 <- model2_formulas |>
+        map(~ coxph(.x, data = above30, ties = "breslow")) |>
+        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    model2_below30 <- model2_formulas |>
+        map(~ coxph(.x, data = below30, ties = "breslow")) |>
+        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    # Combine all results into a list and return it
+    return(list(
+        bmi_normal = model2_normal,
+        bmi2530 = model2_bmi2530,
+        above30 = model2_above30,
+        below30 = model2_below30
+    ))
+}
+
 
