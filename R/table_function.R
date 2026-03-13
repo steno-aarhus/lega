@@ -111,26 +111,19 @@ table_main_analyses <- function(data){
         pivot_wider(names_from = exposure, values_from = value) %>%
         print()
 }
-### Secondary analyses ------------------------------------------------------
-table_secondary_analyses <- function(data){
+
+### Secondary and sensitivity analyses ----------------------------------------------------
+table_sec_sens <- function(data){
     rows1_sec <- extract(consumers_analyses(data), "Consumers only")
-    rows2_sec <- extract(legumes_and_peas(data), "Legumes and peas")
-    rows3_sec <- extract(legumes_without_soy(data), "Legumes without soymilk")
-
-    table_secondary <- bind_rows(rows1_sec, rows2_sec, rows3_sec) %>%
-        pivot_wider(names_from = exposure, values_from = value) %>%
-        print()
-}
-
-### Sensitivity analyses ----------------------------------------------------
-table_sensitivity_analyses <- function(data){
-    rows1_sens <- extract(alcohol_restricted_analyses(data), "Alcohol below 90 percentile")
-    rows2_sens <- extract(normal_liver_analyses(data), "ALT below threshold")
-    rows3_sens <- extract(three_recalls_analyses(data), ">3 completed Oxford WebQ")
-    rows4_sens <- extract(low_alc_cases_analyses(data), "NAFLD diagnosis + alcohol intake below threshold")
+    rows1_sens <- extract(legumes_and_peas(data), "Legumes and peas")
+    rows2_sens <- extract(legumes_without_soy(data), "Legumes without soymilk")
+    rows3_sens <- extract(alcohol_restricted_analyses(data), "Alcohol below 90 percentile")
+    rows4_sens <- extract(normal_liver_analyses(data), "ALT below threshold")
+    rows5_sens <- extract(three_recalls_analyses(data), ">3 completed Oxford WebQ")
+    rows6_sens <- extract(low_alc_cases_analyses(data), "NAFLD diagnosis + alcohol intake below threshold")
 
 
-    table_sensitivity <- bind_rows(rows1_sens, rows2_sens, rows3_sens, rows4_sens) %>%
+    table_sensitivity <- bind_rows(rows1_sec, rows1_sens, rows2_sens, rows3_sens, rows4_sens, rows5_sens, rows6_sens) %>%
         pivot_wider(names_from = exposure, values_from = value) %>%
         print()
 }
