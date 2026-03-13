@@ -31,7 +31,6 @@ source(here::here("R/data_wrangling.R"))
 source(here::here("R/descriptives.R"))
 source(here::here("R/model_assumptions.R"))
 source(here::here("R/analyses.R"))
-source(here::here("R/extra_analyses.R"))
 
 # Things to run in order to work.
 list(
