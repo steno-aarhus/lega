@@ -1,4 +1,7 @@
-# Additional calculations
+# For oral defence
+# This script is written solely for the purpose of conducting additional 
+# statistics for inclusion into thesis and oral defence of a PhD project.
+# Any code is therefore not included in the targets pipeline
 
 
 # Unknown family disease history ------------------------------------------
