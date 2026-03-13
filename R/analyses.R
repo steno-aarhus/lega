@@ -389,7 +389,7 @@ cholecystit_model2<- function(data) {
     return(model2_cholecystit)
 }
 
-# Main analyses stratifying  by sex
+# Main analyses stratified by sex
 
 # create_formula <- function(xvars, covars) {
 #     outcome <- "survival::Surv(survival_gbd, gbd == 1)"
@@ -456,7 +456,7 @@ women_strata <- function(data) {
 }
 
 
-# Main analyses stratifying  by age
+# Main analyses stratified by age
 
 age_strata <- function(data) {
     data <- data %>%
@@ -534,8 +534,9 @@ age_strata <- function(data) {
 }
 
 
-# Main analyses stratifying  by BMI
-# ## BMI strata any GBD ---------------------------------------------------------
+# Main analyses stratified by BMI
+
+
 # bmi_strata<- function(data) {
 #     bmi_normal <- data %>%
 #         subset(bmi < 25)
