@@ -288,10 +288,6 @@ covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
 
 # Gallstones only
 
-create_formula_gallstone <- function(xvars, covars) {
-    outcome <- "Surv(survival_gallstone, gallstone == 1)"
-    reformulate(c(xvars, covars), response = outcome)
-}
 
 gallstone_model2<- function(data) {
     covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
@@ -322,11 +318,6 @@ gallstone_model2<- function(data) {
 
 # Cholecystectomy only
 
-create_formula_removal <- function(xvars, covars) {
-    outcome <- "Surv(survival_removal, cholecystectomy == 1)"
-    reformulate(c(xvars, covars), response = outcome)
-}
-
 removal_model2<- function(data) {
     covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
                  "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
@@ -356,11 +347,6 @@ removal_model2<- function(data) {
 
 
 # Cholecystitis only
-
-create_formula_cholecystit <- function(xvars, covars) {
-    outcome <- "Surv(survival_gallstone, cholecystit == 1)"
-    reformulate(c(xvars, covars), response = outcome)
-}
 
 cholecystit_model2<- function(data) {
     covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
