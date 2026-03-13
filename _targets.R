@@ -174,11 +174,6 @@ tar_target(
     command = sorted_data |>
         consumers_analyses()
 ),
-tar_target(
-    name = consumers_total,
-    command = sorted_data |>
-        total_intake()
-),
 
 
 # # sensitivity analyses ----------------------------------------------------

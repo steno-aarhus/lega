@@ -120,31 +120,6 @@ consumers_analyses<- function(data) {
 }
 
 
-# Legumes as a continuous predictor with no substitution modelled
-total_intake <- function(data) {
-    consumers <- data %>%
-        subset(legume_weekly > 0)
-
-    total_model2 <- coxph(
-        Surv(survival_gbd, gbd == 1) ~ legumes80 +
-            # other food components
-            cereal_refined_weekly + whole_grain_weekly + mixed_dish_weekly +
-            dairy_weekly + fats_weekly + fruit_weekly + nut_weekly +
-            veggie_weekly + potato_weekly + egg_weekly +
-            non_alc_beverage_weekly + alc_beverage_weekly + snack_weekly +
-            sauce_weekly + meats_weekly + poultry_weekly + fish_weekly +
-            # other variables
-            ethnicity + deprivation + education +
-            cohabitation + physical_activity + smoking + bilirubin + weight_loss +
-            related_conditions + family_diabetes + yearly_income + estrogen_treatment +
-            pregnancies + strata(region, age_strata, sex),
-        data = consumers, ties = "breslow"
-    )
-    total <- tidy(total_model2, exponentiate = TRUE, conf.int = TRUE) %>%
-        mutate(across(where(is.numeric), ~ round(.x, 2)))
-    return(total)
-}
-
 # Sensitivity analyses ----------------------------------------------------
 
 # Peas included in legume exposure
