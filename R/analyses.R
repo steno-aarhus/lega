@@ -286,8 +286,8 @@ covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
 ## Splitting gallbladder diseases into distinct outcomes: gallstone, cholecystectomy,
 # and cholecystitis
 
-
 # Gallstones only
+
 create_formula_gallstone <- function(xvars, covars) {
     outcome <- "Surv(survival_gallstone, gallstone == 1)"
     reformulate(c(xvars, covars), response = outcome)
@@ -326,131 +326,138 @@ create_formula_removal <- function(xvars, covars) {
     outcome <- "Surv(survival_removal, cholecystectomy == 1)"
     reformulate(c(xvars, covars), response = outcome)
 }
-#
-# removal_model2<- function(data) {
-#     covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
-#                  "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
-#                  "veggie_weekly", "potato_weekly", "egg_weekly",
-#                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
-#                  "sauce_weekly", "food_weight_weekly", "ethnicity",
-#                  "deprivation", "education", "cohabitation", "physical_activity",
-#                  "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
-#                  "pregnancies", "yearly_income",
-#                  "related_conditions", "family_diabetes",
-#                  "strata(region, age_strata, sex)")
-#
-#     model2_removal_formulas <- list(
-#         meat_model2 = create_formula_removal(c("legumes80", "poultry80", "fish80"), covars2),
-#         poultry_model2 = create_formula_removal(c("legumes80", "meats80", "fish80"), covars2),
-#         fish_model2 = create_formula_removal(c("legumes80", "meats80", "poultry80"), covars2)
-#     )
-#
-#     model2_removal <- model2_removal_formulas |>
-#         map(~ coxph(.x, data = data, ties = "breslow")) |>
-#         map2(names(model2_removal_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-#                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-#                  mutate(model = .y))
-#
-#     return(model2_removal)
-# }
-#
-#
-# ## Cholecystit only --------------------------------------------------------
-# create_formula_cholecystit <- function(xvars, covars) {
-#     outcome <- "Surv(survival_gallstone, cholecystit == 1)"
-#     reformulate(c(xvars, covars), response = outcome)
-# }
-#
-# cholecystit_model2<- function(data) {
-#     covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
-#                  "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
-#                  "veggie_weekly", "potato_weekly", "egg_weekly",
-#                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
-#                  "sauce_weekly", "food_weight_weekly", "ethnicity",
-#                  "deprivation", "education", "cohabitation", "physical_activity",
-#                  "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
-#                  "pregnancies", "yearly_income",
-#                  "related_conditions", "family_diabetes",
-#                  "strata(region, age_strata, sex)")
-#
-#     model2_cholecystit_formulas <- list(
-#         meat_model2 = create_formula_cholecystit(c("legumes80", "poultry80", "fish80"), covars2),
-#         poultry_model2 = create_formula_cholecystit(c("legumes80", "meats80", "fish80"), covars2),
-#         fish_model2 = create_formula_cholecystit(c("legumes80", "meats80", "poultry80"), covars2)
-#     )
-#
-#     model2_cholecystit <- model2_cholecystit_formulas |>
-#         map(~ coxph(.x, data = data, ties = "breslow")) |>
-#         map2(names(model2_cholecystit_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-#                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-#                  mutate(model = .y))
-#
-#     return(model2_cholecystit)
-# }
-#
-# ## Sex strata any GBD ---------------------------------------------------------
+
+removal_model2<- function(data) {
+    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
+                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
+                 "veggie_weekly", "potato_weekly", "egg_weekly",
+                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
+                 "sauce_weekly", "food_weight_weekly", "ethnicity",
+                 "deprivation", "education", "cohabitation", "physical_activity",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
+                 "related_conditions", "family_diabetes",
+                 "strata(region, age_strata, sex)")
+
+    model2_removal_formulas <- list(
+        meat_model2 = create_formula_removal(c("legumes80", "poultry80", "fish80"), covars2),
+        poultry_model2 = create_formula_removal(c("legumes80", "meats80", "fish80"), covars2),
+        fish_model2 = create_formula_removal(c("legumes80", "meats80", "poultry80"), covars2)
+    )
+
+    model2_removal <- model2_removal_formulas |>
+        map(~ coxph(.x, data = data, ties = "breslow")) |>
+        map2(names(model2_removal_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    return(model2_removal)
+}
+
+
+# Cholecystitis only
+
+create_formula_cholecystit <- function(xvars, covars) {
+    outcome <- "Surv(survival_gallstone, cholecystit == 1)"
+    reformulate(c(xvars, covars), response = outcome)
+}
+
+cholecystit_model2<- function(data) {
+    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
+                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
+                 "veggie_weekly", "potato_weekly", "egg_weekly",
+                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
+                 "sauce_weekly", "food_weight_weekly", "ethnicity",
+                 "deprivation", "education", "cohabitation", "physical_activity",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
+                 "related_conditions", "family_diabetes",
+                 "strata(region, age_strata, sex)")
+
+    model2_cholecystit_formulas <- list(
+        meat_model2 = create_formula_cholecystit(c("legumes80", "poultry80", "fish80"), covars2),
+        poultry_model2 = create_formula_cholecystit(c("legumes80", "meats80", "fish80"), covars2),
+        fish_model2 = create_formula_cholecystit(c("legumes80", "meats80", "poultry80"), covars2)
+    )
+
+    model2_cholecystit <- model2_cholecystit_formulas |>
+        map(~ coxph(.x, data = data, ties = "breslow")) |>
+        map2(names(model2_cholecystit_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    return(model2_cholecystit)
+}
+
+# Main analyses stratifying  by sex
+
 # create_formula <- function(xvars, covars) {
 #     outcome <- "survival::Surv(survival_gbd, gbd == 1)"
 #     reformulate(c(xvars, covars), response = outcome)
 # }
-#
-# men_strata <- function(data) {
-#     men <- data %>%
-#         subset(sex == 1)
-#     covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
-#                  "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
-#                  "veggie_weekly", "potato_weekly", "egg_weekly",
-#                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
-#                  "sauce_weekly", "food_weight_weekly", "ethnicity",
-#                  "deprivation", "education", "cohabitation", "physical_activity",
-#                  "smoking", "bilirubin", "weight_loss", "yearly_income",
-#                  "related_conditions", "family_diabetes",
-#                  "strata(region, age_strata)")
-#
-#     model2_formulas <- list(
-#         meat_model2 = create_formula(c("legumes80", "poultry80", "fish80"), covars2),
-#         poultry_model2 = create_formula(c("legumes80", "meats80", "fish80"), covars2),
-#         fish_model2 = create_formula(c("legumes80", "meats80", "poultry80"), covars2)
-#     )
-#
-#     model2_men <- model2_formulas |>
-#         map(~ survival::coxph(.x, data = men, ties = "breslow")) |>
-#         map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-#                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-#                  mutate(model = .y))
-#
-#     return(model2_men)
-# }
-#
-# women_strata <- function(data) {
-#     women <- data %>%
-#         subset(sex == 0)
-#     covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
-#                  "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
-#                  "veggie_weekly", "potato_weekly", "egg_weekly",
-#                  "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
-#                  "sauce_weekly", "food_weight_weekly", "ethnicity",
-#                  "deprivation", "education", "cohabitation", "physical_activity",
-#                  "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
-#                  "pregnancies", "yearly_income",
-#                  "related_conditions", "family_diabetes",
-#                  "strata(region, age_strata)")
-#
-#     model2_formulas <- list(
-#         meat_model2 = create_formula(c("legumes80", "poultry80", "fish80"), covars2),
-#         poultry_model2 = create_formula(c("legumes80", "meats80", "fish80"), covars2),
-#         fish_model2 = create_formula(c("legumes80", "meats80", "poultry80"), covars2)
-#     )
-#
-#     model2_women <- model2_formulas |>
-#         map(~ coxph(.x, data = women, ties = "breslow")) |>
-#         map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-#                  mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-#                  mutate(model = .y))
-#
-#     return(model2_women)
-# }
-#
+
+# Males
+men_strata <- function(data) {
+    men <- data %>%
+        subset(sex == 1)
+    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
+                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
+                 "veggie_weekly", "potato_weekly", "egg_weekly",
+                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
+                 "sauce_weekly", "food_weight_weekly", "ethnicity",
+                 "deprivation", "education", "cohabitation", "physical_activity",
+                 "smoking", "bilirubin", "weight_loss", "yearly_income",
+                 "related_conditions", "family_diabetes",
+                 "strata(region, age_strata)")
+
+    model2_formulas <- list(
+        meat_model2 = create_formula(c("legumes80", "poultry80", "fish80"), covars2),
+        poultry_model2 = create_formula(c("legumes80", "meats80", "fish80"), covars2),
+        fish_model2 = create_formula(c("legumes80", "meats80", "poultry80"), covars2)
+    )
+
+    model2_men <- model2_formulas |>
+        map(~ survival::coxph(.x, data = men, ties = "breslow")) |>
+        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    return(model2_men)
+}
+
+# Females
+women_strata <- function(data) {
+    women <- data %>%
+        subset(sex == 0)
+    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
+                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
+                 "veggie_weekly", "potato_weekly", "egg_weekly",
+                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
+                 "sauce_weekly", "food_weight_weekly", "ethnicity",
+                 "deprivation", "education", "cohabitation", "physical_activity",
+                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
+                 "pregnancies", "yearly_income",
+                 "related_conditions", "family_diabetes",
+                 "strata(region, age_strata)")
+
+    model2_formulas <- list(
+        meat_model2 = create_formula(c("legumes80", "poultry80", "fish80"), covars2),
+        poultry_model2 = create_formula(c("legumes80", "meats80", "fish80"), covars2),
+        fish_model2 = create_formula(c("legumes80", "meats80", "poultry80"), covars2)
+    )
+
+    model2_women <- model2_formulas |>
+        map(~ coxph(.x, data = women, ties = "breslow")) |>
+        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
+                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
+                 mutate(model = .y))
+
+    return(model2_women)
+}
+
+
+# Main analyses stratifying  by age
+
 # ## Age strata any GBD ---------------------------------------------------------
 # age_strata <- function(data) {
 #     data <- data %>%
