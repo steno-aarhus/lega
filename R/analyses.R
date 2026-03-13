@@ -84,7 +84,10 @@ main_model3<- function(data) {
     return(model3_results)
 }
 
-# secondary analyses
+
+# Secondary analyses ------------------------------------------------------
+
+# Study sample restricted to consumers only (>0 g consumed legumes)
 consumers_analyses<- function(data) {
     consumers <- data %>%
         subset(legume_weekly > 0)
@@ -117,7 +120,7 @@ consumers_analyses<- function(data) {
 }
 
 
-
+# Legumes as a continuous predictor with no substitution modelled
 total_intake <- function(data) {
     consumers <- data %>%
         subset(legume_weekly > 0)
@@ -142,8 +145,9 @@ total_intake <- function(data) {
     return(total)
 }
 
-# sensitivity analyses ----------------------------------------------------
-# peas included in legume component
+# Sensitivity analyses ----------------------------------------------------
+
+# Peas included in legume exposure
 legumes_and_peas<- function(data) {
     covariates_pea <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
                         "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
@@ -171,7 +175,7 @@ legumes_and_peas<- function(data) {
     return(model2_results_pea)
 }
 
-# soy excluded from legume component
+# Soy milk excluded from legume component
 legumes_without_soy<- function(data) {
     data <- data %>%
         mutate(
@@ -209,9 +213,7 @@ legumes_without_soy<- function(data) {
 }
 
 
-
-# Varying 24h recalls -----------------------------------------------------
-
+# Study sample restricted to those with three or more completed Oxford WebQ
 three_recalls_analyses <- function(data) {
     data3 <- data %>%
         subset(p20077>=3)
@@ -245,7 +247,7 @@ three_recalls_analyses <- function(data) {
 
 # Excuding high bilirubin levels
 # removing top 10 % (90th percentile) of bilirubin
-#
+
 bilirubin_analyses<- function(data) {
 percentile_90 <- quantile(data$bilirubin, probs = 0.90, na.rm = TRUE)
 lower_bili <- data %>%
@@ -278,62 +280,3 @@ covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
 }
 
 
-# Red and processed meats analysed separately
-
-meat_separate<- function(data) {
-    covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
-                 "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
-                 "veggie_weekly", "potato_weekly", "egg_weekly",
-                 "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
-                 "sauce_weekly", "food_weight_weekly", "ethnicity",
-                 "deprivation", "education", "cohabitation", "physical_activity",
-                 "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
-                 "pregnancies", "yearly_income",
-                 "related_conditions", "family_diabetes",
-                 "strata(region, age_strata, sex)")
-
-    model2_formulas <- list(
-        red_model2 = create_formula(c("legumes80", "poultry80", "fish80", "processed_weekly"), covars2),
-        processed_model2 = create_formula(c("legumes80", "poultry80", "fish80", "red_weekly"), covars2)
-    )
-
-    model2_results <- model2_formulas |>
-        map(~ survival::coxph(.x, data = data, ties = "breslow")) |>
-        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-                 mutate(model = .y))
-
-    return(model2_results)
-}
-
-
-# excluding those with GBD related diseases
-
-healthy_analyses<- function(data) {
-healthy <- data %>%
-    subset(related_conditions == "none of the above")
-
-covars2 <- c("cereal_refined_weekly", "whole_grain_weekly", "mixed_dish_weekly",
-             "dairy_weekly", "fats_weekly", "fruit_weekly", "nut_weekly",
-             "veggie_weekly", "potato_weekly", "egg_weekly",
-             "non_alc_beverage_weekly", "alc_beverage_weekly", "snack_weekly",
-             "sauce_weekly", "food_weight_weekly", "ethnicity",
-             "deprivation", "education", "cohabitation", "physical_activity",
-             "smoking", "estrogen_treatment", "bilirubin", "weight_loss",
-             "pregnancies", "yearly_income", "family_diabetes",
-             "strata(region, age_strata, sex)")
-
-    model2_formulas <- list(
-        meat_model2 = create_formula(c("legumes80", "poultry80", "fish80"), covars2),
-        poultry_model2 = create_formula(c("legumes80", "meats80", "fish80"), covars2),
-        fish_model2 = create_formula(c("legumes80", "meats80", "poultry80"), covars2)
-    )
-
-    model2_results_healthy <- model2_formulas |>
-        map(~ coxph(.x, data = healthy, ties = "breslow")) |>
-        map2(names(model2_formulas), ~ tidy(.x, exponentiate = TRUE, conf.int = TRUE) |>
-                 mutate(across(where(is.numeric), ~ round(.x, 2))) |>
-                 mutate(model = .y))
-
-    return(model2_results_healthy)
-}
